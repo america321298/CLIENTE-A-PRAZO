@@ -1,116 +1,36 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>El Shaday Gás - Controle de Clientes e Fiado</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui,Arial}
-body{background:#0a1020;color:#e2e8f0;padding-bottom:100px}
-.header{background:#12245c;padding:14px;position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:10px}
-.logo{width:42px;height:42px;background:orange;border-radius:10px;display:grid;place-items:center;font-size:20px}
-.tabs{display:flex;gap:8px;overflow-x:auto;padding:10px;background:#0a1020;position:sticky;top:62px;z-index:9}
-.tab{padding:10px 18px;border-radius:20px;border:none;background:#1a274d;color:#8a9ac3;font-weight:700;white-space:nowrap;flex-shrink:0}
-.tab.ativo{background:#2f6bff;color:white}
-.search{margin:10px;width:calc(100% - 20px);padding:12px;border-radius:12px;border:none;background:#1a274d;color:white}
-.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:10px}
-.card{background:#1a274d;border-radius:14px;padding:12px;text-align:center}
-.bloco{background:#1a274d;margin:10px;border-radius:14px;padding:12px}
-.item{background:#0f1a33;padding:12px;border-radius:12px;margin-top:8px}
-.btn{padding:8px 12px;border-radius:20px;border:none;font-weight:800;font-size:12px;margin:4px 4px 0 0}
-.btn-blue{background:#2f6bff;color:white}.btn-green{background:#22c55e;color:white}.btn-ghost{background:#2a3a6a;color:white}
-.fab{position:fixed;right:16px;bottom:16px;width:64px;height:64px;border-radius:50%;background:#2f6bff;color:white;font-size:32px;border:none;z-index:20}
-.modal{position:fixed;inset:0;background:#0a1020ee;display:none;overflow:auto;padding:12px;z-index:50}
-.modal.show{display:block}
-.box{background:#1a274d;border-radius:16px;padding:14px;max-width:500px;margin:20px auto}
-.input{width:100%;padding:12px;border-radius:10px;border:none;background:#0f1a33;color:white;margin-top:8px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.tela{display:none}.tela.ativa{display:block}
-</style>
-</head>
-<body>
-<div class="header"><div class="logo">🔥</div><div><b>EL SHADAY <span style="color:#fbbf24">GÁS</span></b><br><small style="opacity:.7">Controle de Clientes e Fiado</small></div><div style="margin-left:auto;text-align:right"><small>A receber</small><div id="totalTop" style="color:#fbbf24;font-weight:900">R$ 0</div></div></div>
-
-<div class="tabs" id="tabsBar">
-<button class="tab ativo" data-tab="dashboard">📊 Dashboard</button>
-<button class="tab" data-tab="clientes">👥 Clientes</button>
-<button class="tab" data-tab="vendas">💰 Vendas</button>
-<button class="tab" data-tab="receber">📋 A Receber</button>
-<button class="tab" data-tab="mapa">📍 Mapa</button>
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>El Shaday Gas</title><style>body{background:#0a1020;color:#fff;font-family:Arial;margin:0}.h{background:#1a2f6b;padding:12px;display:flex;align-items:center;gap:8px}.fab{position:fixed;right:20px;bottom:20px;width:70px;height:70px;border-radius:50%;background:#2f6bff;color:#fff;font-size:40px;border:0;z-index:10}.modal{position:fixed;inset:0;background:#000e;display:none;z-index:20;padding:10px;overflow:auto}.modal.on{display:block}.box{background:#1e2e5a;border-radius:14px;padding:14px}.inp{width:100%;padding:12px;border-radius:10px;border:0;background:#0f1a33;color:#fff;margin-top:8px}.btn{width:100%;padding:12px;border-radius:10px;border:0;background:#2f6bff;color:#fff;font-weight:900;margin-top:10px}.card{background:#1e2e5a;margin:10px;border-radius:12px;padding:12px}</style></head><body>
+<div class="h">🔥 <b>EL SHADAY GAS</b></div>
+<div class="card"><input id="busca" class="inp" placeholder="Buscar..." oninput="ver()"><div id="lista"></div></div>
+<button class="fab" onclick="abrir()">+</button>
+<div id="modal" class="modal"><div class="box">
+<h3 id="tit">Novo Cliente</h3>
+<input id="nome" class="inp" placeholder="Nome *">
+<input id="zap" class="inp" placeholder="Zap 83999999999">
+<input id="end" class="inp" placeholder="Endereço">
+<input id="bairro" class="inp" placeholder="Bairro">
+<div style="border:1px dashed #2f6bff;padding:8px;border-radius:10px;margin-top:8px">
+<b style="font-size:11px;color:#60a5fa">📍 LOCALIZAÇÃO</b><br>
+<input id="lat" class="inp" placeholder="Latitude"><input id="lng" class="inp" placeholder="Longitude">
+<button class="inp" style="background:#22c55e" onclick="gps()">📍 Usar meu GPS agora</button>
+<input id="link" class="inp" placeholder="Cole link do Google Maps" oninput="linkMap()">
+<div id="prev"></div>
 </div>
-
-<input id="busca" class="search" placeholder="🔍 Buscar nome, zap, endereço, bairro...">
-
-<div id="dashboard" class="tela ativa">
-<div class="grid">
-<div class="card"><small>CLIENTES</small><div id="sCli" style="font-size:20px;font-weight:900">0</div></div>
-<div class="card"><small>A RECEBER</small><div id="sRec" style="font-size:18px;font-weight:900;color:#f59e0b">R$ 0</div></div>
-<div class="card"><small>VENCIDAS</small><div id="sVenc" style="font-size:20px;font-weight:900;color:#ef4444">0</div></div>
-<div class="card"><small>HOJE</small><div id="sHoje" style="font-size:20px;font-weight:900">0</div></div>
-<div class="card"><small>7 DIAS</small><div id="s7" style="font-size:20px;font-weight:900">0</div></div>
-<div class="card"><small>RECEBIDO</small><div id="sPago" style="font-size:18px;font-weight:900;color:#22c55e">R$ 0</div></div>
-</div>
-<div class="bloco"><h3>🔔 Hoje</h3><div id="lHoje"></div></div>
-<div class="bloco"><h3>🔴 Vencidas</h3><div id="lVenc"></div></div>
-<div class="bloco"><h3>🟡 Próximos 7 dias</h3><div id="l7"></div></div>
-</div>
-
-<div id="clientes" class="tela"><div class="bloco"><h3>👥 Clientes</h3><div id="lClientes"></div></div></div>
-<div id="vendas" class="tela"><div class="bloco"><h3>💰 Nova Venda</h3><select id="vCliente" class="input"></select><div class="row"><select id="vProd" class="input"><option>Gás P13</option><option>Gás P20</option><option>Gás P45</option><option>Água 20L</option></select><input id="vQtd" class="input" type="number" value="1"></div><div class="row"><input id="vValor" class="input" type="number" placeholder="Valor R$"><input id="vData" class="input" type="date"></div><div class="row"><input id="vVenc" class="input" type="date"><select id="vStatus" class="input"><option>Pendente</option><option>Pago</option></select></div><button id="btnSalvarVenda" class="input" style="background:#2f6bff;font-weight:900">Salvar Venda</button><div id="lVendas" style="margin-top:12px"></div></div></div>
-<div id="receber" class="tela"><div class="bloco"><h3>📋 Contas a Receber</h3><div id="lReceber"></div></div></div>
-<div id="mapa" class="tela"><div class="bloco"><h3>📍 Mapa / Rota</h3><div id="lMapa"></div></div></div>
-
-<div id="modalCli" class="modal"><div class="box">
-<h2 id="tituloModal">Novo Cliente</h2>
-<input id="cNome" class="input" placeholder="Nome completo *">
-<input id="cZap" class="input" placeholder="WhatsApp 83999999999">
-<input id="cEnd" class="input" placeholder="Endereço completo">
-<div class="row"><input id="cBairro" class="input" placeholder="Bairro"><input id="cCidade" class="input" value="Campina Grande"></div>
-<div style="border:1px dashed #2f6bff;padding:10px;border-radius:12px;margin-top:10px">
-<b style="color:#60a5fa;font-size:12px">📍 LOCALIZAÇÃO GOOGLE MAPS</b>
-<div class="row"><input id="cLat" class="input" placeholder="Latitude"><input id="cLng" class="input" placeholder="Longitude"></div>
-<button id="btnGPS" class="input" style="background:#22c55e;font-weight:900">📍 Usar minha localização atual (GPS)</button>
-<button id="btnMapa" class="input" style="background:#2f6bff;font-weight:900">📍 Adicionar localização no Mapa</button>
-<input id="cLink" class="input" placeholder="Cole link do Google Maps">
-<div id="preview" style="margin-top:8px"></div>
-</div>
-<textarea id="cObs" class="input" placeholder="Observações"></textarea>
-<button id="btnSalvarCli" class="input" style="background:#2f6bff;font-weight:900;margin-top:12px">💾 Salvar Cliente</button>
-<button id="btnFecharCli" class="input" style="background:#2a3a6a">Cancelar</button>
-<button id="btnExcluirCli" class="input" style="background:#ef4444;display:none">Excluir Cliente</button>
+<input id="dev" class="inp" type="number" placeholder="Valor devendo R$">
+<button class="btn" onclick="salvar()">💾 SALVAR CLIENTE</button>
+<button class="btn" style="background:#334173" onclick="fechar()">Cancelar</button>
+<button id="del" class="btn" style="background:#ef4444;display:none" onclick="excluir()">Excluir</button>
 </div></div>
-
-<div id="modalDet" class="modal"><div class="box"><div id="detConteudo"></div><button id="btnFecharDet" class="input" style="background:#2a3a6a;margin-top:10px">Fechar</button></div></div>
-
-<button id="fab" class="fab">+</button>
-
 <script>
-let clientes = JSON.parse(localStorage.getItem('elshaday_cli')||'[]');
-let vendas = JSON.parse(localStorage.getItem('elshaday_vnd')||'[]');
-let editId=null;
-function salvar(){localStorage.setItem('elshaday_cli',JSON.stringify(clientes));localStorage.setItem('elshaday_vnd',JSON.stringify(vendas));}
-function formatBR(d){if(!d)return'';let p=d.split('-');return p[2]+'/'+p[1]+'/'+p[0];}
-function diasAtraso(venc){let h=new Date();h.setHours(0,0,0,0);let v=new Date(venc+'T00:00:00');return Math.floor((h-v)/86400000);}
-function getCli(id){return clientes.find(c=>c.id==id);}
-document.querySelectorAll('.tab').forEach(b=>{
- b.addEventListener('click', function(){
-   let id=this.dataset.tab;
-   document.querySelectorAll('.tela').forEach(t=>t.classList.remove('ativa'));
-   document.getElementById(id).classList.add('ativa');
-   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('ativo'));
-   this.classList.add('ativo');
-   render();
- });
-});
-document.getElementById('fab').addEventListener('click', abrirNovo);
-document.getElementById('btnFecharCli').addEventListener('click', ()=>document.getElementById('modalCli').classList.remove('show'));
-document.getElementById('btnFecharDet').addEventListener('click', ()=>document.getElementById('modalDet').classList.remove('show'));
-document.getElementById('btnSalvarCli').addEventListener('click', salvarCliente);
-document.getElementById('btnSalvarVenda').addEventListener('click', salvarVenda);
-document.getElementById('btnGPS').addEventListener('click', pegarGPS);
-document.getElementById('btnMapa').addEventListener('click', abrirMapa);
-document.getElementById('btnExcluirCli').addEventListener('click', excluirCliente);
-document.getElementById('busca').addEventListener('input', render);
-document.getElementById('cLink').addEventListener('input', function(){let m=this.value.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);if(m){document.getElementById('cLat').value=m[1];document.getElementById('cLng').value=m[2];preview();}});
-function abrirNovo(){editId=null;document.getElementById('tituloModal').textContent='Novo Cliente';['cNome','cZap','cEnd','cBairro','cLat','cLng','cLink','cObs'].forEach(i=>document.getElementById(i).value='');document.getElementById('cCidade').value='Campina Grande';document.getElementById('btnExcluirCli').style.display='none';document.getElementById('modalCli').classList.add('show');}
-function pegarGPS(){
+var cs=JSON.parse(localStorage.getItem('esc')||'[]');var edit=null;
+function save(){localStorage.setItem('esc',JSON.stringify(cs));}
+function abrir(){edit=null;document.getElementById('tit').innerText='Novo Cliente';['nome','zap','end','bairro','lat','lng','link','dev'].forEach(i=>document.getElementById(i).value='');document.getElementById('del').style.display='none';document.getElementById('prev').innerHTML='';document.getElementById('modal').classList.add('on');}
+function fechar(){document.getElementById('modal').classList.remove('on');}
+function gps(){navigator.geolocation.getCurrentPosition(p=>{document.getElementById('lat').value=p.coords.latitude.toFixed(6);document.getElementById('lng').value=p.coords.longitude.toFixed(6);previa();},()=>alert('Ative o GPS'));}
+function previa(){var a=document.getElementById('lat').value,b=document.getElementById('lng').value;if(!a)return;document.getElementById('prev').innerHTML='<a href="https://www.google.com/maps?q='+a+','+b+'" target="_blank" style="color:#60a5fa">📍 Ver no Maps: '+a+','+b+'</a>';}
+function linkMap(){var v=document.getElementById('link').value;var m=v.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);if(m){document.getElementById('lat').value=m[1];document.getElementById('lng').value=m[2];previa();}}
+function salvar(){var n=document.getElementById('nome').value;if(!n){alert('Nome');return;}var o={id:edit||Date.now(),nome:n,zap:document.getElementById('zap').value,end:document.getElementById('end').value,bairro:document.getElementById('bairro').value,lat:document.getElementById('lat').value,lng:document.getElementById('lng').value,dev:parseFloat(document.getElementById('dev').value)||0};if(edit){var i=cs.findIndex(x=>x.id==edit);cs[i]=o;}else cs.push(o);save();fechar();ver();}
+function editar(id){var c=cs.find(x=>x.id==id);edit=id;document.getElementById('tit').innerText='Editar';document.getElementById('nome').value=c.nome;document.getElementById('zap').value=c.zap;document.getElementById('end').value=c.end;document.getElementById('bairro').value=c.bairro;document.getElementById('lat').value=c.lat||'';document.getElementById('lng').value=c.lng||'';document.getElementById('dev').value=c.dev;document.getElementById('del').style.display='block';previa();document.getElementById('modal').classList.add('on');}
+function excluir(){if(confirm('Excluir?')){cs=cs.filter(x=>x.id!=edit);save();fechar();ver();}}
+function ver(){var b=(document.getElementById('busca').value||'').toLowerCase();var f=cs.filter(c=>(c.nome+c.bairro+c.end).toLowerCase().includes(b));document.getElementById('lista').innerHTML=f.map(c=>'<div class="card" style="background:#0f1a33" onclick="editar('+c.id+')"><b>'+c.nome+' '+(c.lat?'📍':'')+'</b><br><small>'+c.bairro+' - '+c.end+' | Deve R$ '+c.dev.toFixed(2)+'</small><br><div style="margin-top:6px"><a href="https://wa.me/55'+c.zap+'" target="_blank" onclick="event.stopPropagation()" style="background:#22c55e;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">🟢 Zap</a> '+(c.lat?'<a href="https://www.google.com/maps?q='+c.lat+','+c.lng+'" target="_blank" onclick="event.stopPropagation()" style="background:#334173;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">📍 Ver</a> <a href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank" onclick="event.stopPropagation()" style="background:#2f6bff;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">🚗 Rota</a>':'')+'</div></div>').join('')||'<p style="text-align:center;opacity:.5;padding:20px">Nenhum cliente<br>Clique no + azul para adicionar</p>';}
+ver();
+</script></body></html>

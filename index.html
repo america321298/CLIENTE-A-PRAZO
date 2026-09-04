@@ -1,36 +1,1115 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>El Shaday Gas</title><style>body{background:#0a1020;color:#fff;font-family:Arial;margin:0}.h{background:#1a2f6b;padding:12px;display:flex;align-items:center;gap:8px}.fab{position:fixed;right:20px;bottom:20px;width:70px;height:70px;border-radius:50%;background:#2f6bff;color:#fff;font-size:40px;border:0;z-index:10}.modal{position:fixed;inset:0;background:#000e;display:none;z-index:20;padding:10px;overflow:auto}.modal.on{display:block}.box{background:#1e2e5a;border-radius:14px;padding:14px}.inp{width:100%;padding:12px;border-radius:10px;border:0;background:#0f1a33;color:#fff;margin-top:8px}.btn{width:100%;padding:12px;border-radius:10px;border:0;background:#2f6bff;color:#fff;font-weight:900;margin-top:10px}.card{background:#1e2e5a;margin:10px;border-radius:12px;padding:12px}</style></head><body>
-<div class="h">🔥 <b>EL SHADAY GAS</b></div>
-<div class="card"><input id="busca" class="inp" placeholder="Buscar..." oninput="ver()"><div id="lista"></div></div>
-<button class="fab" onclick="abrir()">+</button>
-<div id="modal" class="modal"><div class="box">
-<h3 id="tit">Novo Cliente</h3>
-<input id="nome" class="inp" placeholder="Nome *">
-<input id="zap" class="inp" placeholder="Zap 83999999999">
-<input id="end" class="inp" placeholder="Endereço">
-<input id="bairro" class="inp" placeholder="Bairro">
-<div style="border:1px dashed #2f6bff;padding:8px;border-radius:10px;margin-top:8px">
-<b style="font-size:11px;color:#60a5fa">📍 LOCALIZAÇÃO</b><br>
-<input id="lat" class="inp" placeholder="Latitude"><input id="lng" class="inp" placeholder="Longitude">
-<button class="inp" style="background:#22c55e" onclick="gps()">📍 Usar meu GPS agora</button>
-<input id="link" class="inp" placeholder="Cole link do Google Maps" oninput="linkMap()">
-<div id="prev"></div>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087f3f">
+<title>El Shaday Gás - Clientes e Fiado</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+    background:#f1f5f3;
+    color:#17251d;
+}
+
+header{
+    background:#087f3f;
+    color:white;
+    padding:18px 15px;
+    position:sticky;
+    top:0;
+    z-index:10;
+    box-shadow:0 2px 8px #0002;
+}
+
+.header-content{
+    max-width:1100px;
+    margin:auto;
+}
+
+header h1{
+    font-size:22px;
+}
+
+header p{
+    margin-top:5px;
+    font-size:13px;
+    opacity:.9;
+}
+
+nav{
+    background:white;
+    display:flex;
+    overflow-x:auto;
+    gap:5px;
+    padding:8px;
+    position:sticky;
+    top:76px;
+    z-index:9;
+    box-shadow:0 2px 5px #0001;
+}
+
+nav button{
+    border:0;
+    background:#eef3ef;
+    color:#174b2e;
+    padding:11px 14px;
+    border-radius:8px;
+    white-space:nowrap;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+nav button.active{
+    background:#087f3f;
+    color:white;
+}
+
+main{
+    max-width:1100px;
+    margin:auto;
+    padding:18px 12px 50px;
+}
+
+.section{
+    display:none;
+}
+
+.section.active{
+    display:block;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 2px 8px #0001;
+}
+
+.card h2{
+    color:#087f3f;
+    margin-bottom:15px;
+    font-size:20px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+}
+
+.full{
+    grid-column:1/-1;
+}
+
+label{
+    display:block;
+    font-weight:bold;
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+input,select,textarea{
+    width:100%;
+    border:1px solid #ccd6cf;
+    border-radius:8px;
+    padding:12px;
+    font-size:15px;
+    background:#fff;
+}
+
+textarea{
+    min-height:80px;
+    resize:vertical;
+}
+
+button{
+    cursor:pointer;
+}
+
+.btn{
+    border:0;
+    border-radius:8px;
+    padding:11px 15px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.btn-green{
+    background:#087f3f;
+    color:white;
+}
+
+.btn-blue{
+    background:#1976d2;
+    color:white;
+}
+
+.btn-red{
+    background:#d62828;
+    color:white;
+}
+
+.btn-orange{
+    background:#f59e0b;
+    color:white;
+}
+
+.btn-gray{
+    background:#64748b;
+    color:white;
+}
+
+.btn-whatsapp{
+    background:#25D366;
+    color:white;
+}
+
+.btn-map{
+    background:#4285F4;
+    color:white;
+}
+
+.actions{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.actions .btn{
+    margin-top:5px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:15px;
+}
+
+.stat{
+    background:white;
+    border-radius:12px;
+    padding:17px;
+    box-shadow:0 2px 8px #0001;
+}
+
+.stat span{
+    display:block;
+    color:#64748b;
+    font-size:13px;
+}
+
+.stat strong{
+    display:block;
+    font-size:23px;
+    margin-top:7px;
+    color:#087f3f;
+}
+
+.search{
+    margin-bottom:15px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    min-width:750px;
+}
+
+th,td{
+    padding:10px;
+    border-bottom:1px solid #e2e8e4;
+    text-align:left;
+    font-size:14px;
+}
+
+th{
+    background:#edf7f0;
+    color:#174b2e;
+}
+
+.badge{
+    padding:5px 8px;
+    border-radius:20px;
+    font-size:12px;
+    font-weight:bold;
+    display:inline-block;
+}
+
+.pendente{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.pago{
+    background:#d1e7dd;
+    color:#0f5132;
+}
+
+.vencido{
+    background:#f8d7da;
+    color:#842029;
+}
+
+.cliente-card{
+    border:1px solid #e2e8e4;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:10px;
+}
+
+.cliente-card h3{
+    color:#087f3f;
+    margin-bottom:7px;
+}
+
+.cliente-card p{
+    font-size:14px;
+    margin:4px 0;
+}
+
+.empty{
+    text-align:center;
+    padding:30px;
+    color:#64748b;
+}
+
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:#0008;
+    z-index:100;
+    padding:15px;
+    overflow:auto;
+}
+
+.modal-content{
+    background:white;
+    max-width:650px;
+    margin:30px auto;
+    border-radius:14px;
+    padding:20px;
+}
+
+.modal-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.close{
+    border:0;
+    background:#eee;
+    border-radius:50%;
+    width:35px;
+    height:35px;
+    font-size:20px;
+}
+
+.alert-box{
+    padding:12px;
+    border-radius:8px;
+    background:#fff3cd;
+    margin-bottom:10px;
+}
+
+.danger-box{
+    background:#f8d7da;
+}
+
+.success-box{
+    background:#d1e7dd;
+}
+
+@media(max-width:700px){
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .stats{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .stat strong{
+        font-size:19px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="header-content">
+<h1>🔥 EL SHADAY GÁS</h1>
+<p>Controle de Clientes • Vendas a Prazo • Cobranças • Entregas</p>
 </div>
-<input id="dev" class="inp" type="number" placeholder="Valor devendo R$">
-<button class="btn" onclick="salvar()">💾 SALVAR CLIENTE</button>
-<button class="btn" style="background:#334173" onclick="fechar()">Cancelar</button>
-<button id="del" class="btn" style="background:#ef4444;display:none" onclick="excluir()">Excluir</button>
-</div></div>
+</header>
+
+<nav>
+<button class="active" onclick="showSection('dashboard',this)">📊 Dashboard</button>
+<button onclick="showSection('clientes',this)">👥 Clientes</button>
+<button onclick="showSection('novoCliente',this)">➕ Novo Cliente</button>
+<button onclick="showSection('vendas',this)">💰 Vendas</button>
+<button onclick="showSection('receber',this)">💳 Contas a Receber</button>
+</nav>
+
+<main>
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="section active">
+
+<div class="stats">
+<div class="stat">
+<span>Clientes</span>
+<strong id="totalClientes">0</strong>
+</div>
+
+<div class="stat">
+<span>Total a receber</span>
+<strong id="totalReceber">R$ 0,00</strong>
+</div>
+
+<div class="stat">
+<span>Vencidas</span>
+<strong id="totalVencidas">R$ 0,00</strong>
+</div>
+
+<div class="stat">
+<span>Vencem hoje</span>
+<strong id="totalHoje">R$ 0,00</strong>
+</div>
+</div>
+
+<div class="card">
+<h2>🔔 Alertas de cobrança</h2>
+<div id="alertas"></div>
+</div>
+
+<div class="card">
+<h2>📋 Resumo</h2>
+<p><b>Vendas a prazo:</b> <span id="qtdVendas">0</span></p>
+<p style="margin-top:8px"><b>Total recebido:</b> <span id="totalPago">R$ 0,00</span></p>
+<p style="margin-top:8px"><b>Contas pendentes:</b> <span id="qtdPendentes">0</span></p>
+</div>
+
+</section>
+
+
+<!-- CLIENTES -->
+<section id="clientes" class="section">
+
+<div class="card">
+<h2>👥 Clientes cadastrados</h2>
+
+<input
+class="search"
+id="buscarCliente"
+placeholder="🔎 Pesquisar por nome, WhatsApp ou endereço..."
+oninput="renderClientes()">
+
+<div id="listaClientes"></div>
+</div>
+
+</section>
+
+
+<!-- NOVO CLIENTE -->
+<section id="novoCliente" class="section">
+
+<div class="card">
+<h2>➕ Cadastro de Cliente</h2>
+
+<form id="clienteForm">
+
+<div class="grid">
+
+<div>
+<label>Nome completo *</label>
+<input id="nome" required>
+</div>
+
+<div>
+<label>WhatsApp *</label>
+<input id="whatsapp" placeholder="(82) 99999-9999" required>
+</div>
+
+<div class="full">
+<label>Endereço completo *</label>
+<input id="endereco" required>
+</div>
+
+<div>
+<label>Bairro</label>
+<input id="bairro">
+</div>
+
+<div>
+<label>Cidade</label>
+<input id="cidade" value="Maceió">
+</div>
+
+<div class="full">
+<label>Observações</label>
+<textarea id="observacoes"></textarea>
+</div>
+
+</div>
+
+<div class="card" style="background:#f1f8f3;margin-top:15px">
+<h2 style="font-size:17px">📍 Localização do cliente</h2>
+
+<p id="localizacaoStatus">
+Nenhuma localização cadastrada.
+</p>
+
+<div class="actions">
+<button type="button" class="btn btn-map" onclick="usarLocalizacao()">
+📍 Usar minha localização
+</button>
+
+<button type="button" class="btn btn-blue" onclick="abrirMapaParaEndereco()">
+🗺️ Localizar endereço no Maps
+</button>
+</div>
+
+<input type="hidden" id="latitude">
+<input type="hidden" id="longitude">
+
+</div>
+
+<button class="btn btn-green" type="submit">
+💾 Salvar Cliente
+</button>
+
+<button class="btn btn-gray" type="button" onclick="limparFormulario()">
+Limpar
+</button>
+
+</form>
+</div>
+
+</section>
+
+
+<!-- VENDAS -->
+<section id="vendas" class="section">
+
+<div class="card">
+<h2>💰 Registrar venda a prazo</h2>
+
+<form id="vendaForm">
+
+<div class="grid">
+
+<div>
+<label>Cliente *</label>
+<select id="vendaCliente" required></select>
+</div>
+
+<div>
+<label>Data da venda</label>
+<input type="date" id="dataVenda" required>
+</div>
+
+<div>
+<label>Produto</label>
+<input id="produto" value="Gás">
+</div>
+
+<div>
+<label>Quantidade</label>
+<input type="number" id="quantidade" value="1" min="1">
+</div>
+
+<div>
+<label>Valor da venda (R$) *</label>
+<input type="number" id="valorVenda" step="0.01" min="0" required>
+</div>
+
+<div>
+<label>Data de vencimento *</label>
+<input type="date" id="dataVencimento" required>
+</div>
+
+<div class="full">
+<label>Observação</label>
+<textarea id="obsVenda"></textarea>
+</div>
+
+</div>
+
+<button class="btn btn-green" type="submit">
+💾 Registrar venda
+</button>
+
+</form>
+</div>
+
+<div class="card">
+<h2>📋 Histórico de vendas</h2>
+<div id="listaVendas"></div>
+</div>
+
+</section>
+
+
+<!-- CONTAS A RECEBER -->
+<section id="receber" class="section">
+
+<div class="card">
+<h2>💳 Contas a Receber</h2>
+
+<div class="actions">
+<button class="btn btn-gray" onclick="filtrarContas('todas')">Todas</button>
+<button class="btn btn-orange" onclick="filtrarContas('pendente')">Pendentes</button>
+<button class="btn btn-red" onclick="filtrarContas('vencido')">Vencidas</button>
+<button class="btn btn-blue" onclick="filtrarContas('hoje')">Vencendo hoje</button>
+<button class="btn btn-green" onclick="filtrarContas('pago')">Pagas</button>
+</div>
+
+<div id="listaContas" style="margin-top:15px"></div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- MODAL CLIENTE -->
+<div id="modalCliente" class="modal">
+
+<div class="modal-content">
+
+<div class="modal-header">
+<h2>👤 Detalhes do Cliente</h2>
+<button class="close" onclick="fecharModal()">×</button>
+</div>
+
+<div id="detalhesCliente"></div>
+
+</div>
+</div>
+
+
 <script>
-var cs=JSON.parse(localStorage.getItem('esc')||'[]');var edit=null;
-function save(){localStorage.setItem('esc',JSON.stringify(cs));}
-function abrir(){edit=null;document.getElementById('tit').innerText='Novo Cliente';['nome','zap','end','bairro','lat','lng','link','dev'].forEach(i=>document.getElementById(i).value='');document.getElementById('del').style.display='none';document.getElementById('prev').innerHTML='';document.getElementById('modal').classList.add('on');}
-function fechar(){document.getElementById('modal').classList.remove('on');}
-function gps(){navigator.geolocation.getCurrentPosition(p=>{document.getElementById('lat').value=p.coords.latitude.toFixed(6);document.getElementById('lng').value=p.coords.longitude.toFixed(6);previa();},()=>alert('Ative o GPS'));}
-function previa(){var a=document.getElementById('lat').value,b=document.getElementById('lng').value;if(!a)return;document.getElementById('prev').innerHTML='<a href="https://www.google.com/maps?q='+a+','+b+'" target="_blank" style="color:#60a5fa">📍 Ver no Maps: '+a+','+b+'</a>';}
-function linkMap(){var v=document.getElementById('link').value;var m=v.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);if(m){document.getElementById('lat').value=m[1];document.getElementById('lng').value=m[2];previa();}}
-function salvar(){var n=document.getElementById('nome').value;if(!n){alert('Nome');return;}var o={id:edit||Date.now(),nome:n,zap:document.getElementById('zap').value,end:document.getElementById('end').value,bairro:document.getElementById('bairro').value,lat:document.getElementById('lat').value,lng:document.getElementById('lng').value,dev:parseFloat(document.getElementById('dev').value)||0};if(edit){var i=cs.findIndex(x=>x.id==edit);cs[i]=o;}else cs.push(o);save();fechar();ver();}
-function editar(id){var c=cs.find(x=>x.id==id);edit=id;document.getElementById('tit').innerText='Editar';document.getElementById('nome').value=c.nome;document.getElementById('zap').value=c.zap;document.getElementById('end').value=c.end;document.getElementById('bairro').value=c.bairro;document.getElementById('lat').value=c.lat||'';document.getElementById('lng').value=c.lng||'';document.getElementById('dev').value=c.dev;document.getElementById('del').style.display='block';previa();document.getElementById('modal').classList.add('on');}
-function excluir(){if(confirm('Excluir?')){cs=cs.filter(x=>x.id!=edit);save();fechar();ver();}}
-function ver(){var b=(document.getElementById('busca').value||'').toLowerCase();var f=cs.filter(c=>(c.nome+c.bairro+c.end).toLowerCase().includes(b));document.getElementById('lista').innerHTML=f.map(c=>'<div class="card" style="background:#0f1a33" onclick="editar('+c.id+')"><b>'+c.nome+' '+(c.lat?'📍':'')+'</b><br><small>'+c.bairro+' - '+c.end+' | Deve R$ '+c.dev.toFixed(2)+'</small><br><div style="margin-top:6px"><a href="https://wa.me/55'+c.zap+'" target="_blank" onclick="event.stopPropagation()" style="background:#22c55e;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">🟢 Zap</a> '+(c.lat?'<a href="https://www.google.com/maps?q='+c.lat+','+c.lng+'" target="_blank" onclick="event.stopPropagation()" style="background:#334173;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">📍 Ver</a> <a href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank" onclick="event.stopPropagation()" style="background:#2f6bff;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">🚗 Rota</a>':'')+'</div></div>').join('')||'<p style="text-align:center;opacity:.5;padding:20px">Nenhum cliente<br>Clique no + azul para adicionar</p>';}
-ver();
-</script></body></html>
+
+/* =========================
+   BANCO DE DADOS LOCAL
+========================= */
+
+let clientes = JSON.parse(localStorage.getItem("elshaday_clientes") || "[]");
+let vendas = JSON.parse(localStorage.getItem("elshaday_vendas") || "[]");
+
+let filtroAtual = "todas";
+
+function salvarDados(){
+    localStorage.setItem("elshaday_clientes", JSON.stringify(clientes));
+    localStorage.setItem("elshaday_vendas", JSON.stringify(vendas));
+}
+
+
+/* =========================
+   NAVEGAÇÃO
+========================= */
+
+function showSection(id,button){
+
+    document.querySelectorAll(".section").forEach(s=>{
+        s.classList.remove("active");
+    });
+
+    document.getElementById(id).classList.add("active");
+
+    document.querySelectorAll("nav button").forEach(b=>{
+        b.classList.remove("active");
+    });
+
+    if(button) button.classList.add("active");
+
+    atualizarTudo();
+}
+
+
+/* =========================
+   DATA
+========================= */
+
+function hojeISO(){
+
+    const d = new Date();
+
+    const ano = d.getFullYear();
+    const mes = String(d.getMonth()+1).padStart(2,"0");
+    const dia = String(d.getDate()).padStart(2,"0");
+
+    return `${ano}-${mes}-${dia}`;
+}
+
+document.getElementById("dataVenda").value = hojeISO();
+
+function formatarData(data){
+
+    if(!data) return "";
+
+    const [ano,mes,dia] = data.split("-");
+
+    return `${dia}/${mes}/${ano}`;
+}
+
+
+/* =========================
+   MOEDA
+========================= */
+
+function moeda(valor){
+
+    return Number(valor || 0).toLocaleString("pt-BR",{
+        style:"currency",
+        currency:"BRL"
+    });
+}
+
+
+/* =========================
+   CLIENTES
+========================= */
+
+document.getElementById("clienteForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const cliente = {
+
+        id:Date.now(),
+
+        nome:document.getElementById("nome").value.trim(),
+
+        whatsapp:document.getElementById("whatsapp").value.trim(),
+
+        endereco:document.getElementById("endereco").value.trim(),
+
+        bairro:document.getElementById("bairro").value.trim(),
+
+        cidade:document.getElementById("cidade").value.trim(),
+
+        observacoes:document.getElementById("observacoes").value.trim(),
+
+        latitude:document.getElementById("latitude").value,
+
+        longitude:document.getElementById("longitude").value,
+
+        criadoEm:new Date().toISOString()
+    };
+
+    clientes.push(cliente);
+
+    salvarDados();
+
+    alert("✅ Cliente cadastrado com sucesso!");
+
+    limparFormulario();
+
+    showSection("clientes");
+
+});
+
+
+function limparFormulario(){
+
+    document.getElementById("clienteForm").reset();
+
+    document.getElementById("cidade").value="Maceió";
+
+    document.getElementById("latitude").value="";
+    document.getElementById("longitude").value="";
+
+    document.getElementById("localizacaoStatus").innerText=
+    "Nenhuma localização cadastrada.";
+
+}
+
+
+/* =========================
+   LOCALIZAÇÃO
+========================= */
+
+function usarLocalizacao(){
+
+    if(!navigator.geolocation){
+
+        alert("Seu navegador não permite localização.");
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            const lat=position.coords.latitude;
+            const lng=position.coords.longitude;
+
+            document.getElementById("latitude").value=lat;
+            document.getElementById("longitude").value=lng;
+
+            document.getElementById("localizacaoStatus").innerHTML=
+            `✅ Localização cadastrada<br>
+            Latitude: ${lat.toFixed(6)}<br>
+            Longitude: ${lng.toFixed(6)}`;
+
+        },
+
+        function(){
+
+            alert("Não foi possível obter sua localização. Verifique a permissão do navegador.");
+
+        },
+
+        {
+            enableHighAccuracy:true,
+            timeout:10000
+        }
+    );
+}
+
+
+function abrirMapaParaEndereco(){
+
+    const endereco=[
+        document.getElementById("endereco").value,
+        document.getElementById("bairro").value,
+        document.getElementById("cidade").value
+    ].filter(Boolean).join(", ");
+
+    if(!endereco){
+
+        alert("Digite o endereço primeiro.");
+
+        return;
+    }
+
+    const url=
+    "https://www.google.com/maps/search/?api=1&query="+
+    encodeURIComponent(endereco);
+
+    window.open(url,"_blank");
+}
+
+
+function abrirLocalizacao(lat,lng){
+
+    if(!lat || !lng){
+
+        alert("Este cliente ainda não possui localização cadastrada.");
+
+        return;
+    }
+
+    const url=
+    `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+
+    window.open(url,"_blank");
+}
+
+
+function tracarRota(lat,lng){
+
+    if(!lat || !lng){
+
+        alert("Este cliente ainda não possui localização cadastrada.");
+
+        return;
+    }
+
+    const url=
+    `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+
+    window.open(url,"_blank");
+}
+
+
+/* =========================
+   WHATSAPP
+========================= */
+
+function abrirWhatsApp(numero,mensagem=""){
+
+    let telefone=numero.replace(/\D/g,"");
+
+    if(telefone.length===11){
+        telefone="55"+telefone;
+    }
+
+    if(!telefone.startsWith("55")){
+        telefone="55"+telefone;
+    }
+
+    const url=
+    "https://wa.me/"+telefone+
+    "?text="+encodeURIComponent(mensagem);
+
+    window.open(url,"_blank");
+}
+
+
+/* =========================
+   LISTA DE CLIENTES
+========================= */
+
+function renderClientes(){
+
+    const busca=
+    document.getElementById("buscarCliente").value
+    .toLowerCase();
+
+    const lista=document.getElementById("listaClientes");
+
+    const filtrados=clientes.filter(c=>
+        c.nome.toLowerCase().includes(busca) ||
+        c.whatsapp.toLowerCase().includes(busca) ||
+        c.endereco.toLowerCase().includes(busca)
+    );
+
+    if(!filtrados.length){
+
+        lista.innerHTML=
+        `<div class="empty">Nenhum cliente encontrado.</div>`;
+
+        return;
+    }
+
+    lista.innerHTML=filtrados.map(c=>{
+
+        const dividas=vendas
+        .filter(v=>v.clienteId===c.id && v.status!=="Pago")
+        .reduce((s,v)=>s+Number(v.valor),0);
+
+        return `
+
+        <div class="cliente-card">
+
+        <h3>${esc(c.nome)}</h3>
+
+        <p>📱 ${esc(c.whatsapp)}</p>
+
+        <p>🏠 ${esc(c.endereco)}
+        ${c.bairro ? " - "+esc(c.bairro):""}
+        </p>
+
+        <p>💰 <b>Devendo: ${moeda(dividas)}</b></p>
+
+        <p>
+        ${c.latitude && c.longitude
+        ? "📍 Localização cadastrada"
+        : "⚠️ Sem localização"}
+        </p>
+
+        <div class="actions">
+
+        <button class="btn btn-green"
+        onclick="abrirDetalhes(${c.id})">
+        👤 Detalhes
+        </button>
+
+        <button class="btn btn-whatsapp"
+        onclick="abrirWhatsApp('${escAttr(c.whatsapp)}')">
+        🟢 WhatsApp
+        </button>
+
+        ${c.latitude && c.longitude ?
+
+        `<button class="btn btn-map"
+        onclick="abrirLocalizacao(${c.latitude},${c.longitude})">
+        📍 Maps
+        </button>
+
+        <button class="btn btn-blue"
+        onclick="tracarRota(${c.latitude},${c.longitude})">
+        🚗 Rota
+        </button>`
+
+        :""}
+
+        </div>
+
+        </div>
+        `;
+
+    }).join("");
+}
+
+
+/* =========================
+   DETALHES CLIENTE
+========================= */
+
+function abrirDetalhes(id){
+
+    const c=clientes.find(x=>x.id===id);
+
+    if(!c) return;
+
+    const dividas=vendas
+    .filter(v=>v.clienteId===id && v.status!=="Pago")
+    .reduce((s,v)=>s+Number(v.valor),0);
+
+    const historico=vendas
+    .filter(v=>v.clienteId===id);
+
+    document.getElementById("detalhesCliente").innerHTML=`
+
+    <div class="cliente-card">
+
+    <h3>${esc(c.nome)}</h3>
+
+    <p>📱 <b>WhatsApp:</b> ${esc(c.whatsapp)}</p>
+
+    <p>🏠 <b>Endereço:</b> ${esc(c.endereco)}</p>
+
+    <p>🏘️ <b>Bairro:</b> ${esc(c.bairro)}</p>
+
+    <p>🌆 <b>Cidade:</b> ${esc(c.cidade)}</p>
+
+    <p>💰 <b>Total devido:</b> ${moeda(dividas)}</p>
+
+    <p>📝 <b>Observações:</b> ${esc(c.observacoes || "Nenhuma")}</p>
+
+    </div>
+
+    <div class="actions">
+
+    <button class="btn btn-whatsapp"
+    onclick="abrirWhatsApp('${escAttr(c.whatsapp)}',
+    'Olá, ${escAttr(c.nome)}! Aqui é da El Shaday Gás. Gostaria de falar sobre sua conta.')">
+    🟢 WhatsApp
+    </button>
+
+    ${c.latitude && c.longitude ?
+
+    `<button class="btn btn-map"
+    onclick="abrirLocalizacao(${c.latitude},${c.longitude})">
+    📍 Ver localização
+    </button>
+
+    <button class="btn btn-blue"
+    onclick="tracarRota(${c.latitude},${c.longitude})">
+    🚗 Traçar rota
+    </button>`
+
+    :""}
+
+    <button class="btn btn-green"
+    onclick="prepararVenda(${c.id})">
+    💰 Registrar venda
+    </button>
+
+    </div>
+
+    <h3 style="margin-top:20px;color:#087f3f">
+    📋 Histórico
+    </h3>
+
+    ${historico.length ?
+
+    historico.map(v=>`
+
+    <div class="cliente-card">
+
+    <b>${esc(v.produto)}</b>
+
+    <p>Data: ${formatarData(v.dataVenda)}</p>
+
+    <p>Valor: ${moeda(v.valor)}</p>
+
+    <p>Vencimento: ${formatarData(v.vencimento)}</p>
+
+    <p>Status:
+    <span class="badge ${v.status.toLowerCase()}">
+    ${v.status}
+    </span>
+    </p>
+
+    ${v.status!=="Pago" ?
+
+    `<button class="btn btn-green"
+    onclick="marcarPago(${v.id})">
+    💳 Registrar pagamento
+    </button>`
+
+    :""}
+
+    </div>
+
+    `).join("")
+
+    :"<p>Nenhuma venda registrada.</p>"}
+
+    `;
+
+    document.getElementById("modalCliente").style.display="block";
+}
+
+
+function fecharModal(){
+
+    document.getElementById("modalCliente").style.display="none";
+}
+
+
+/* =========================
+   VENDAS
+========================= */
+
+document.getElementById("vendaForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const venda={
+
+        id:Date.now(),
+
+        clienteId:Number(document.getElementById("vendaCliente").value),
+
+        dataVenda:document.getElementById("dataVenda").value,
+
+        produto:document.getElementById("produto").value,
+
+        quantidade:Number(document.getElementById("quantidade").value),
+
+        valor:Number(document.getElementById("valorVenda").value),
+
+        vencimento:document.getElementById("dataVencimento").value,
+
+        status:"Pendente",
+
+        observacao:document.getElementById("obsVenda").value
+    };
+
+    vendas.push(venda);
+
+    salvarDados();
+
+    alert("✅ Venda registrada!");
+
+    document.getElementById("vendaForm").reset()

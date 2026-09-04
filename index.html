@@ -1,1 +1,276 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Planilha Cliente a Prazo</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+:root{--bg:#0b1220;--card:#17233f;--card2:#1e315c;--border:#2a3f6b;--blue:#3b82f6;--green:#22c55e;--red:#ef4444;--yellow:#f59e0b;--text:#e2e8f0;--muted:#94a3b8}
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial}
+body{margin:0;background:var(--bg);color:var(--text);padding-bottom:90px}
+header{position:sticky;top:0;z-index:100;background:linear-gradient(135deg,#1e3a8a,#0f172a);padding:14px 14px 10px;border-bottom:1px solid var(--border)}
+.logo{display:flex;align-items:center;gap:10px}
+.logo b{font-size:18px;letter-spacing:.5px}
+.logo span{font-size:12px;color:#93c5fd;display:block}
+.tabs{display:flex;gap:6px;margin-top:10px;overflow:auto}
+.tab{padding:8px 14px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:13px;font-weight:700;white-space:nowrap}
+.tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px;margin:10px}
+label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:10px;display:block;font-weight:700}
+input,select,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid var(--border);background:#0f1c36;color:#fff;font-size:15px;margin-top:4px;outline:none}
+.btn{border:none;border-radius:12px;padding:13px;font-weight:800;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-blue{background:var(--blue);color:#fff}
+.btn-green{background:var(--green);color:#052e16}
+.btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-wa{background:#25D366;color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.kpi{text-align:center;padding:12px;border-radius:14px;background:var(--card2);border:1px solid var(--border)}
+.kpi b{display:block;font-size:19px;margin-top:2px}
+.kpi span{font-size:10px;color:var(--muted);text-transform:uppercase;font-weight:800}
+.item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px;border-left:4px solid var(--blue)}
+.item.vencido{border-left-color:var(--red)}
+.item.hoje{border-left-color:var(--yellow)}
+.item.pago{border-left-color:var(--green);opacity:.75}
+.small{font-size:12px;color:var(--muted);line-height:1.4}
+.badge{font-size:10px;padding:3px 8px;border-radius:20px;font-weight:800}
+.badge-pend{background:#f59e0b20;color:var(--yellow);border:1px solid #f59e0b40}
+.badge-venc{background:#ef444420;color:var(--red);border:1px solid #ef444440}
+.badge-pago{background:#22c55e20;color:var(--green);border:1px solid #22c55e40}
+#map{height:260px;border-radius:12px;border:1px solid var(--border);margin-top:8px}
+.hidden{display:none!important}
+.fab{position:fixed;bottom:18px;right:18px;width:56px;height:56px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:26px;box-shadow:0 8px 24px #0006;z-index:200}
+.search{position:sticky;top:96px;z-index:90;background:var(--bg);padding:8px 10px}
+.modal{position:fixed;inset:0;background:#000a;backdrop-filter:blur(6px);z-index:300;display:flex;align-items:flex-end;justify-content:center}
+.modal>div{background:#131f3a;border:1px solid var(--border);border-radius:18px 18px 0 0;width:100%;max-width:560px;max-height:90vh;overflow:auto;padding:14px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo"><div style="width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,#22c55e,#3b82f6);display:flex;align-items:center;justify-content:center;font-size:20px">📋</div><div><b>PLANILHA CLIENTE A PRAZO</b><span>Controle com Mapa e Cobrança</span></div></div>
+<div class="tabs">
+<button class="tab active" onclick="nav('dash')">📊 Dashboard</button>
+<button class="tab" onclick="nav('clientes')">👥 Clientes</button>
+<button class="tab" onclick="nav('vendas')">💰 Vendas</button>
+<button class="tab" onclick="nav('receber')">📋 A Receber</button>
+</div>
+</header>
+<div class="search" id="searchBar"><input id="buscaGeral" placeholder="🔍 Buscar por nome, zap, endereço, bairro..." oninput="renderAll()"></div>
+<div id="view-dash">
+<div class="card grid3">
+<div class="kpi"><span>Clientes</span><b id="kCli">0</b></div>
+<div class="kpi"><span>A Receber</span><b id="kReceber" style="color:#f59e0b">R$ 0</b></div>
+<div class="kpi"><span>Vencidas</span><b id="kVenc" style="color:#ef4444">0</b></div>
+<div class="kpi"><span>Vencem Hoje</span><b id="kHoje" style="color:#f59e0b">0</b></div>
+<div class="kpi"><span>Próx. 7 dias</span><b id="k7">0</b></div>
+<div class="kpi"><span>Total Recebido</span><b id="kPago" style="color:#22c55e">R$ 0</b></div>
+</div>
+<div class="card"><b>🔔 Cobranças de Hoje</b><div id="alertHoje" class="small" style="margin-top:8px"></div></div>
+<div class="card"><b>🔴 Vencidas - Cobrar Agora</b><div id="alertVenc" style="margin-top:8px"></div></div>
+</div>
+<div id="view-clientes" class="hidden">
+<div class="card">
+<b>👥 Cadastrar Cliente</b>
+<label>Nome completo *</label><input id="cNome" placeholder="Ex: João Silva">
+<div class="row"><div><label>WhatsApp *</label><input id="cZap" placeholder="83999999999" type="tel"></div><div><label>Bairro</label><input id="cBairro" placeholder="Ex: Centro"></div></div>
+<label>Endereço completo</label><input id="cEnd" placeholder="Rua, número">
+<div class="row"><div><label>Cidade</label><input id="cCidade" placeholder="Campina Grande" value="Campina Grande"></div><div><label>Observações</label><input id="cObs" placeholder="Ponto de referência"></div></div>
+<label>📍 Localização Google Maps</label>
+<div class="grid2">
+<button class="btn btn-blue" onclick="abrirMapa()">📍 Adicionar localização</button>
+<button class="btn btn-ghost" onclick="usarGPS()">📌 Usar meu GPS agora</button>
+</div>
+<div id="locInfo" class="small" style="margin-top:6px;color:#93c5fd">Nenhuma localização salva</div>
+<div id="mapWrap" class="hidden"><div id="map"></div><div class="small">Toque no mapa para mover o pino.</div><button class="btn btn-green" style="margin-top:8px;width:100%" onclick="salvarLocalMapa()">✅ Salvar localização</button></div>
+<input type="hidden" id="cLat"><input type="hidden" id="cLng">
+<button class="btn btn-green" style="width:100%;margin-top:12px" onclick="salvarCliente()">💾 SALVAR CLIENTE</button>
+<button id="btnCancelEdit" class="btn btn-ghost hidden" style="width:100%;margin-top:6px" onclick="cancelEdit()">Cancelar edição</button>
+</div>
+<div id="listaClientes"></div>
+</div>
+<div id="view-vendas" class="hidden">
+<div class="card">
+<b>💰 Registrar Venda a Prazo</b>
+<label>Cliente *</label><select id="vCliente"></select>
+<div class="row"><div><label>Data da venda</label><input id="vData" type="date"></div><div><label>Vencimento *</label><input id="vVenc" type="date"></div></div>
+<div class="row"><div><label>Produto *</label><select id="vProd"><option>Produto / Serviço</option><option>Roupas</option><option>Calçados</option><option>Gás</option><option>Água</option><option>Alimentos</option><option>Outro</option></select></div><div><label>Qtd</label><input id="vQtd" type="number" value="1" min="1"></div></div>
+<div class="row"><div><label>Valor R$ *</label><input id="vValor" type="number" inputmode="decimal" placeholder="115.00"></div><div><label>Status</label><select id="vStatus"><option value="Pendente">Pendente</option><option value="Pago">Pago</option></select></div></div>
+<label>Observação</label><input id="vObs" placeholder="Ex: Entregar após 18h">
+<button class="btn btn-blue" style="width:100%;margin-top:10px" onclick="salvarVenda()">💾 REGISTRAR VENDA</button>
+</div>
+<div id="listaVendas"></div>
+</div>
+<div id="view-receber" class="hidden">
+<div class="card grid2">
+<select id="fStatus" onchange="renderReceber()"><option value="todos">Todos</option><option value="Pendente">Pendentes</option><option value="Vencido">Vencidas</option><option value="hoje">Vencem hoje</option><option value="Pago">Pagas</option><option value="comLoc">Com localização 📍</option></select>
+<select id="fOrdem" onchange="renderReceber()"><option value="vencAsc">Mais antigas</option><option value="vencDesc">Venc. mais longe</option><option value="valorDesc">Maior valor</option></select>
+</div>
+<div id="listaReceber"></div>
+</div>
+<div id="modalCliente" class="modal hidden" onclick="if(event.target==this)fecharModal()">
+<div>
+<div style="display:flex;justify-content:space-between;align-items:center"><b id="mNome">Cliente</b><button class="btn btn-ghost" onclick="fecharModal()">X</button></div>
+<div class="small" id="mInfo" style="margin-top:6px"></div>
+<div class="grid3" style="margin-top:12px">
+<button class="btn btn-wa" onclick="mAcao('zap')">🟢 WhatsApp</button>
+<button class="btn btn-blue" onclick="mAcao('ver')">📍 Ver local</button>
+<button class="btn btn-ghost" onclick="mAcao('rota')">🚗 Rota</button>
+</div>
+<div class="grid3" style="margin-top:6px">
+<button class="btn btn-blue" onclick="mAcao('venda')">💰 Venda</button>
+<button class="btn btn-green" onclick="mAcao('pago')">💳 Pagamento</button>
+<button class="btn btn-ghost" onclick="mAcao('hist')">📋 Histórico</button>
+</div>
+<div id="mHist" style="margin-top:12px"></div>
+</div>
+</div>
+<button class="fab" onclick="navFab()">+</button>
+<script>
+let DB_KEY='planilhaClientePrazo_v4';
+let db = JSON.parse(localStorage.getItem(DB_KEY) || '{"clientes":[],"vendas":[]}');
+if(!db.clientes) db.clientes=[]; if(!db.vendas) db.vendas=[];
+let editId=null; let tempMarker=null; let map=null; let tempLat=null,tempLng=null; let clienteAtivo=null;
+function save(){localStorage.setItem(DB_KEY, JSON.stringify(db)); renderAll();}
+function hojeISO(){return new Date().toISOString().slice(0,10);}
+document.getElementById('vData').value = hojeISO();
+let d = new Date(); d.setDate(d.getDate()+7); document.getElementById('vVenc').value = d.toISOString().slice(0,10);
+function nav(t){
+ document.querySelectorAll('[id^=view-]').forEach(v=>v.classList.add('hidden'));
+ document.getElementById('view-'+t).classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+ let idx={dash:0,clientes:1,vendas:2,receber:3}[t]; document.querySelectorAll('.tab')[idx].classList.add('active');
+ document.getElementById('searchBar').style.display = t=='dash'?'none':'block';
+ renderAll();
+}
+function navFab(){ window.scrollTo({top:0,behavior:'smooth'}); nav('clientes'); }
+function abrirMapa(){
+ document.getElementById('mapWrap').classList.remove('hidden');
+ setTimeout(()=>{
+  if(!map){
+   map = L.map('map').setView([-7.23,-35.88],13);
+   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM'}).addTo(map);
+   map.on('click', e=>{ setPin(e.latlng.lat,e.latlng.lng); });
+  }
+  map.invalidateSize();
+  if(tempLat) setPin(tempLat,tempLng);
+  else if(navigator.geolocation){ navigator.geolocation.getCurrentPosition(p=>{ map.setView([p.coords.latitude,p.coords.longitude],16); setPin(p.coords.latitude,p.coords.longitude); });}
+ },200);
+}
+function setPin(lat,lng){
+ tempLat=lat; tempLng=lng;
+ if(tempMarker) map.removeLayer(tempMarker);
+ tempMarker = L.marker([lat,lng],{draggable:true}).addTo(map);
+ tempMarker.on('dragend', e=>{ let p=e.target.getLatLng(); tempLat=p.lat; tempLng=p.lng; updateLocInfo(); });
+ updateLocInfo();
+}
+function updateLocInfo(){ document.getElementById('locInfo').innerHTML = '📍 Lat: '+tempLat.toFixed(6)+' Lng: '+tempLng.toFixed(6)+' - pronto para salvar'; }
+function salvarLocalMapa(){
+ if(tempLat==null){alert('Toque no mapa');return;}
+ document.getElementById('cLat').value=tempLat;
+ document.getElementById('cLng').value=tempLng;
+ document.getElementById('locInfo').innerHTML = '✅ Localização salva! <a href="https://www.google.com/maps/search/?api=1&query='+tempLat+','+tempLng+'" target="_blank" style="color:#93c5fd">Ver no Google Maps</a>';
+ document.getElementById('mapWrap').classList.add('hidden');
+}
+function usarGPS(){
+ if(!navigator.geolocation){alert('GPS não suportado');return;}
+ navigator.geolocation.getCurrentPosition(p=>{
+  tempLat=p.coords.latitude; tempLng=p.coords.longitude;
+  document.getElementById('cLat').value=tempLat; document.getElementById('cLng').value=tempLng;
+  document.getElementById('locInfo').innerHTML = '✅ GPS capturado! '+tempLat.toFixed(5)+', '+tempLng.toFixed(5);
+ }, err=>alert('Erro GPS: '+err.message));
+}
+function salvarCliente(){
+ let nome=document.getElementById('cNome').value.trim();
+ let zap=document.getElementById('cZap').value.replace(/\D/g,'');
+ let bairro=document.getElementById('cBairro').value.trim();
+ let end=document.getElementById('cEnd').value.trim();
+ let cid=document.getElementById('cCidade').value.trim();
+ let obs=document.getElementById('cObs').value.trim();
+ let lat=parseFloat(document.getElementById('cLat').value)||null;
+ let lng=parseFloat(document.getElementById('cLng').value)||null;
+ if(!nome ||!zap){alert('Nome e WhatsApp obrigatórios');return;}
+ if(editId){
+  let c=db.clientes.find(x=>x.id==editId);
+  Object.assign(c,{nome,zap,bairro,endereco:end,cidade:cid,obs,lat,lng});
+  editId=null;
+ }else{
+  db.clientes.unshift({id:Date.now(),nome,zap,bairro,endereco:end,cidade:cid,obs,lat,lng,criado:new Date().toISOString()});
+ }
+ document.getElementById('cNome').value='';document.getElementById('cZap').value='';document.getElementById('cBairro').value='';document.getElementById('cEnd').value='';document.getElementById('cObs').value='';document.getElementById('cLat').value='';document.getElementById('cLng').value='';document.getElementById('locInfo').innerText='Nenhuma localização salva';tempLat=null;tempLng=null;
+ document.getElementById('btnCancelEdit').classList.add('hidden');
+ save(); alert('Cliente salvo!');
+}
+function editarCliente(id){
+ let c=db.clientes.find(x=>x.id==id);
+ editId=id;
+ document.getElementById('cNome').value=c.nome;document.getElementById('cZap').value=c.zap;document.getElementById('cBairro').value=c.bairro||'';document.getElementById('cEnd').value=c.endereco||'';document.getElementById('cCidade').value=c.cidade||'';document.getElementById('cObs').value=c.obs||'';
+ document.getElementById('cLat').value=c.lat||'';document.getElementById('cLng').value=c.lng||'';
+ if(c.lat){document.getElementById('locInfo').innerHTML='📍 Localização existente: '+c.lat+', '+c.lng;tempLat=c.lat;tempLng=c.lng;}
+ document.getElementById('btnCancelEdit').classList.remove('hidden');
+ nav('clientes'); window.scrollTo({top:0,behavior:'smooth'});
+}
+function cancelEdit(){editId=null; document.getElementById('btnCancelEdit').classList.add('hidden');}
+function excluirCliente(id){ if(!confirm('Apagar cliente e todas as vendas?'))return; db.clientes=db.clientes.filter(c=>c.id!=id); db.vendas=db.vendas.filter(v=>v.clienteId!=id); save(); }
+function salvarVenda(){
+ let clienteId=parseInt(document.getElementById('vCliente').value);
+ let data=document.getElementById('vData').value||hojeISO();
+ let venc=document.getElementById('vVenc').value;
+ let prod=document.getElementById('vProd').value;
+ let qtd=parseInt(document.getElementById('vQtd').value)||1;
+ let valor=parseFloat(document.getElementById('vValor').value)||0;
+ let status=document.getElementById('vStatus').value;
+ let obs=document.getElementById('vObs').value;
+ if(!clienteId ||!valor ||!venc){alert('Cliente, valor e vencimento obrigatórios');return;}
+ db.vendas.unshift({id:Date.now(),clienteId,data,venc,produto:prod,qtd,valor,status,obs});
+ save(); document.getElementById('vValor').value='';document.getElementById('vObs').value=''; alert('Venda registrada!');
+}
+function pagarVenda(id){ let v=db.vendas.find(x=>x.id==id); if(v.status=='Pago'){v.status='Pendente';}else{v.status='Pago';} save(); }
+function excluirVenda(id){ if(confirm('Apagar venda?')){db.vendas=db.vendas.filter(v=>v.id!=id); save();} }
+function getStatusReal(v){
+ if(v.status=='Pago') return 'Pago';
+ let hoje=new Date(); hoje.setHours(0,0,0,0);
+ let venc=new Date(v.venc); venc.setHours(0,0,0,0);
+ if(venc < hoje) return 'Vencido';
+ if(venc.getTime()==hoje.getTime()) return 'Hoje';
+ return 'Pendente';
+}
+function diasAtraso(venc){ let hoje=new Date(); hoje.setHours(0,0,0,0); let v=new Date(venc); v.setHours(0,0,0,0); return Math.floor((hoje - v)/86400000); }
+function linkMaps(lat,lng){return 'https://www.google.com/maps/search/?api=1&query='+lat+','+lng;}
+function linkRota(lat,lng){return 'https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng;}
+function linkZap(zap, nome, valor, data){
+ let msg='Olá, '+nome+'! Aqui é da loja. Passando para lembrar que sua conta no valor de R$ '+valor.toFixed(2)+' está com vencimento em '+data.split('-').reverse().join('/')+'. Agradecemos pela preferência!';
+ return 'https://wa.me/55'+zap+'?text='+encodeURIComponent(msg);
+}
+function renderAll(){
+ let sel=document.getElementById('vCliente'); sel.innerHTML = db.clientes.map(c=>'<option value="'+c.id+'">'+c.nome+' - '+(c.bairro||'')+' '+(c.lat?'📍':'')+'</option>').join('') || '<option>Cadastre cliente primeiro</option>';
+ renderClientes(); renderVendas(); renderReceber(); renderDash();
+}
+function renderClientes(){
+ let busca=document.getElementById('buscaGeral').value.toLowerCase();
+ let cont=document.getElementById('listaClientes'); cont.innerHTML='';
+ db.clientes.filter(c=>{
+  if(!busca) return true;
+  return (c.nome+' '+c.zap+' '+(c.endereco||'')+' '+(c.bairro||'')).toLowerCase().includes(busca);
+ }).forEach(c=>{
+  let vendasC=db.vendas.filter(v=>v.clienteId==c.id);
+  let devendo=vendasC.filter(v=>v.status!='Pago').reduce((s,v)=>s+v.valor,0);
+  let div=document.createElement('div'); div.className='item';
+  div.innerHTML='<div style="display:flex;justify-content:space-between"><b>'+c.nome+' '+(c.lat?'📍':'')+'</b><span class="badge '+(devendo>0?'badge-venc':'badge-pago')+'">'+(devendo>0?'R$ '+devendo.toFixed(2):'EM DIA')+'</span></div><div class="small">📱 '+c.zap+' • 🏘️ '+(c.bairro||'')+' '+(c.endereco?'- '+c.endereco:'')+'<br>'+(c.obs||'')+'</div><div class="grid3" style="margin-top:8px"><button class="btn btn-wa" style="padding:8px;font-size:12px" onclick="window.open(\'https://wa.me/55'+c.zap+'\',\'_blank\')">🟢 Zap</button><button class="btn btn-blue" style="padding:8px;font-size:12px" onclick="abrirDetalhe('+c.id+')">👁️ Ver</button><button class="btn btn-ghost" style="padding:8px;font-size:12px" onclick="editarCliente('+c.id+')">✏️ Editar</button></div>';
+  cont.appendChild(div);
+ });
+}
+function renderVendas(){
+ let cont=document.getElementById('listaVendas'); cont.innerHTML='';
+ db.vendas.slice(0,100).forEach(v=>{
+  let c=db.clientes.find(x=>x.id==v.clienteId);
+  let st=getStatusReal(v);
+  cont.innerHTML+='<div class="item '+(st=='Vencido'?'vencido':st=='Hoje'?'hoje':v.status=='Pago'?'pago':'')+'"><div style="display:flex;justify-content:space-between"><b>'+(c?c.nome:'Cliente apagado')+' - '+v.produto+' x'+v.qtd+'</b><span class="badge '+(st=='Pago'?'badge-pago':st=='Vencido'?'badge-venc':'badge-pend')+'">'+st+'</span></div><div class="small">📅 Venda: '+v.data.split('-').reverse().join('/')+' • Venc: '+v.venc.split('-').reverse().join('/')+' • R$ '+v.valor.toFixed(2)+'</div><div class="grid2" style="margin-top:8px"><button class="btn '+(v.status=='Pago'?'btn-ghost':'btn-green')+'" style="padding:8px;font-size:12px" onclick="pagarVenda('+v.id+')">'+(v.status=='Pago'?'Desfazer':'💳 Marcar Pago')+'</button><button class="btn btn-ghost" style="padding:8px;font-size:12px" onclick="excluirVenda('+v.id+')">🗑️ Apagar</button></div></div>';
+ });
+}
+function renderReceber(){
+ let busca=document.getElementById('buscaGeral').value.toLowerCase();
+ let f=document.getElementById('fStatus').value;
+ let ord=d

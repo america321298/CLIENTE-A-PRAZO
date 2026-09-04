@@ -2,58 +2,128 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>El Shaday Gas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087f3f">
+<title>El Shaday Gás - Controle a Prazo</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
-body{background:#0a1020;color:#fff}
-.h{background:#12245c;padding:12px;display:flex;gap:10px;align-items:center}
-.logo{width:40px;height:40px;background:orange;border-radius:10px;display:grid;place-items:center}
-.fab{position:fixed;right:18px;bottom:18px;width:65px;height:65px;border-radius:50%;background:#2f6bff;color:#fff;font-size:40px;border:0}
-.card{background:#1a274d;border-radius:12px;padding:12px;margin:10px}
-.item{background:#0f1a33;border-radius:10px;padding:10px;margin-top:8px}
-.inp{width:100%;padding:12px;border-radius:10px;border:0;background:#0f1a33;color:#fff;margin-top:8px}
-.btn{padding:8px 12px;border-radius:20px;border:0;color:#fff;font-weight:700;margin:3px}
-.modal{position:fixed;inset:0;background:#000d;display:none;padding:10px;overflow:auto;z-index:99}
-.modal.on{display:block}
-.box{background:#1a274d;border-radius:14px;padding:14px;max-width:500px;margin:20px auto}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,Helvetica,sans-serif}
+body{background:#f1f5f3;color:#17251d}
+header{background:#087f3f;color:white;padding:16px;position:sticky;top:0;z-index:20;box-shadow:0 2px 8px #0003}
+.header{max-width:1100px;margin:auto}
+header h1{font-size:23px}header p{font-size:13px;margin-top:5px}
+nav{position:sticky;top:73px;z-index:19;background:white;padding:8px;display:flex;gap:6px;overflow-x:auto;box-shadow:0 2px 6px #0002}
+nav button{border:0;padding:11px 14px;border-radius:8px;background:#edf2ef;color:#174b2e;font-weight:bold;white-space:nowrap}
+nav button.active{background:#087f3f;color:white}
+main{max-width:1100px;margin:auto;padding:16px 12px 100px}
+.section{display:none}.section.active{display:block}
+.card{background:white;padding:18px;border-radius:13px;margin-bottom:15px;box-shadow:0 2px 8px #0001}
+.card h2{color:#087f3f;margin-bottom:15px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.full{grid-column:1/-1}
+label{display:block;font-weight:bold;font-size:14px;margin-bottom:5px}
+input,select,textarea{width:100%;padding:12px;border:1px solid #ccd6cf;border-radius:8px;font-size:15px;background:white}
+textarea{min-height:80px;resize:vertical}
+.btn{border:0;border-radius:8px;padding:11px 14px;font-weight:bold;margin-top:8px;cursor:pointer}
+.btn-green{background:#087f3f;color:white}.btn-whatsapp{background:#25d366;color:white}.btn-blue{background:#1976d2;color:white}.btn-map{background:#4285f4;color:white}.btn-red{background:#d62828;color:white}.btn-orange{background:#f59e0b;color:white}.btn-gray{background:#64748b;color:white}
+.actions{display:flex;flex-wrap:wrap;gap:6px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:15px}
+.stat{background:white;padding:16px;border-radius:12px;box-shadow:0 2px 7px #0001}
+.stat small{color:#64748b}.stat strong{display:block;margin-top:7px;color:#087f3f;font-size:21px}
+.cliente{border:1px solid #dce5df;border-radius:10px;padding:14px;margin-bottom:10px}
+.cliente h3{color:#087f3f;margin-bottom:8px}.cliente p{margin:5px 0;font-size:14px}
+.badge{display:inline-block;padding:5px 9px;border-radius:20px;font-size:12px;font-weight:bold}
+.badge-pendente{background:#fff3cd;color:#856404}.badge-vencido{background:#f8d7da;color:#842029}.badge-pago{background:#d1e7dd;color:#0f5132}
+.alert{padding:13px;border-radius:9px;margin-bottom:8px;background:#fff3cd}.alert.red{background:#f8d7da}.alert.green{background:#d1e7dd}
+.empty{text-align:center;padding:30px;color:#64748b}
+.table{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:850px}th,td{padding:10px;border-bottom:1px solid #e2e8e4;text-align:left;font-size:13px}th{background:#edf7f0;color:#174b2e}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:100;padding:15px;overflow:auto}.modal-content{background:white;max-width:650px;margin:30px auto;padding:20px;border-radius:14px}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}.close{border:0;width:35px;height:35px;border-radius:50%;font-size:20px}
+.info-location{background:#edf7f0;padding:12px;border-radius:8px;margin-top:12px}
+.fab{position:fixed;right:18px;bottom:18px;width:64px;height:64px;border-radius:50%;background:#087f3f;color:#fff;font-size:34px;border:0;box-shadow:0 4px 12px #0004;z-index:50}
+@media(max-width:700px){.grid{grid-template-columns:1fr}.full{grid-column:auto}.stats{grid-template-columns:repeat(2,1fr)}.stat strong{font-size:17px}header h1{font-size:20px}}
 </style>
 </head>
 <body>
-<div class="h"><div class="logo">🔥</div><div><b>EL SHADAY GAS</b><br><small>Clientes e Fiado</small></div></div>
-<div class="card"><input id="busca" class="inp" placeholder="🔍 Buscar..." oninput="ver()"><div id="lista"></div></div>
-<button class="fab" onclick="abrir()">+</button>
-<div id="modal" class="modal"><div class="box">
-<h3 id="tit">Novo Cliente</h3>
-<input id="nome" class="inp" placeholder="Nome *">
-<input id="zap" class="inp" placeholder="WhatsApp 83999999999">
-<input id="end" class="inp" placeholder="Endereco">
-<input id="bai" class="inp" placeholder="Bairro">
-<div style="border:1px dashed #2f6bff;padding:8px;border-radius:10px;margin-top:8px">
-<b style="color:#60a5fa;font-size:11px">📍 LOCALIZACAO</b><br>
-<div style="display:flex;gap:6px"><input id="lat" class="inp" placeholder="Latitude"><input id="lng" class="inp" placeholder="Longitude"></div>
-<button class="inp" style="background:#22c55e" onclick="gps()">📍 Usar meu GPS agora</button>
-<input id="link" class="inp" placeholder="Cole link do Google Maps" oninput="linkM()">
-<div id="prev" style="margin-top:6px"></div>
+<header><div class="header"><h1>🔥 EL SHADAY GÁS</h1><p>Clientes • Venda a Prazo • Cobranças • Entregas</p></div></header>
+<nav>
+<button class="active" onclick="abrirTela('dashboard',this)">📊 Início</button>
+<button onclick="abrirTela('clientes',this)">👥 Clientes</button>
+<button onclick="abrirTela('novo',this)">➕ Cliente</button>
+<button onclick="abrirTela('venda',this)">🔥 Vender a Prazo</button>
+<button onclick="abrirTela('receber',this)">💳 A Receber</button>
+<button onclick="abrirTela('backup',this)">💾 Backup</button>
+</nav>
+<main>
+<section id="dashboard" class="section active">
+<div class="stats">
+<div class="stat"><small>👥 Clientes</small><strong id="dashClientes">0</strong></div>
+<div class="stat"><small>💰 A receber</small><strong id="dashReceber">R$ 0,00</strong></div>
+<div class="stat"><small>🔴 Vencido</small><strong id="dashVencido">R$ 0,00</strong></div>
+<div class="stat"><small>🟢 Recebido</small><strong id="dashPago">R$ 0,00</strong></div>
 </div>
-<input id="dev" class="inp" type="number" placeholder="Valor devendo R$">
-<button class="inp" style="background:#2f6bff;font-weight:900" onclick="salvar()">💾 SALVAR CLIENTE</button>
-<button class="inp" style="background:#334173" onclick="fechar()">Cancelar</button>
-<button id="del" class="inp" style="background:#ef4444;display:none" onclick="excluir()">Excluir Cliente</button>
-</div></div>
+<div class="card"><h2>🔔 Alertas de cobrança</h2><div id="dashboardAlertas"></div></div>
+<div class="card"><h2>📋 Resumo</h2>
+<p>🔥 Vendas a prazo: <b id="dashVendas">0</b></p>
+<p style="margin-top:8px">🟡 Contas pendentes: <b id="dashPendentes">0</b></p>
+<p style="margin-top:8px">🔴 Contas vencidas: <b id="dashContasVencidas">0</b></p>
+<p style="margin-top:8px">🔔 Vencendo hoje: <b id="dashHoje">0</b></p>
+</div>
+</section>
+<section id="clientes" class="section"><div class="card"><h2>👥 Clientes cadastrados</h2><input id="pesquisaCliente" placeholder="🔎 Pesquisar cliente, WhatsApp ou endereço" oninput="mostrarClientes()"><div id="listaClientes" style="margin-top:15px"></div></div></section>
+<section id="novo" class="section"><div class="card"><h2 id="tituloCliente">➕ Cadastrar Cliente</h2>
+<form id="formCliente"><input type="hidden" id="clienteEditando"><div class="grid">
+<div><label>Nome completo *</label><input id="nome" required></div>
+<div><label>WhatsApp *</label><input id="whatsapp" placeholder="82999999999" required></div>
+<div class="full"><label>Endereço *</label><input id="endereco" required></div>
+<div><label>Bairro</label><input id="bairro"></div>
+<div><label>Cidade</label><input id="cidade" value="Maceió"></div>
+<div class="full"><label>Observações</label><textarea id="observacoes"></textarea></div>
+</div>
+<div class="info-location"><h3>📍 Localização do cliente</h3><p id="statusLocalizacao" style="margin-top:8px">Nenhuma localização cadastrada.</p>
+<div class="actions"><button type="button" class="btn btn-map" onclick="capturarLocalizacao()">📍 Capturar localização atual</button><button type="button" class="btn btn-blue" onclick="abrirEnderecoMaps()">🗺️ Procurar endereço no Maps</button></div><input type="hidden" id="latitude"><input type="hidden" id="longitude"></div>
+<button class="btn btn-green" type="submit">💾 Salvar Cliente</button><button type="button" class="btn btn-gray" onclick="limparCliente()">Limpar</button>
+</form></div></section>
+<section id="venda" class="section"><div class="card"><h2>🔥 Vender Gás a Prazo</h2><form id="formVenda"><div class="grid">
+<div class="full"><label>Cliente *</label><select id="vendaCliente" required><option value="">Selecione o cliente</option></select></div>
+<div><label>Data da venda *</label><input type="date" id="dataVenda" required></div>
+<div><label>Data para pagamento *</label><input type="date" id="vencimento" required></div>
+<div><label>Produto</label><input id="produto" value="Botijão de Gás"></div>
+<div><label>Quantidade</label><input type="number" id="quantidade" value="1" min="1"></div>
+<div><label>Valor total (R$) *</label><input type="number" id="valor" step="0.01" min="0" placeholder="140.00" required></div>
+<div class="full"><label>Observação</label><textarea id="observacaoVenda"></textarea></div>
+</div><button class="btn btn-green" type="submit">🔥 REGISTRAR VENDA A PRAZO</button></form></div>
+<div class="card"><h2>📋 Últimas vendas</h2><div id="ultimasVendas"></div></div></section>
+<section id="receber" class="section"><div class="card"><h2>💳 Contas a Receber</h2><div class="actions">
+<button class="btn btn-gray" onclick="filtrar('todas')">Todas</button><button class="btn btn-orange" onclick="filtrar('pendente')">🟡 Pendentes</button><button class="btn btn-red" onclick="filtrar('vencido')">🔴 Vencidas</button><button class="btn btn-blue" onclick="filtrar('hoje')">🔔 Hoje</button><button class="btn btn-green" onclick="filtrar('pago')">🟢 Pagas</button>
+</div><div id="listaReceber" style="margin-top:15px"></div></div></section>
+<section id="backup" class="section"><div class="card"><h2>💾 Backup dos dados</h2><p>Faça uma cópia dos clientes e vendas para não perder seus dados.</p><button class="btn btn-green" onclick="exportarBackup()">📤 Fazer backup</button><button class="btn btn-blue" onclick="document.getElementById('arquivoBackup').click()">📥 Restaurar backup</button><input type="file" id="arquivoBackup" accept=".json" style="display:none" onchange="importarBackup(event)"></div><div class="card"><h2>⚠️ Atenção</h2><p>Os dados desta versão são salvos no navegador do aparelho. Faça backups regularmente.</p></div></section>
+</main>
+<button class="fab" onclick="abrirTela('novo',document.querySelectorAll('nav button')[2])">+</button>
+<div id="modal" class="modal"><div class="modal-content"><div class="modal-head"><h2>👤 Cliente</h2><button class="close" onclick="fecharModal()">×</button></div><div id="modalConteudo"></div></div></div>
 <script>
-var cs=[];try{cs=JSON.parse(localStorage.getItem('es_v4')||'[]')}catch(e){};var edit=null;
-function save(){localStorage.setItem('es_v4',JSON.stringify(cs))}
-function abrir(){edit=null;document.getElementById('tit').innerText='Novo Cliente';['nome','zap','end','bai','lat','lng','link','dev'].forEach(function(i){document.getElementById(i).value=''});document.getElementById('del').style.display='none';document.getElementById('prev').innerHTML='';document.getElementById('modal').classList.add('on')}
-function fechar(){document.getElementById('modal').classList.remove('on')}
-function gps(){if(!navigator.geolocation){alert('Sem GPS');return}navigator.geolocation.getCurrentPosition(function(p){document.getElementById('lat').value=p.coords.latitude.toFixed(6);document.getElementById('lng').value=p.coords.longitude.toFixed(6);previa()},function(){alert('Ative o GPS')})}
-function previa(){var a=document.getElementById('lat').value,b=document.getElementById('lng').value;if(!a)return;document.getElementById('prev').innerHTML='<a href="https://www.google.com/maps?q='+a+','+b+'" target="_blank" style="color:#60a5fa">📍 Ver no Maps: '+a+','+b+'</a>'}
-function linkM(){var v=document.getElementById('link').value;var m=v.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);if(m){document.getElementById('lat').value=m[1];document.getElementById('lng').value=m[2];previa()}}
-function salvar(){var n=document.getElementById('nome').value.trim();if(!n){alert('Digite o nome');return}var o={id:edit||Date.now(),nome:n,zap:document.getElementById('zap').value.replace(/\D/g,''),end:document.getElementById('end').value,bai:document.getElementById('bai').value,lat:document.getElementById('lat').value,lng:document.getElementById('lng').value,dev:parseFloat(document.getElementById('dev').value)||0};if(edit){var i=cs.findIndex(function(x){return x.id==edit});cs[i]=o}else cs.push(o);save();fechar();ver()}
-function editar(id){var c=cs.find(function(x){return x.id==id});edit=id;document.getElementById('tit').innerText='Editar Cliente';document.getElementById('nome').value=c.nome;document.getElementById('zap').value=c.zap;document.getElementById('end').value=c.end;document.getElementById('bai').value=c.bai;document.getElementById('lat').value=c.lat||'';document.getElementById('lng').value=c.lng||'';document.getElementById('dev').value=c.dev;document.getElementById('del').style.display='block';previa();document.getElementById('modal').classList.add('on')}
-function excluir(){if(confirm('Excluir este cliente?')){cs=cs.filter(function(x){return x.id!=edit});save();fechar();ver()}}
-function ver(){var b=(document.getElementById('busca').value||'').toLowerCase();var f=cs.filter(function(c){return (c.nome+' '+c.bai+' '+c.end).toLowerCase().includes(b)});document.getElementById('lista').innerHTML=f.map(function(c){return '<div class="item" onclick="editar('+c.id+')"><b>'+c.nome+' '+(c.lat?'📍':'')+'</b><br><small>'+c.bai+' - '+c.end+' | Deve R$ '+c.dev.toFixed(2)+'</small><br><div style="margin-top:6px"><a href="https://wa.me/55'+c.zap+'" target="_blank" onclick="event.stopPropagation()" style="background:#22c55e;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">🟢 Zap</a> '+(c.lat?'<a href="https://www.google.com/maps?q='+c.lat+','+c.lng+'" target="_blank" onclick="event.stopPropagation()" style="background:#334173;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">📍 Ver</a> <a href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank" onclick="event.stopPropagation()" style="background:#2f6bff;color:#fff;padding:6px 10px;border-radius:15px;text-decoration:none">🚗 Rota</a>':'')+'</div></div>'}).join('')||'<p style="text-align:center;opacity:.5;padding:20px">Nenhum cliente<br>Clique no + azul</p>'}
-ver();
-</script>
-</body>
-</html>
+let clientes=JSON.parse(localStorage.getItem("ELSHADAY_CLIENTES")||"[]");
+let vendas=JSON.parse(localStorage.getItem("ELSHADAY_VENDAS")||"[]");
+let filtroAtual="todas";
+function salvar(){localStorage.setItem("ELSHADAY_CLIENTES",JSON.stringify(clientes));localStorage.setItem("ELSHADAY_VENDAS",JSON.stringify(vendas));}
+function hoje(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
+function dataBR(data){if(!data)return"";const p=data.split("-");return p[2]+"/"+p[1]+"/"+p[0];}
+function moeda(valor){return Number(valor||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});}
+function abrirTela(id,botao){document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));document.getElementById(id).classList.add("active");document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));if(botao)botao.classList.add("active");atualizar();}
+function capturarLocalizacao(){if(!navigator.geolocation){alert("Seu navegador não permite localização.");return;}navigator.geolocation.getCurrentPosition(function(pos){const lat=pos.coords.latitude;const lng=pos.coords.longitude;document.getElementById("latitude").value=lat;document.getElementById("longitude").value=lng;document.getElementById("statusLocalizacao").innerHTML="✅ Localização salva<br>Latitude: "+lat.toFixed(6)+"<br>Longitude: "+lng.toFixed(6);},function(){alert("Não foi possível obter a localização. Permita o acesso à localização no navegador.");},{enableHighAccuracy:true,timeout:15000});}
+function abrirEnderecoMaps(){const endereco=[document.getElementById("endereco").value,document.getElementById("bairro").value,document.getElementById("cidade").value].filter(Boolean).join(", ");if(!endereco){alert("Digite o endereço primeiro.");return;}window.open("https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(endereco),"_blank");}
+function abrirMaps(lat,lng){window.open("https://www.google.com/maps/search/?api=1&query="+lat+","+lng,"_blank");}
+function rota(lat,lng){window.open("https://www.google.com/maps/dir/?api=1&destination="+lat+","+lng,"_blank");}
+function whatsapp(numero,mensagem){let telefone=String(numero).replace(/\D/g,"");if(telefone.length===11)telefone="55"+telefone;if(!telefone.startsWith("55"))telefone="55"+telefone;window.open("https://wa.me/"+telefone+"?text="+encodeURIComponent(mensagem||""),"_blank");}
+document.getElementById("formCliente").addEventListener("submit",function(e){e.preventDefault();const editando=document.getElementById("clienteEditando").value;const dados={nome:document.getElementById("nome").value.trim(),whatsapp:document.getElementById("whatsapp").value.trim(),endereco:document.getElementById("endereco").value.trim(),bairro:document.getElementById("bairro").value.trim(),cidade:document.getElementById("cidade").value.trim(),observacoes:document.getElementById("observacoes").value.trim(),latitude:document.getElementById("latitude").value,longitude:document.getElementById("longitude").value};if(editando){const index=clientes.findIndex(c=>String(c.id)===String(editando));if(index>=0){clientes[index]={...clientes[index],...dados};alert("✅ Cliente atualizado!");}}else{clientes.push({id:Date.now(),...dados,criadoEm:new Date().toISOString()});alert("✅ Cliente cadastrado!");}salvar();limparCliente();abrirTela("clientes");});
+function limparCliente(){document.getElementById("formCliente").reset();document.getElementById("clienteEditando").value="";document.getElementById("cidade").value="Maceió";document.getElementById("latitude").value="";document.getElementById("longitude").value="";document.getElementById("statusLocalizacao").innerText="Nenhuma localização cadastrada.";document.getElementById("tituloCliente").innerText="➕ Cadastrar Cliente";}
+function editarCliente(id){const c=clientes.find(x=>x.id===id);if(!c)return;document.getElementById("clienteEditando").value=c.id;document.getElementById("nome").value=c.nome;document.getElementById("whatsapp").value=c.whatsapp;document.getElementById("endereco").value=c.endereco;document.getElementById("bairro").value=c.bairro;document.getElementById("cidade").value=c.cidade;document.getElementById("observacoes").value=c.observacoes;document.getElementById("latitude").value=c.latitude||"";document.getElementById("longitude").value=c.longitude||"";if(c.latitude&&c.longitude){document.getElementById("statusLocalizacao").innerHTML="✅ Localização cadastrada<br>"+c.latitude+" / "+c.longitude;}else{document.getElementById("statusLocalizacao").innerText="Nenhuma localização cadastrada.";}document.getElementById("tituloCliente").innerText="✏️ Editar Cliente";abrirTela("novo");}
+function excluirCliente(id){const temVenda=vendas.some(v=>v.clienteId===id);if(temVenda){alert("Este cliente possui vendas registradas. Não é possível excluir para preservar o histórico.");return;}if(!confirm("Tem certeza que deseja excluir este cliente?"))return;clientes=clientes.filter(c=>c.id!==id);salvar();atualizar();}
+function mostrarClientes(){const busca=(document.getElementById("pesquisaCliente").value||"").toLowerCase();const lista=document.getElementById("listaClientes");const resultado=clientes.filter(c=>c.nome.toLowerCase().includes(busca)||c.whatsapp.toLowerCase().includes(busca)||c.endereco.toLowerCase().includes(busca));if(!resultado.length){lista.innerHTML='<div class="empty">Nenhum cliente encontrado.</div>';return;}lista.innerHTML=resultado.map(c=>{const divida=vendas.filter(v=>v.clienteId===c.id&&statusVenda(v)!=="Pago").reduce((total,v)=>total+Number(v.valor),0);return `<div class="cliente"><h3>👤 ${esc(c.nome)}</h3><p>📱 ${esc(c.whatsapp)}</p><p>🏠 ${esc(c.endereco)}${c.bairro?" - "+esc(c.bairro):""}</p><p>💰 <b>Saldo devedor: ${moeda(divida)}</b></p><p>${c.latitude&&c.longitude?"📍 Localização cadastrada":"⚠️ Sem localização"}</p><div class="actions"><button class="btn btn-green" onclick="abrirDetalhes(${c.id})">👤 Detalhes</button><button class="btn btn-whatsapp" onclick="whatsapp('${attr(c.whatsapp)}')">🟢 WhatsApp</button><button class="btn btn-orange" onclick="editarCliente(${c.id})">✏️ Editar</button>${c.latitude&&c.longitude?`<button class="btn btn-map" onclick="abrirMaps(${c.latitude},${c.longitude})">📍 Maps</button><button class="btn btn-blue" onclick="rota(${c.latitude},${c.longitude})">🚗 Rota</button>`:""}<button class="btn btn-red" onclick="excluirCliente(${c.id})">🗑️ Excluir</button></div></div>`;}).join("");}
+function abrirDetalhes(id){const c=clientes.find(x=>x.id===id);if(!c)return;const historico=vendas.filter(v=>v.clienteId===id);const divida=historico.filter(v=>statusVenda(v)!=="Pago").reduce((s,v)=>s+Number(v.valor),0);let html=`<div class="cliente"><h3>${esc(c.nome)}</h3><p>📱 ${esc(c.whatsapp)}</p><p>🏠 ${esc(c.endereco)}</p><p>🏘️ ${esc(c.bairro)}</p><p>🌆 ${esc(c.cidade)}</p><p>💰 <b>Saldo devedor: ${moeda(divida)}</b></p><p>📝 ${esc(c.observacoes||"Sem observações")}</p></div><div class="actions"><button class="btn btn-whatsapp" onclick="whatsapp('${attr(c.whatsapp)}','Olá, ${attr(c.nome)}! Aqui é da El Shaday Gás.')">🟢 WhatsApp</button>${c.latitude&&c.longitude?`<button class="btn btn-map" onclick="abrirMaps(${c.latitude},${c.longitude})">📍 Ver localização</button><button class="btn btn-blue" onclick="rota(${c.latitude},${c.longitude})">🚗 Traçar rota</button>`:""}<button class="btn btn-green" onclick="venderPara(${c.id})">🔥 Vender a prazo</button></div><h3 style="margin-top:20px;color:#087f3f">📋 Histórico de compras</h3>`;if(!historico.length){html+="<p style='margin-top:10px'>Nenhuma venda registrada.</p>";}else{html+=historico.slice().reverse().map(v=>{const st=statusVenda(v);return `<div class="cliente"><b>🔥 ${esc(v.produto)}</b><p>Quantidade: ${v.quantidade}</p><p>Valor: ${moeda(v.valor)}</p><p>Venda: ${dataBR(v.dataVenda)}</p><p>Vencimento: ${dataBR(v.vencimento)}</p><p><span class="badge badge-${st.toLowerCase()}">${st}</span></p>${st!=="Pago"?`<button class="btn btn-whatsapp" onclick="cobrar(${v.id})">🟢 Cobrar</button><button class="btn btn-green" onclick="registrarPagamento(${v.id})">💳 Recebeu</button>`:""}</div>`;}).join("");}document.getElementById("modalConteudo").innerHTML=html;document.getElementById("modal").style.display="block";}
+function fecharModal(){document.getElementById("modal").style.display="none";}
+document.getElementById("formVenda").addEventListener("submit",function(e){e.preventDefault();const clienteId=Number(document.getElementById("vendaCliente").value);if(!clienteId){alert("Selecione um cliente.");return;}const venda={id:Date.now(),clienteId:clienteId,dataVenda:document.getElementById("dataVenda").value,vencimento:document.getElementById("vencimento").value,produto:document.getElementById("produto").value,quantidade:Number(document.getElementById("quantidade").value),valor:Number(document.getElementById("valor").value),observacao:document.getElementById("observacaoVenda").value,status:"Pendente",dataPagamento:""};vendas.push(venda);salvar();alert("🔥 VENDA A PRAZO REGISTRADA COM SUCESSO!");document.getElementById("formVenda").reset();document.getElementById("dataVenda").value=hoje();abrirTela("receber");});
+function venderPara(id){fecharModal();document.getElementById("vendaCliente").value=id;abrirTela("venda");}
+function statusVenda(v){if(v.status==="Pago")return"Pago";if(v.vencimento<hoje()){v.status="Vencido";return"Vencido";}return"Pendente";}
+function cobrar(id){const v=vendas.find(x=>x.id===id);if(!v)return;const c=clientes.find(x=>x.id===v.clienteId);if(!c)return;const status=statusVenda(v);let mensagem;if(status==="Vencido"){mensagem="Olá, "+c.nome+"! Aqui é da El Shaday Gás. Passando para lembrar que sua conta no valor de "+moeda(v.valor)+" venceu em "+dataBR(v.vencimento)+". Poderia verificar o pagamento? Agradecemos pela preferência!";}else{mensagem="Olá, "+c.nome+"! Aqui é da El Shaday Gás. Passando para lembrar que sua conta no valor de "+moeda(v.valor)+" vence em "+dataBR(v.vencimento)+". Agradecemos pela preferência!";}whatsapp(c.whatsapp,mensagem);}
+function registrarPagamento(id){const v=vendas.find(x=>x.id===id);if(!v)return;if(!confirm("Confirmar que recebeu "+moeda(v.valor)+"?"))return;v.status="Pago";v.dataPagamento=hoje();salvar();alert("✅ Pagamento registrado com sucesso!");fecharModal();atualizar();}
+function filtrar(tipo){filtroAtual=tipo;renderReceber();}
+function renderReceber(){vendas.forEach(v=>statusVenda(v));const lista=document.getElementById("listaReceber");let dados=[...vendas];if(filtroAtual==="pendente")dados=dados.filter(v=>v.status==="Pendente");if(filtroAtual==="vencido")dados=dados.filter(v=>v.status==="Vencido");if(filtroAtual==="pago")dados=dados.filter(v=>v.status==="Pago");if(filtroAtual==

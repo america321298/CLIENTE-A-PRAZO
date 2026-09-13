@@ -1,10 +1,8 @@
-name: robô
+name: robo
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 */5 * * *'
 jobs:
-  bot:
+  robo:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

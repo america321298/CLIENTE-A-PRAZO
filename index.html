@@ -86,7 +86,6 @@
 <script>
 let EST_GAS = 200;
 let EST_AGUA = 150;
-
 function iniciar(){
   let eg = localStorage.getItem('EST_GAS_FINAL');
   let ea = localStorage.getItem('EST_AGUA_FINAL');
@@ -230,10 +229,18 @@ function zap(){
 }
 function pdf(){
   const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
-  let rows=[]; document.querySelectorAll('#lista.linha').forEach(l=>{ let c=l.querySelector('.cCli').value||'Cliente'; let p=l.querySelector('.cProd').value; let q=l.querySelector('.cQtd').value; let u=l.querySelector('.cUnit').value; let t=l.querySelector('.totalCell').innerText; if(q) rows.push([c,p,q,u,t,l.querySelector('.cPix').value,l.querySelector('.cDh').value,l.querySelector('.cCart').value,l.querySelector('.fiCell').innerText]); });
+  let rows=[];
+  document.querySelectorAll('#lista.linha').forEach(l=>{
+    let c=l.querySelector('.cCli').value||'';
+    let p=l.querySelector('.cProd').value;
+    let q=l.querySelector('.cQtd').value;
+    let u=l.querySelector('.cUnit').value;
+    let t=l.querySelector('.totalCell').innerText;
+    if(c && q) rows.push([c,p,q,u,t,l.querySelector('.cPix').value,l.querySelector('.cDh').value,l.querySelector('.cCart').value,l.querySelector('.fiCell').innerText]);
+  });
   if(!rows.length){alert('Sem vendas');return;}
   doc.text('EL SHADAY '+new Date().toLocaleDateString(),14,10);
-  doc.autoTable({head:[['Cli','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:14});
+  doc.autoTable({head:[['Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:14});
   doc.save('elshaday.pdf');
 }
 window.onload=iniciar;

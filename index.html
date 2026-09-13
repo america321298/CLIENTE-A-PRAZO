@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html translate="no" class="notranslate">
 <head>
-<meta charset="UTF-8">
-<meta name="google" content="notranslate">
+<meta charset="UTF-8"><meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>EL SHADAY FIX TECLADO</title>
+<title>EL SHADAY FIX DESPESA HIST</title>
 <style>
 body{margin:0;font-family:Arial;background:#f0f0f0}
 .titulo{background:#1a7a34;color:#fff;text-align:center;padding:8px;font-weight:bold}
@@ -13,24 +12,23 @@ body{margin:0;font-family:Arial;background:#f0f0f0}
 .top.white{background:#fff;color:#000;border:1px solid #ccc}
 .top b{font-size:16px;display:block}
 .top.alerta{background:red!important;animation:pisca 0.7s infinite}
-@keyframes pisca{0%{opacity:1}50%{opacity:0.4}100%{opacity:1}}
+@keyframes pisca{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
 .card{margin:4px;background:#fff;border-radius:8px;padding:4px;border:1.5px solid #0d47a1}
-.wrap{overflow-x:auto}
-.tabela{min-width:680px}
+.wrap{overflow-x:auto}.tabela{min-width:680px}
 .th{display:grid;grid-template-columns:92px 36px 44px 48px 58px 42px 42px 42px 48px;gap:2px;font-size:8px;font-weight:bold;text-align:center}
 .th span{padding:4px;border-radius:4px;color:#fff}
 .linha{display:grid;grid-template-columns:92px 36px 44px 48px 58px 42px 42px 42px 48px;gap:2px;margin:2px 0}
-.linha input,.linha select{height:36px;border:1.5px solid #888;border-radius:5px;text-align:center;font-size:14px;font-weight:bold}
-.totalCell,.fiCell{height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold;font-size:12px}
+.linha input,.linha select{height:36px;border:1.5px solid #888;border-radius:5px;text-align:center;font-size:13px;font-weight:bold}
+.totalCell,.fiCell{height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold}
 .totalCell{background:#ffeb3b}.fiCell{background:#ffcdd2}
 .sum{padding:8px;border-radius:6px;color:#fff;font-weight:bold;display:flex;justify-content:space-between;margin:2px}
 .btn{border:none;border-radius:6px;padding:10px 4px;color:#fff;font-weight:bold;font-size:11px}
 .bot{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin:4px}
+.histCard{display:none;margin:4px;background:#fff;border-radius:8px;padding:6px;border:2px solid #7b1fa2}
 </style>
 </head>
 <body class="notranslate" translate="no">
-
-<div class="titulo">🔥 EL SHADAY GÁS E ÁGUA</div>
+<div class="titulo">🔥 EL SHADAY GÁS E ÁGUA 💧</div>
 <div class="t3">
 <div class="top" id="boxCheio">CHEIO<br><b id="gCheio">200</b></div>
 <div class="top white">VAZIO<br><b id="gVazio">0</b></div>
@@ -39,7 +37,6 @@ body{margin:0;font-family:Arial;background:#f0f0f0}
 <div class="top white">VAZIA<br><b id="aVazia">0</b></div>
 <div class="top white">VEND<br><b id="aVendida">0</b></div>
 </div>
-
 <div class="card">
 <div style="background:#ffeb3b;text-align:center;font-weight:bold;padding:5px;border-radius:6px">📒 FOLHA DE CADERNO</div>
 <div class="wrap"><div class="tabela">
@@ -53,7 +50,6 @@ body{margin:0;font-family:Arial;background:#f0f0f0}
 <button class="btn" style="background:#2e7d32" onclick="add(1)">+1 Venda</button>
 </div>
 </div>
-
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px">
 <div class="sum" style="background:#1565c0">PIX: R$<span id="sPix">0</span></div>
 <div class="sum" style="background:#2e7d32">DH: R$<span id="sDH">0</span></div>
@@ -61,43 +57,59 @@ body{margin:0;font-family:Arial;background:#f0f0f0}
 <div class="sum" style="background:#c62828">FIADO: R$<span id="sFiado">0</span></div>
 <div class="sum" style="background:#0d47a1;grid-column:span 2">TOTAL GERAL: R$<span id="sGeral">0</span></div>
 </div>
-
-<div style="margin:4px;background:#fff;border:1.5px solid red;border-radius:8px;padding:6px">
+<div style="margin:4px;background:#fff;border:2px solid #e53935;border-radius:8px;padding:6px">
 <div style="display:grid;grid-template-columns:80px 1fr;gap:6px">
-<div>Desp. R$<br><input id="despValor" translate="no" type="tel" inputmode="numeric" value="0" style="width:100%;padding:6px"></div>
-<div>Motivo<br><input id="despMotivo" translate="no" type="text" placeholder="Gasolina" style="width:100%;padding:6px"></div>
+<div>Desp. R$<br><input id="despValor" translate="no" type="tel" inputmode="numeric" value="0" style="width:100%;padding:8px;border-radius:4px;border:1.5px solid #999;font-weight:bold" oninput="salvarDesp(); calcular();"></div>
+<div>Motivo<br><input id="despMotivo" translate="no" type="text" placeholder="Ex: Almoço" style="width:100%;padding:8px;border-radius:4px;border:1.5px solid #999" oninput="salvarDesp()"></div>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
 <div class="sum" style="background:#ef5350">DESPESA: R$<span id="sDesp">0</span></div>
-<div class="sum" style="background:#2e7d32">LUCRO: R$<span id="sLucro">0</span></div>
+<div class="sum" style="background:#2e7d32">LUCRO REAL: R$<span id="sLucro">0</span></div>
 </div>
 </div>
-
 <div class="bot">
 <button class="btn" style="background:#2e7d32" onclick="add(5)">+5</button>
 <button class="btn" style="background:#ef6c00" onclick="remFolha()">-Folha</button>
 <button class="btn" style="background:#0d47a1" onclick="salvar()">💾Salvar</button>
-<button class="btn" style="background:#7b1fa2" onclick="renderHist()">Hist</button>
+<button class="btn" style="background:#7b1fa2" onclick="toggleHist()">Hist</button>
 <button class="btn" style="background:#29b6f6" onclick="repor()">REPOR</button>
 <button class="btn" style="background:#c62828" onclick="zerar()">ZERAR</button>
 <button class="btn" style="background:#000" onclick="window.print()">PDF</button>
 <button class="btn" style="background:#e64a19" onclick="limpar()">Limpar</button>
 </div>
-
+<div class="histCard" id="histCard">
+<div style="font-weight:bold;display:flex;justify-content:space-between"><span>📊 HISTÓRICO</span><button onclick="document.getElementById('histCard').style.display='none'" style="background:red;color:#fff;border:none;border-radius:4px;padding:2px 8px">X</button></div>
+<div style="display:grid;grid-template-columns:70px 30px 30px 60px 70px 60px;gap:2px;background:#0d47a1;color:#fff;padding:4px;border-radius:4px;font-size:10px;text-align:center;margin-top:4px"><span>DATA</span><span>GÁS</span><span>ÁGUA</span><span>FIADO</span><span>RECEBIDO</span><span>DESP</span></div>
+<div id="histLista" style="font-size:11px"></div>
+<div style="background:#0d47a1;color:#fff;padding:6px;border-radius:6px;text-align:center;margin-top:4px;font-size:11px" id="soma30">SOMA 30 DIAS: 0 GÁS</div>
+</div>
 <script>
 let ESTOQUE={gas:200,agua:150};
-let DB=JSON.parse(localStorage.getItem('ELSHADAY_TEC')||'null');
-let HIST=JSON.parse(localStorage.getItem('ELSHADAY_HIST_TEC')||'{}');
+let DB=JSON.parse(localStorage.getItem('ELSHADAY_TEC2')||'null');
+let DESP=JSON.parse(localStorage.getItem('ELSHADAY_DESP')||'{}');
+let HIST=JSON.parse(localStorage.getItem('ELSHADAY_HIST2')||'{}');
 let hoje=new Date().toISOString().slice(0,10);
 if(!DB){DB={}; DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});}
-
+if(!DB[hoje]) DB[hoje]=[];
+if(!DESP[hoje]) DESP[hoje]={valor:0,motivo:''};
+function salvarDesp(){ DESP[hoje]={valor:document.getElementById('despValor').value, motivo:document.getElementById('despMotivo').value}; localStorage.setItem('ELSHADAY_DESP',JSON.stringify(DESP)); }
 function add(n){for(let i=0;i<n;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar();}
 function remFolha(){DB[hoje].splice(-3); montar();}
-function zerar(){if(confirm('Zerar HOJE?')){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar();}}
+function zerar(){if(confirm('Zerar HOJE?')){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); DESP[hoje]={valor:0,motivo:''}; document.getElementById('despValor').value=0; document.getElementById('despMotivo').value=''; salvarDesp(); montar();}}
 function limpar(){if(confirm('Limpar TUDO?')){localStorage.clear(); location.reload();}}
-function repor(){let g=prompt('Gás entrou?','50'); if(g) ESTOQUE.gas+=parseInt(g)||0; calcular();}
-function salvar(){localStorage.setItem('ELSHADAY_TEC',JSON.stringify(DB)); let gas=0,agua=0,fiado=0,recebido=0; DB[hoje].forEach(v=>{let tot=(+v.qtd||0)*(+v.unit||0); let f=tot-(+v.pix||0)-(+v.dh||0)-(+v.cart||0); if(v.prod=='G') gas+=+v.qtd||0; else agua+=+v.qtd||0; fiado+=f>0?f:0; recebido+=(+v.pix||0)+(+v.dh||0)+(+v.cart||0);}); HIST[hoje]={gas,agua,fiado,recebido}; localStorage.setItem('ELSHADAY_HIST_TEC',JSON.stringify(HIST)); alert('Salvo!');}
-
+function repor(){let g=prompt('Gás cheio entrou?','50'); if(g) ESTOQUE.gas+=parseInt(g)||0; calcular();}
+function salvar(){
+ localStorage.setItem('ELSHADAY_TEC2',JSON.stringify(DB));
+ salvarDesp();
+ let gas=0,agua=0,fiado=0,recebido=0;
+ DB[hoje].forEach(v=>{let tot=(+v.qtd||0)*(+v.unit||0); let f=tot-(+v.pix||0)-(+v.dh||0)-(+v.cart||0); if(v.prod=='G') gas+=+v.qtd||0; else agua+=+v.qtd||0; fiado+=f>0?f:0; recebido+=(+v.pix||0)+(+v.dh||0)+(+v.cart||0);});
+ let desp=+DESP[hoje].valor||0;
+ HIST[hoje]={gas,agua,fiado,recebido,desp, motivo:DESP[hoje].motivo};
+ localStorage.setItem('ELSHADAY_HIST2',JSON.stringify(HIST));
+ alert('Salvo! Gás:'+gas+' Desp:'+desp);
+ renderHist();
+ document.getElementById('histCard').style.display='block';
+}
 function montar(){
  let html='';
  DB[hoje].forEach((v,i)=>{
@@ -114,9 +126,9 @@ function montar(){
   </div>`;
  });
  document.getElementById('lista').innerHTML=html;
+ if(DESP[hoje]){ document.getElementById('despValor').value=DESP[hoje].valor||0; document.getElementById('despMotivo').value=DESP[hoje].motivo||''; }
  calcular();
 }
-
 function calcular(){
  let gVend=0,aVend=0,sPix=0,sDH=0,sCart=0,sFiado=0,sGeral=0;
  DB[hoje].forEach((v,i)=>{
@@ -144,10 +156,20 @@ function calcular(){
  let desp=+document.getElementById('despValor').value||0;
  document.getElementById('sDesp').innerText=desp;
  document.getElementById('sLucro').innerText=(sPix+sDH+sCart)-desp;
- localStorage.setItem('ELSHADAY_TEC',JSON.stringify(DB));
+ localStorage.setItem('ELSHADAY_TEC2',JSON.stringify(DB));
+}
+function toggleHist(){ let card=document.getElementById('histCard'); if(card.style.display=='block'){card.style.display='none'}else{renderHist(); card.style.display='block'} }
+function renderHist(){
+ let html=''; let totGas=0,totAgua=0;
+ Object.keys(HIST).sort().reverse().forEach(d=>{
+  let h=HIST[d]; totGas+=h.gas||0; totAgua+=h.agua||0;
+  html+=`<div style="display:grid;grid-template-columns:70px 30px 30px 60px 70px 60px;gap:2px;padding:5px;text-align:center;border-bottom:1px solid #ddd;font-size:10px"><span>${d.split('-').reverse().join('/')}</span><span>${h.gas||0}</span><span>${h.agua||0}</span><span style="color:red">R$${h.fiado||0}</span><span>R$${h.recebido||0}</span><span>R$${h.desp||0} ${h.motivo||''}</span></div>`;
+ });
+ document.getElementById('histLista').innerHTML=html || '<div style="padding:8px;text-align:center;color:#999">Nenhum dia salvo ainda. Clique em Salvar</div>';
+ document.getElementById('soma30').innerText=`SOMA 30 DIAS: ${totGas} GÁS | ${totAgua} ÁGUA`;
 }
 montar();
-function renderHist(){}
+renderHist();
 </script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 name: robo
-on:
-  workflow_dispatch:
+on: workflow_dispatch
 jobs:
   robo:
     runs-on: ubuntu-latest
@@ -9,5 +8,11 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-      - run: npm install
-      - run: node index.js
+      - name: Install
+        run: |
+          pwd
+          ls -la
+          if [ -f "CLIENTE-A-PRAZO/package.json" ]; then cd CLIENTE-A-PRAZO && npm install; else npm install; fi
+      - name: Run bot
+        run: |
+          if [ -f "CLIENTE-A-PRAZO/index.js" ]; then cd CLIENTE-A-PRAZO && node index.js; else node index.js; fi

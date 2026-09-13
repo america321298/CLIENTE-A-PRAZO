@@ -3,15 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
-<title>EL SHADAY GÁS E ÁGUA</title>
+<title>EL SHADAY GAS</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-input, select, textarea {
-  -webkit-user-select: text!important;
-  user-select: text!important;
-  touch-action: manipulation;
-  -webkit-appearance: none;
-}
+input,select,textarea{-webkit-user-select:text!important;user-select:text!important;touch-action:manipulation}
 body{background:#eef2f7;padding:10px;padding-bottom:30px}
 .topo{background:#0d2a6b;color:white;padding:16px;border-radius:15px;text-align:center}
 .topo h1{font-size:22px;font-weight:900}
@@ -42,179 +37,34 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 </style>
 </head>
 <body>
-<div class="topo">
-  <h1>🔥 EL SHADAY GÁS E ÁGUA 💧</h1>
-  <input type="date" id="data" inputmode="numeric">
-</div>
+<div class="topo"><h1>🔥 EL SHADAY GÁS E ÁGUA 💧</h1><input type="date" id="data"></div>
 <div class="cards">
-  <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()" inputmode="numeric" autocomplete="off"></div>
-  <div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">0</div></div>
-  <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
-  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()" inputmode="numeric" autocomplete="off"></div>
-  <div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">0</div></div>
-  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
+<div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()"></div>
+<div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">0</div></div>
+<div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
+<div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()"></div>
+<div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">0</div></div>
+<div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
 </div>
-<div class="tabela">
-  <div class="header">
-    <span style="background:#facc15">Cliente</span>
-    <span style="background:#e0e7ff">Produto</span>
-    <span style="background:#86efac">Qtd</span>
-    <span style="background:#000;color:white">Unit</span>
-    <span style="background:#fef08a">Total</span>
-    <span style="background:#3b82f6;color:white">PIX</span>
-    <span style="background:#16a34a;color:white">DH</span>
-  </div>
-  <div id="linhas"></div>
-  <div id="rodape" style="text-align:center;font-weight:bold;margin-top:10px;font-size:13px"></div>
-</div>
-<div class="resumo">
-  <div id="dataTopo" style="text-align:center;font-weight:bold;margin-top:10px;font-size:15px"></div>
-  <div class="resumo-linha">
-    <div class="resumo-box" style="background:#2563eb"><span>💰 PIX:</span><span id="totalPix">R$ 0</span></div>
-    <div class="resumo-box" style="background:#16a34a"><span>💵 DH:</span><span id="totalDh">R$ 0</span></div>
-  </div>
-  <div class="resumo-full" style="background:#1e3a8a"><span>📦 TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div>
-  <div class="resumo-full" style="background:#dc2626;border:2px solid #000"><span>⚠️ FALTA RECEBER:</span><span id="falta">R$ 0</span></div>
-  <div class="resumo-linha">
-    <div class="resumo-box" style="background:#ea580c"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div>
-    <div class="resumo-box" style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div>
-  </div>
-</div>
-<div class="botoes">
-  <button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
-  <button style="background:#f97316" onclick="remLinha()">- Folha</button>
-  <button style="background:#0d2a6b" onclick="salvarHistorico()">💾 Salvar Dia</button>
-  <button style="background:#7c3aed" onclick="verHistorico()">📊 Histórico Mês</button>
-</div>
-<div class="botoes">
-  <button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR HOJE</button>
-  <button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
-  <button style="background:#6b7280" onclick="fecharHistorico()">Fechar</button>
-  <button style="background:#000" onclick="limparHistoricoMesAtual()">🗑️ Limpar Mês</button>
-</div>
-<div class="hist" id="historicoDiv">
-  <h2>📊 HISTÓRICO COMPLETO DO MÊS</h2>
-  <div class="filtro">
-    <select id="filtroMes" onchange="verHistorico()"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select>
-    <select id="filtroAno" onchange="verHistorico()"><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select>
-  </div>
-  <div style="display:grid;grid-template-columns:1fr 0.6fr 0.6fr 0.7fr;gap:4px;padding:6px;background:#e5e7eb;border-radius:8px;font-size:11px;font-weight:900;text-align:center;margin-bottom:4px"><span>DATA</span><span>GÁS</span><span>ÁGUA</span><span>TOTAL</span></div>
-  <div id="listaHistorico"></div>
-  <div class="hist-total" id="totalMesDiv"></div>
-</div>
+<div class="tabela"><div class="header"><span style="background:#facc15">Cliente</span><span style="background:#e0e7ff">Produto</span><span style="background:#86efac">Qtd</span><span style="background:#000;color:white">Unit</span><span style="background:#fef08a">Total</span><span style="background:#3b82f6;color:white">PIX</span><span style="background:#16a34a;color:white">DH</span></div><div id="linhas"></div><div id="rodape" style="text-align:center;font-weight:bold;margin-top:10px;font-size:13px"></div></div>
+<div class="resumo"><div id="dataTopo" style="text-align:center;font-weight:bold;margin-top:10px;font-size:15px"></div><div class="resumo-linha"><div class="resumo-box" style="background:#2563eb"><span>💰 PIX:</span><span id="totalPix">R$ 0</span></div><div class="resumo-box" style="background:#16a34a"><span>💵 DH:</span><span id="totalDh">R$ 0</span></div></div><div class="resumo-full" style="background:#1e3a8a"><span>📦 TOTAL GERAL:</span><span id="totalGeral">R$ 0</span></div><div class="resumo-full" style="background:#dc2626;border:2px solid #000"><span>⚠️ FALTA RECEBER:</span><span id="falta">R$ 0</span></div><div class="resumo-linha"><div class="resumo-box" style="background:#ea580c"><span>🔥 GÁS:</span><span id="totalGas">R$ 0</span></div><div class="resumo-box" style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div></div></div>
+<div class="botoes"><button style="background:#16a34a" onclick="addLinha()">+ Venda</button><button style="background:#f97316" onclick="remLinha()">- Folha</button><button style="background:#0d2a6b" onclick="salvarHistorico()">💾 Salvar Dia</button><button style="background:#7c3aed" onclick="verHistorico()">📊 Histórico Mês</button></div>
+<div class="botoes"><button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR HOJE</button><button style="background:#1e40af" onclick="window.print()">📄 PDF</button><button style="background:#6b7280" onclick="fecharHistorico()">Fechar</button><button style="background:#000" onclick="limparHistoricoMesAtual()">🗑️ Limpar Mês</button></div>
+<div class="hist" id="historicoDiv"><h2>📊 HISTÓRICO COMPLETO DO MÊS</h2><div class="filtro"><select id="filtroMes" onchange="verHistorico()"><option value="01">Janeiro</option><option value="02">Fevereiro</option><option value="03">Março</option><option value="04">Abril</option><option value="05">Maio</option><option value="06">Junho</option><option value="07">Julho</option><option value="08">Agosto</option><option value="09">Setembro</option><option value="10">Outubro</option><option value="11">Novembro</option><option value="12">Dezembro</option></select><select id="filtroAno" onchange="verHistorico()"><option value="2025">2025</option><option value="2026" selected>2026</option><option value="2027">2027</option></select></div><div style="display:grid;grid-template-columns:1fr 0.6fr 0.6fr 0.7fr;gap:4px;padding:6px;background:#e5e7eb;border-radius:8px;font-size:11px;font-weight:900;text-align:center;margin-bottom:4px"><span>DATA</span><span>GÁS</span><span>ÁGUA</span><span>TOTAL</span></div><div id="listaHistorico"></div><div class="hist-total" id="totalMesDiv"></div></div>
 <script>
-let KEY='alysson_final_v4';
-let KEY_HIST='alysson_historico_mes_v4';
-function htmlLinha(d={}){
-  return `<div class="linha">
-    <input class="c" value="${d.cliente||''}" placeholder="Cliente" oninput="salvar()" inputmode="text" autocomplete="off" enterkeyhint="next">
-    <select class="prod" onchange="mudar(this)">
-      <option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option>
-      <option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option>
-    </select>
-    <input type="number" class="q" value="${d.q||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
-    <input type="number" class="u" value="${d.u||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
-    <div class="total">R$ 0</div>
-    <input type="number" class="p" value="${d.p||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
-    <input type="number" class="d" value="${d.dh||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
-  </div>`;
-}
+let KEY='alysson_final_v4';let KEY_HIST='alysson_historico_mes_v4';
+function htmlLinha(d={}){return `<div class="linha"><input class="c" value="${d.cliente||''}" placeholder="Cliente" oninput="salvar()" inputmode="text" autocomplete="off"><select class="prod" onchange="mudar(this)"><option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option><option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option></select><input type="number" class="q" value="${d.q||0}" oninput="salvar()" inputmode="numeric"><input type="number" class="u" value="${d.u||0}" oninput="salvar()" inputmode="numeric"><div class="total">R$ 0</div><input type="number" class="p" value="${d.p||0}" oninput="salvar()" inputmode="numeric"><input type="number" class="d" value="${d.dh||0}" oninput="salvar()" inputmode="numeric"></div>`;}
 function mudar(sel){let u=sel.closest('.linha').querySelector('.u'); if(sel.value==='gas') u.value=88; else u.value=8; salvar();}
-function calcular(){
-  let vg=0,va=0,pix=0,dh=0,geral=0,tGas=0,tAgua=0;
-  document.querySelectorAll('.linha').forEach(l=>{
-    let pr=l.querySelector('.prod').value;
-    let q=parseFloat(l.querySelector('.q').value)||0;
-    let u=parseFloat(l.querySelector('.u').value)||0;
-    let p=parseFloat(l.querySelector('.p').value)||0;
-    let dd=parseFloat(l.querySelector('.d').value)||0;
-    let tot=q*u; l.querySelector('.total').innerText='R$ '+tot;
-    if(pr.includes('gas')){vg+=q; tGas+=tot;} else {va+=q; tAgua+=tot;}
-    pix+=p; dh+=dd; geral+=tot;
-  });
-  document.getElementById('gasVazio').innerText=vg;
-  document.getElementById('aguaVazia').innerText=va;
-  document.getElementById('gasVendido').innerText=vg;
-  document.getElementById('aguaVendida').innerText=va;
-  document.getElementById('totalPix').innerText='R$ '+pix;
-  document.getElementById('totalDh').innerText='R$ '+dh;
-  document.getElementById('totalGas').innerText='R$ '+tGas;
-  document.getElementById('totalAgua').innerText='R$ '+tAgua;
-  document.getElementById('totalGeral').innerText='R$ '+geral;
-  document.getElementById('falta').innerText='R$ '+(geral-(pix+dh));
-  let gc=parseInt(document.getElementById('gasCheio').value)||0;
-  let ac=parseInt(document.getElementById('aguaCheia').value)||0;
-  let data=document.getElementById('data').value;
-  if(data){let [a,m,d]=data.split('-'); document.getElementById('dataTopo').innerText=`Data: ${d}/${m}/${a}`; document.getElementById('rodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vg} | Água Rest: ${ac-va}`;}
-  return {vg,va,pix,dh,geral,tGas,tAgua,data};
-}
-function salvar(){
-  calcular();
-  let dados={gasCheio:document.getElementById('gasCheio').value,aguaCheia:document.getElementById('aguaCheia').value,data:document.getElementById('data').value,linhas:[]};
-  document.querySelectorAll('.linha').forEach(l=>{dados.linhas.push({cliente:l.querySelector('.c').value,prod:l.querySelector('.prod').value,q:l.querySelector('.q').value,u:l.querySelector('.u').value,p:l.querySelector('.p').value,dh:l.querySelector('.d').value});});
-  localStorage.setItem(KEY,JSON.stringify(dados));
-}
+function calcular(){let vg=0,va=0,pix=0,dh=0,geral=0,tGas=0,tAgua=0;document.querySelectorAll('.linha').forEach(l=>{let pr=l.querySelector('.prod').value;let q=parseFloat(l.querySelector('.q').value)||0;let u=parseFloat(l.querySelector('.u').value)||0;let p=parseFloat(l.querySelector('.p').value)||0;let dd=parseFloat(l.querySelector('.d').value)||0;let tot=q*u; l.querySelector('.total').innerText='R$ '+tot;if(pr.includes('gas')){vg+=q; tGas+=tot;} else {va+=q; tAgua+=tot;}pix+=p; dh+=dd; geral+=tot;});document.getElementById('gasVazio').innerText=vg;document.getElementById('aguaVazia').innerText=va;document.getElementById('gasVendido').innerText=vg;document.getElementById('aguaVendida').innerText=va;document.getElementById('totalPix').innerText='R$ '+pix;document.getElementById('totalDh').innerText='R$ '+dh;document.getElementById('totalGas').innerText='R$ '+tGas;document.getElementById('totalAgua').innerText='R$ '+tAgua;document.getElementById('totalGeral').innerText='R$ '+geral;document.getElementById('falta').innerText='R$ '+(geral-(pix+dh));let gc=parseInt(document.getElementById('gasCheio').value)||0;let ac=parseInt(document.getElementById('aguaCheia').value)||0;let data=document.getElementById('data').value;if(data){let [a,m,d]=data.split('-'); document.getElementById('dataTopo').innerText=`Data: ${d}/${m}/${a}`; document.getElementById('rodape').innerText=`Data: ${d}/${m}/${a} | Gás Rest: ${gc-vg} | Água Rest: ${ac-va}`;}return {vg,va,pix,dh,geral,tGas,tAgua,data};}
+function salvar(){calcular();let dados={gasCheio:document.getElementById('gasCheio').value,aguaCheia:document.getElementById('aguaCheia').value,data:document.getElementById('data').value,linhas:[]};document.querySelectorAll('.linha').forEach(l=>{dados.linhas.push({cliente:l.querySelector('.c').value,prod:l.querySelector('.prod').value,q:l.querySelector('.q').value,u:l.querySelector('.u').value,p:l.querySelector('.p').value,dh:l.querySelector('.d').value});});localStorage.setItem(KEY,JSON.stringify(dados));}
 function addLinha(){document.getElementById('linhas').insertAdjacentHTML('beforeend',htmlLinha()); salvar();}
 function remLinha(){let ls=document.querySelectorAll('.linha'); if(ls.length>1){ls[ls.length-1].remove(); salvar();}}
 function zerarTudo(){if(confirm('Zerar HOJE? O histórico do mês continua!')){localStorage.removeItem(KEY); location.reload();}}
-function salvarHistorico(){
-  let res=calcular(); if(res.geral==0){alert('Nada pra salvar!'); return;}
-  let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
-  let data=res.data||new Date().toISOString().split('T')[0];
-  let [a,m,d]=data.split('-'); let dataBR=`${d}/${m}/${a}`;
-  let idx=hist.findIndex(h=>h.dataISO==data);
-  let item={dataISO:data,dataBR:dataBR,mes:m,ano:a,total:res.geral,pix:res.pix,dh:res.dh,gas:res.vg,agua:res.va,tGas:res.tGas,tAgua:res.tAgua};
-  if(idx>=0) hist[idx]=item; else hist.push(item);
-  localStorage.setItem(KEY_HIST,JSON.stringify(hist));
-  alert(`✅ Dia ${dataBR} salvo! 🔥 Gás: ${res.vg} | 💧 Água: ${res.va}`);
-}
-function verHistorico(){
-  let mesFiltro=document.getElementById('filtroMes').value;
-  let anoFiltro=document.getElementById('filtroAno').value;
-  let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
-  let histFiltrado=hist.filter(h=>h.mes==mesFiltro && h.ano==anoFiltro);
-  histFiltrado.sort((a,b)=>a.dataISO.localeCompare(b.dataISO));
-  let div=document.getElementById('listaHistorico');
-  let totalMes=0, totalGasQtd=0, totalAguaQtd=0, totalGasR=0, totalAguaR=0, totalPix=0, totalDh=0;
-  if(histFiltrado.length==0){div.innerHTML=`<div style="text-align:center;padding:10px">Nenhuma venda em ${mesFiltro}/${anoFiltro}</div>`;}
-  else{div.innerHTML=''; histFiltrado.forEach(h=>{
-      totalMes+=h.total; totalGasQtd+=h.gas; totalAguaQtd+=h.agua; totalGasR+=h.tGas; totalAguaR+=h.tAgua; totalPix+=h.pix; totalDh+=h.dh;
-      div.innerHTML+=`<div class="hist-item"><span>${h.dataBR}</span><span>🔥 ${h.gas}</span><span>💧 ${h.agua}</span><span>R$ ${h.total}</span></div>`;
-    });}
-  document.getElementById('totalMesDiv').innerHTML=`
-    <div style="display:flex;justify-content:space-between"><span>📅 DIAS:</span><span>${histFiltrado.length} dias</span></div>
-    <div style="display:flex;justify-content:space-between"><span>🔥 GÁS QTD MÊS:</span><span>${totalGasQtd} botijões</span></div>
-    <div style="display:flex;justify-content:space-between"><span>💧 ÁGUA QTD MÊS:</span><span>${totalAguaQtd} galões</span></div>
-    <div style="display:flex;justify-content:space-between"><span>🔥 GÁS R$:</span><span>R$ ${totalGasR}</span></div>
-    <div style="display:flex;justify-content:space-between"><span>💧 ÁGUA R$:</span><span>R$ ${totalAguaR}</span></div>
-    <div style="display:flex;justify-content:space-between"><span>💰 PIX MÊS:</span><span>R$ ${totalPix}</span></div>
-    <div style="display:flex;justify-content:space-between"><span>💵 DH MÊS:</span><span>R$ ${totalDh}</span></div>
-    <div style="display:flex;justify-content:space-between;font-size:18px;border-top:2px solid white;padding-top:6px;margin-top:6px"><span>💰 TOTAL MÊS:</span><span>R$ ${totalMes}</span></div>
-  `;
-  document.getElementById('historicoDiv').style.display='block';
-  window.scrollTo(0,document.body.scrollHeight);
-}
+function salvarHistorico(){let res=calcular(); if(res.geral==0){alert('Nada pra salvar!'); return;}let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');let data=res.data||new Date().toISOString().split('T')[0];let [a,m,d]=data.split('-'); let dataBR=`${d}/${m}/${a}`;let idx=hist.findIndex(h=>h.dataISO==data);let item={dataISO:data,dataBR:dataBR,mes:m,ano:a,total:res.geral,pix:res.pix,dh:res.dh,gas:res.vg,agua:res.va,tGas:res.tGas,tAgua:res.tAgua};if(idx>=0) hist[idx]=item; else hist.push(item);localStorage.setItem(KEY_HIST,JSON.stringify(hist));alert(`✅ Dia ${dataBR} salvo! 🔥 Gás: ${res.vg} | 💧 Água: ${res.va}`);}
+function verHistorico(){let mesFiltro=document.getElementById('filtroMes').value;let anoFiltro=document.getElementById('filtroAno').value;let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');let histFiltrado=hist.filter(h=>h.mes==mesFiltro && h.ano==anoFiltro);histFiltrado.sort((a,b)=>a.dataISO.localeCompare(b.dataISO));let div=document.getElementById('listaHistorico');let totalMes=0, totalGasQtd=0, totalAguaQtd=0, totalGasR=0, totalAguaR=0, totalPix=0, totalDh=0;if(histFiltrado.length==0){div.innerHTML=`<div style="text-align:center;padding:10px">Nenhuma venda em ${mesFiltro}/${anoFiltro}</div>`;}else{div.innerHTML=''; histFiltrado.forEach(h=>{totalMes+=h.total; totalGasQtd+=h.gas; totalAguaQtd+=h.agua; totalGasR+=h.tGas; totalAguaR+=h.tAgua; totalPix+=h.pix; totalDh+=h.dh;div.innerHTML+=`<div class="hist-item"><span>${h.dataBR}</span><span>🔥 ${h.gas}</span><span>💧 ${h.agua}</span><span>R$ ${h.total}</span></div>`;});}document.getElementById('totalMesDiv').innerHTML=`<div style="display:flex;justify-content:space-between"><span>📅 DIAS:</span><span>${histFiltrado.length} dias</span></div><div style="display:flex;justify-content:space-between"><span>🔥 GÁS QTD MÊS:</span><span>${totalGasQtd} botijões</span></div><div style="display:flex;justify-content:space-between"><span>💧 ÁGUA QTD MÊS:</span><span>${totalAguaQtd} galões</span></div><div style="display:flex;justify-content:space-between"><span>🔥 GÁS R$:</span><span>R$ ${totalGasR}</span></div><div style="display:flex;justify-content:space-between"><span>💧 ÁGUA R$:</span><span>R$ ${totalAguaR}</span></div><div style="display:flex;justify-content:space-between"><span>💰 PIX MÊS:</span><span>R$ ${totalPix}</span></div><div style="display:flex;justify-content:space-between"><span>💵 DH MÊS:</span><span>R$ ${totalDh}</span></div><div style="display:flex;justify-content:space-between;font-size:18px;border-top:2px solid white;padding-top:6px;margin-top:6px"><span>💰 TOTAL MÊS:</span><span>R$ ${totalMes}</span></div>`;document.getElementById('historicoDiv').style.display='block';window.scrollTo(0,document.body.scrollHeight);}
 function fecharHistorico(){document.getElementById('historicoDiv').style.display='none';}
-function limparHistoricoMesAtual(){
-  let mesFiltro=document.getElementById('filtroMes').value;
-  let anoFiltro=document.getElementById('filtroAno').value;
-  if(confirm(`Apagar histórico de ${mesFiltro}/${anoFiltro}?`)){
-    let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');
-    let novoHist=hist.filter(h=>!(h.mes==mesFiltro && h.ano==anoFiltro));
-    localStorage.setItem(KEY_HIST,JSON.stringify(novoHist)); verHistorico();
-  }
-}
-function carregar(){
-  let s=localStorage.getItem(KEY);
-  let cont=document.getElementById('linhas');
-  let hoje=new Date().toISOString().split('T')[0];
-  let [a,m]=hoje.split('-');
-  document.getElementById('filtroMes').value=m;
-  document.getElementById('filtroAno').value=a;
-  if(s){try{let d=JSON.parse(s); document.getElementById('gasCheio').value=d.gasCheio||200; document.getElementById('aguaCheia').value=d.aguaCheia||150; document.getElementById('data').value=d.data||hoje; cont.innerHTML=''; d.linhas.forEach(i=>cont.insertAdjacentHTML('beforeend',htmlLinha(i))); calcular(); return;}catch(e){}}
-  document.getElementById('data').value=hoje;
-  cont.innerHTML=''; for(let i=0;i<4;i++) cont.insertAdjacentHTML('beforeend',htmlLinha()); calcular();
-}
+function limparHistoricoMesAtual(){let mesFiltro=document.getElementById('filtroMes').value;let anoFiltro=document.getElementById('filtroAno').value;if(confirm(`Apagar histórico de ${mesFiltro}/${anoFiltro}?`)){let hist=JSON.parse(localStorage.getItem(KEY_HIST)||'[]');let novoHist=hist.filter(h=>!(h.mes==mesFiltro && h.ano==anoFiltro));localStorage.setItem(KEY_HIST,JSON.stringify(novoHist)); verHistorico();}}
+function carregar(){let s=localStorage.getItem(KEY);let cont=document.getElementById('linhas');let hoje=new Date().toISOString().split('T')[0];let [a,m]=hoje.split('-');document.getElementById('filtroMes').value=m;document.getElementById('filtroAno').value=a;if(s){try{let d=JSON.parse(s); document.getElementById('gasCheio').value=d.gasCheio||200; document.getElementById('aguaCheia').value=d.aguaCheia||150; document.getElementById('data').value=d.data||hoje; cont.innerHTML=''; d.linhas.forEach(i=>cont.insertAdjacentHTML('beforeend',htmlLinha(i))); calcular(); return;}catch(e){}}document.getElementById('data').value=hoje;cont.innerHTML=''; for(let i=0;i<4;i++) cont.insertAdjacentHTML('beforeend',htmlLinha()); calcular();}
 carregar();
 </script>
 </body>

@@ -2,10 +2,16 @@
 <html lang="pt-br">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ALYSSON GÁS E ÁGUA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content">
+<title>EL SHADAY GÁS E ÁGUA</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+input, select, textarea {
+  -webkit-user-select: text!important;
+  user-select: text!important;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+}
 body{background:#eef2f7;padding:10px;padding-bottom:30px}
 .topo{background:#0d2a6b;color:white;padding:16px;border-radius:15px;text-align:center}
 .topo h1{font-size:22px;font-weight:900}
@@ -36,21 +42,18 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
 </style>
 </head>
 <body>
-
 <div class="topo">
-  <h1>🔥 ALYSSON GÁS E ÁGUA 💧</h1>
-  <input type="date" id="data">
+  <h1>🔥 EL SHADAY GÁS E ÁGUA 💧</h1>
+  <input type="date" id="data" inputmode="numeric">
 </div>
-
 <div class="cards">
-  <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()"></div>
+  <div class="card" style="border-color:#00c950"><b>🔥 GÁS CHEIO</b><input type="number" id="gasCheio" value="200" oninput="salvar()" inputmode="numeric" autocomplete="off"></div>
   <div class="card" style="border-color:#ef4444"><b>🔴 GÁS VAZIO</b><div class="valor" id="gasVazio">0</div></div>
   <div class="card" style="border-color:#facc15"><b>📦 GÁS VENDIDO</b><div class="valor" id="gasVendido">0</div></div>
-  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()"></div>
+  <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA CHEIA</b><input type="number" id="aguaCheia" value="150" oninput="salvar()" inputmode="numeric" autocomplete="off"></div>
   <div class="card" style="border-color:#0284c7"><b>🔵 ÁGUA VAZIA</b><div class="valor" id="aguaVazia">0</div></div>
   <div class="card" style="border-color:#0ea5e9"><b>💧 ÁGUA VENDIDA</b><div class="valor" id="aguaVendida">0</div></div>
 </div>
-
 <div class="tabela">
   <div class="header">
     <span style="background:#facc15">Cliente</span>
@@ -64,7 +67,6 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
   <div id="linhas"></div>
   <div id="rodape" style="text-align:center;font-weight:bold;margin-top:10px;font-size:13px"></div>
 </div>
-
 <div class="resumo">
   <div id="dataTopo" style="text-align:center;font-weight:bold;margin-top:10px;font-size:15px"></div>
   <div class="resumo-linha">
@@ -78,21 +80,18 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
     <div class="resumo-box" style="background:#0284c7"><span>💧 ÁGUA:</span><span id="totalAgua">R$ 0</span></div>
   </div>
 </div>
-
 <div class="botoes">
   <button style="background:#16a34a" onclick="addLinha()">+ Venda</button>
   <button style="background:#f97316" onclick="remLinha()">- Folha</button>
   <button style="background:#0d2a6b" onclick="salvarHistorico()">💾 Salvar Dia</button>
   <button style="background:#7c3aed" onclick="verHistorico()">📊 Histórico Mês</button>
 </div>
-
 <div class="botoes">
   <button style="background:#dc2626" onclick="zerarTudo()">🗑️ ZERAR HOJE</button>
   <button style="background:#1e40af" onclick="window.print()">📄 PDF</button>
   <button style="background:#6b7280" onclick="fecharHistorico()">Fechar</button>
   <button style="background:#000" onclick="limparHistoricoMesAtual()">🗑️ Limpar Mês</button>
 </div>
-
 <div class="hist" id="historicoDiv">
   <h2>📊 HISTÓRICO COMPLETO DO MÊS</h2>
   <div class="filtro">
@@ -103,22 +102,21 @@ body{background:#eef2f7;padding:10px;padding-bottom:30px}
   <div id="listaHistorico"></div>
   <div class="hist-total" id="totalMesDiv"></div>
 </div>
-
 <script>
 let KEY='alysson_final_v4';
 let KEY_HIST='alysson_historico_mes_v4';
 function htmlLinha(d={}){
   return `<div class="linha">
-    <input class="c" value="${d.cliente||''}" placeholder="Cliente" oninput="salvar()">
+    <input class="c" value="${d.cliente||''}" placeholder="Cliente" oninput="salvar()" inputmode="text" autocomplete="off" enterkeyhint="next">
     <select class="prod" onchange="mudar(this)">
       <option value="gas" ${d.prod=='gas'?'selected':''}>🔥 GÁS</option>
       <option value="agua" ${d.prod=='agua'?'selected':''}>💧 ÁGUA</option>
     </select>
-    <input type="number" class="q" value="${d.q||0}" oninput="salvar()">
-    <input type="number" class="u" value="${d.u||0}" oninput="salvar()">
+    <input type="number" class="q" value="${d.q||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
+    <input type="number" class="u" value="${d.u||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
     <div class="total">R$ 0</div>
-    <input type="number" class="p" value="${d.p||0}" oninput="salvar()">
-    <input type="number" class="d" value="${d.dh||0}" oninput="salvar()">
+    <input type="number" class="p" value="${d.p||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
+    <input type="number" class="d" value="${d.dh||0}" oninput="salvar()" inputmode="numeric" autocomplete="off">
   </div>`;
 }
 function mudar(sel){let u=sel.closest('.linha').querySelector('.u'); if(sel.value==='gas') u.value=88; else u.value=8; salvar();}

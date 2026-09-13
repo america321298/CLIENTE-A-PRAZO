@@ -120,14 +120,21 @@ function render(arr){
 }
 function addLinha(n){
   let linhas = document.querySelectorAll('#lista.linha');
-  let arr=[]; linhas.forEach(l=>{ arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value}); });
+  let arr=[];
+  linhas.forEach(l=>{
+    arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value});
+  });
   for(let i=0;i<n;i++) arr.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
   render(arr);
 }
 function rem(){
   let linhas = document.querySelectorAll('#lista.linha');
   if(linhas.length<=1) return;
-  let arr=[]; for(let i=0;i<linhas.length-1;i++){ let l=linhas[i]; arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value}); }
+  let arr=[];
+  for(let i=0;i<linhas.length-1;i++){
+    let l=linhas[i];
+    arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value});
+  }
   render(arr);
 }
 function salvarEst(){
@@ -195,18 +202,16 @@ function verHist(){
   Object.keys(h).reverse().forEach(d=>{ let v=h[d]; html+=`<div style="padding:6px;border-bottom:1px solid #ccc">${d.split('-').reverse().join('/')} - GAS ${v.gas} AGUA ${v.agua} TOTAL R$${v.total} DESP R$${v.desp} ${v.motivo}</div>`; });
   document.getElementById('histLista').innerHTML=html||'Vazio';
 }
-
-// ===== AQUI ESTÁ A MUDANÇA DO WHATSAPP NO SEU FORMATO =====
 function zap(){
   let data = new Date().toLocaleDateString('pt-BR');
   let cheioGas = document.getElementById('gCheio').value;
   let vendGas = document.getElementById('gVendido').innerText;
   let cheiaAgua = document.getElementById('aCheia').value;
   let vendAgua = document.getElementById('aVendida').innerText;
-
   let m=`*EL SHADAY* ${data}\nGAS Cheio ${cheioGas} Vendido ${vendGas} | AGUA ${cheiaAgua} Vendida ${vendAgua}\n\n`;
-
-  document.querySelectorAll('#lista.linha').forEach(l=>{
+  let linhas = document.getElementById('lista').children;
+  for(let i=0;i<linhas.length;i++){
+    let l = linhas[i];
     let cli = l.querySelector('.cCli').value.trim();
     let qtd = l.querySelector('.cQtd').value;
     let unit = l.querySelector('.cUnit').value;
@@ -217,14 +222,12 @@ function zap(){
     if(cli && qtd){
       let fiado = tot - pix - dh - cart;
       let tag = fiado > 0? "❌ a receber" : "";
-      m+=`${cli} ${qtd} Gás A${unit}=R$${tot}${tag? ' '+tag : ''}\n`;
+      m+=`${cli} ${qtd} Gás A${unit}=R$${tot}${tag}\n`;
     }
-  });
-
+  }
   m+=`\nPIX R$${document.getElementById('sPix').innerText} DH R$${document.getElementById('sDH').innerText} CART R$${document.getElementById('sCart').innerText} FIADO R$${document.getElementById('sFiado').innerText} TOTAL R$${document.getElementById('sGeral').innerText}`;
   window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');
 }
-
 function pdf(){
   const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
   let rows=[]; document.querySelectorAll('#lista.linha').forEach(l=>{ let c=l.querySelector('.cCli').value||'Cliente'; let p=l.querySelector('.cProd').value; let q=l.querySelector('.cQtd').value; let u=l.querySelector('.cUnit').value; let t=l.querySelector('.totalCell').innerText; if(q) rows.push([c,p,q,u,t,l.querySelector('.cPix').value,l.querySelector('.cDh').value,l.querySelector('.cCart').value,l.querySelector('.fiCell').innerText]); });
@@ -236,4 +239,4 @@ function pdf(){
 window.onload=iniciar;
 </script>
 </body>
-  </html>
+</html>

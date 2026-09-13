@@ -94,18 +94,12 @@ function iniciar(){
   if(ea) EST_AGUA = parseInt(ea);
   document.getElementById('gCheio').value = EST_GAS;
   document.getElementById('aCheia').value = EST_AGUA;
-
   let salvos = localStorage.getItem('FOLHA_FINAL_V2');
   let arr = [];
-  if(salvos){
-    try{ arr = JSON.parse(salvos); }catch(e){ arr=[]; }
-  }
-  if(arr.length==0){
-    for(let i=0;i<5;i++) arr.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
-  }
+  if(salvos){ try{ arr = JSON.parse(salvos); }catch(e){ arr=[]; } }
+  if(arr.length==0){ for(let i=0;i<5;i++) arr.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); }
   render(arr);
 }
-
 function render(arr){
   let html='';
   arr.forEach((v,i)=>{
@@ -124,24 +118,16 @@ function render(arr){
   document.getElementById('lista').innerHTML=html;
   calc();
 }
-
 function addLinha(n){
-  let linhas = document.querySelectorAll('#lista .linha');
-  let arr=[];
-  linhas.forEach(l=>{
-    arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value});
-  });
+  let linhas = document.querySelectorAll('#lista.linha');
+  let arr=[]; linhas.forEach(l=>{ arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value}); });
   for(let i=0;i<n;i++) arr.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
   render(arr);
 }
 function rem(){
-  let linhas = document.querySelectorAll('#lista .linha');
+  let linhas = document.querySelectorAll('#lista.linha');
   if(linhas.length<=1) return;
-  let arr=[];
-  for(let i=0;i<linhas.length-1;i++){
-    let l=linhas[i];
-    arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value});
-  }
+  let arr=[]; for(let i=0;i<linhas.length-1;i++){ let l=linhas[i]; arr.push({cliente:l.querySelector('.cCli').value, prod:l.querySelector('.cProd').value, qtd:l.querySelector('.cQtd').value, unit:l.querySelector('.cUnit').value, pix:l.querySelector('.cPix').value, dh:l.querySelector('.cDh').value, cart:l.querySelector('.cCart').value}); }
   render(arr);
 }
 function salvarEst(){
@@ -149,19 +135,16 @@ function salvarEst(){
   let aCheiaInput = parseInt(document.getElementById('aCheia').value)||0;
   let gVend = parseInt(document.getElementById('gVendido').innerText)||0;
   let aVend = parseInt(document.getElementById('aVendida').innerText)||0;
-  // O inicial é o que está na tela + o que já vendeu
   EST_GAS = gCheioInput + gVend;
   EST_AGUA = aCheiaInput + aVend;
   localStorage.setItem('EST_GAS_FINAL', EST_GAS);
   localStorage.setItem('EST_AGUA_FINAL', EST_AGUA);
   calc();
 }
-
 function calc(){
   let linhas = document.getElementById('lista').children;
   let gVend=0, aVend=0, sPix=0, sDh=0, sCart=0, sFiado=0, sGeral=0;
   let paraSalvar=[];
-
   for(let i=0;i<linhas.length;i++){
     let l = linhas[i];
     let qtd = Number(l.querySelector('.cQtd').value) || 0;
@@ -171,95 +154,80 @@ function calc(){
     let cart = Number(l.querySelector('.cCart').value) || 0;
     let prod = l.querySelector('.cProd').value;
     let cliente = l.querySelector('.cCli').value;
-
     let tot = qtd * unit;
-    let fiado = tot - pix - dh - cart;
-    if(fiado < 0) fiado = 0;
-
+    let fiado = tot - pix - dh - cart; if(fiado < 0) fiado = 0;
     if(prod==='G') gVend += qtd; else aVend += qtd;
     sPix+=pix; sDh+=dh; sCart+=cart; sFiado+=fiado; sGeral+=tot;
-
     document.getElementById('t'+i).innerText = 'R$' + tot;
     document.getElementById('f'+i).innerText = 'R$' + fiado;
-
     paraSalvar.push({cliente,prod,qtd:l.querySelector('.cQtd').value,unit:l.querySelector('.cUnit').value,pix:l.querySelector('.cPix').value,dh:l.querySelector('.cDh').value,cart:l.querySelector('.cCart').value});
   }
-
   let restoGas = EST_GAS - gVend;
   let restoAgua = EST_AGUA - aVend;
-
-  if(document.activeElement.id !== 'gCheio') document.getElementById('gCheio').value = restoGas;
-  if(document.activeElement.id !== 'aCheia') document.getElementById('aCheia').value = restoAgua;
-
+  if(document.activeElement.id!== 'gCheio') document.getElementById('gCheio').value = restoGas;
+  if(document.activeElement.id!== 'aCheia') document.getElementById('aCheia').value = restoAgua;
   document.getElementById('gVazio').innerText = gVend;
   document.getElementById('gVendido').innerText = gVend;
   document.getElementById('aVazia').innerText = aVend;
   document.getElementById('aVendida').innerText = aVend;
-
   document.getElementById('sPix').innerText = sPix;
   document.getElementById('sDH').innerText = sDh;
   document.getElementById('sCart').innerText = sCart;
   document.getElementById('sFiado').innerText = sFiado;
   document.getElementById('sGeral').innerText = sGeral;
-
   let desp = Number(document.getElementById('despValor').value)||0;
   document.getElementById('sDesp').innerText = desp;
   document.getElementById('sLucro').innerText = (sPix+sDh+sCart-desp);
-
   localStorage.setItem('FOLHA_FINAL_V2', JSON.stringify(paraSalvar));
 }
-
-function zerar(){
-  if(confirm('Zerar folha?')){
-    localStorage.removeItem('FOLHA_FINAL_V2');
-    render([{},{},{},{},{}].map(()=>({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''})));
-  }
-}
+function zerar(){ if(confirm('Zerar folha?')){ localStorage.removeItem('FOLHA_FINAL_V2'); render([{},{},{},{},{}].map(()=>({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}))); } }
 function limparTudo(){ if(confirm('Limpar tudo?')){ localStorage.clear(); location.reload(); } }
 function salvarDia(){
   let h = JSON.parse(localStorage.getItem('HIST_FINAL')||'{}');
   let hoje = new Date().toISOString().slice(0,10);
   h[hoje]={gas:document.getElementById('gVendido').innerText, agua:document.getElementById('aVendida').innerText, total:document.getElementById('sGeral').innerText, desp:document.getElementById('despValor').value, motivo:document.getElementById('despMotivo').value};
   localStorage.setItem('HIST_FINAL', JSON.stringify(h));
-  alert('Salvo '+hoje);
-  verHist();
+  alert('Salvo '+hoje); verHist();
 }
 function verHist(){
-  let c=document.getElementById('histCard');
-  c.style.display=c.style.display=='block'?'none':'block';
-  let h=JSON.parse(localStorage.getItem('HIST_FINAL')||'{}');
-  let html='';
-  Object.keys(h).reverse().forEach(d=>{
-    let v=h[d];
-    html+=`<div style="padding:6px;border-bottom:1px solid #ccc">${d.split('-').reverse().join('/')} - GAS ${v.gas} AGUA ${v.agua} TOTAL R$${v.total} DESP R$${v.desp} ${v.motivo}</div>`;
-  });
+  let c=document.getElementById('histCard'); c.style.display=c.style.display=='block'?'none':'block';
+  let h=JSON.parse(localStorage.getItem('HIST_FINAL')||'{}'); let html='';
+  Object.keys(h).reverse().forEach(d=>{ let v=h[d]; html+=`<div style="padding:6px;border-bottom:1px solid #ccc">${d.split('-').reverse().join('/')} - GAS ${v.gas} AGUA ${v.agua} TOTAL R$${v.total} DESP R$${v.desp} ${v.motivo}</div>`; });
   document.getElementById('histLista').innerHTML=html||'Vazio';
 }
+
+// ===== AQUI ESTÁ A MUDANÇA DO WHATSAPP NO SEU FORMATO =====
 function zap(){
-  let m=`*EL SHADAY* ${new Date().toLocaleDateString()}\nGAS Cheio ${document.getElementById('gCheio').value} Vendido ${document.getElementById('gVendido').innerText} | AGUA ${document.getElementById('aCheia').value} Vendida ${document.getElementById('aVendida').innerText}\n\n`;
-  document.querySelectorAll('#lista .linha').forEach(l=>{
-    let cl=l.querySelector('.cCli').value;
-    let pr=l.querySelector('.cProd').value;
-    let q=l.querySelector('.cQtd').value;
-    let u=l.querySelector('.cUnit').value;
-    let t=l.querySelector('.totalCell').innerText;
-    if(q) m+=`${cl} ${pr} ${q}x${u}=${t}\n`;
+  let data = new Date().toLocaleDateString('pt-BR');
+  let cheioGas = document.getElementById('gCheio').value;
+  let vendGas = document.getElementById('gVendido').innerText;
+  let cheiaAgua = document.getElementById('aCheia').value;
+  let vendAgua = document.getElementById('aVendida').innerText;
+
+  let m=`*EL SHADAY* ${data}\nGAS Cheio ${cheioGas} Vendido ${vendGas} | AGUA ${cheiaAgua} Vendida ${vendAgua}\n\n`;
+
+  document.querySelectorAll('#lista.linha').forEach(l=>{
+    let cli = l.querySelector('.cCli').value.trim();
+    let qtd = l.querySelector('.cQtd').value;
+    let unit = l.querySelector('.cUnit').value;
+    let pix = Number(l.querySelector('.cPix').value)||0;
+    let dh = Number(l.querySelector('.cDh').value)||0;
+    let cart = Number(l.querySelector('.cCart').value)||0;
+    let tot = (Number(qtd)*Number(unit))||0;
+    if(cli && qtd){
+      let fiado = tot - pix - dh - cart;
+      let tag = fiado > 0? "❌ a receber" : "";
+      m+=`${cli} ${qtd} Gás A${unit}=R$${tot}${tag? ' '+tag : ''}\n`;
+    }
   });
+
   m+=`\nPIX R$${document.getElementById('sPix').innerText} DH R$${document.getElementById('sDH').innerText} CART R$${document.getElementById('sCart').innerText} FIADO R$${document.getElementById('sFiado').innerText} TOTAL R$${document.getElementById('sGeral').innerText}`;
   window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');
 }
+
 function pdf(){
-  const {jsPDF}=window.jspdf;
-  const doc=new jsPDF('l','mm','a4');
-  let rows=[];
-  document.querySelectorAll('#lista .linha').forEach(l=>{
-    let c=l.querySelector('.cCli').value||'Cliente';
-    let p=l.querySelector('.cProd').value;
-    let q=l.querySelector('.cQtd').value;
-    let u=l.querySelector('.cUnit').value;
-    let t=l.querySelector('.totalCell').innerText;
-    if(q) rows.push([c,p,q,u,t,l.querySelector('.cPix').value,l.querySelector('.cDh').value,l.querySelector('.cCart').value,l.querySelector('.fiCell').innerText]);
-  });
+  const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
+  let rows=[]; document.querySelectorAll('#lista.linha').forEach(l=>{ let c=l.querySelector('.cCli').value||'Cliente'; let p=l.querySelector('.cProd').value; let q=l.querySelector('.cQtd').value; let u=l.querySelector('.cUnit').value; let t=l.querySelector('.totalCell').innerText; if(q) rows.push([c,p,q,u,t,l.querySelector('.cPix').value,l.querySelector('.cDh').value,l.querySelector('.cCart').value,l.querySelector('.fiCell').innerText]); });
   if(!rows.length){alert('Sem vendas');return;}
   doc.text('EL SHADAY '+new Date().toLocaleDateString(),14,10);
   doc.autoTable({head:[['Cli','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:14});
@@ -268,4 +236,4 @@ function pdf(){
 window.onload=iniciar;
 </script>
 </body>
-</html>
+  </html>

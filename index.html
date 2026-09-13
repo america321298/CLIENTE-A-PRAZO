@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>EL SHADAY FINAL</title>
+<title>EL SHADAY - CORRIGIDO</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -32,7 +32,7 @@
 </style>
 </head>
 <body>
-<div class="titulo">🔥 EL SHADAY GÁS E ÁGUA 💧 - VERSÃO FINAL</div>
+<div class="titulo">🔥 EL SHADAY GÁS E ÁGUA 💧 - CORRIGIDO</div>
 <div class="estoque">
 <div style="text-align:center;font-size:11px;font-weight:bold;color:#0d47a1">ESTOQUE - CHEIO DIMINUI SOZINHO</div>
 <div class="linha-unica">
@@ -96,7 +96,7 @@ function iniciar(){
   let salvos = localStorage.getItem('FOLHA_FINAL_V2');
   let arr = [];
   if(salvos){ try{ arr = JSON.parse(salvos); }catch(e){ arr=[]; } }
-  if(arr.length==0){ for(let i=0;i<5;i++) arr.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); }
+  if(arr.length==0){ for(let i=0;i<3;i++) arr.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); }
   render(arr);
 }
 function render(arr){
@@ -117,7 +117,6 @@ function render(arr){
   document.getElementById('lista').innerHTML=html;
   calc();
 }
-// CORRIGIDO COM ESPAÇO #lista.linha
 function addLinha(n){
   let linhas = document.querySelectorAll('#lista.linha');
   let arr=[];
@@ -187,7 +186,7 @@ function calc(){
   document.getElementById('sLucro').innerText = (sPix+sDh+sCart-desp);
   localStorage.setItem('FOLHA_FINAL_V2', JSON.stringify(paraSalvar));
 }
-function zerar(){ if(confirm('Zerar folha?')){ localStorage.removeItem('FOLHA_FINAL_V2'); render([{},{},{},{},{}].map(()=>({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}))); } }
+function zerar(){ if(confirm('Zerar folha?')){ localStorage.removeItem('FOLHA_FINAL_V2'); render([{},{},{}].map(()=>({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}))); } }
 function limparTudo(){ if(confirm('Limpar tudo?')){ localStorage.clear(); location.reload(); } }
 function salvarDia(){
   let h = JSON.parse(localStorage.getItem('HIST_FINAL')||'{}');

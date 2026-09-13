@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"><meta name="google" content="notranslate">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>EL SHADAY PDF FIX</title>
+<title>EL SHADAY PDF COMPARTILHAR</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f0f0f0}
 .titulo{background:#1a7a34;color:#fff;text-align:center;padding:8px;font-weight:bold}
@@ -113,14 +113,16 @@ function montar(){ let html=''; DB[hoje].forEach((v,i)=>{ html+=`<div class="lin
 function calcular(){ let gVend=0,aVend=0,sPix=0,sDH=0,sCart=0,sFiado=0,sGeral=0; DB[hoje].forEach((v,i)=>{ let tot=(+v.qtd||0)*(+v.unit||0); let fiado=tot-(+v.pix||0)-(+v.dh||0)-(+v.cart||0); if(fiado<0) fiado=0; if(v.prod=='G') gVend+=+v.qtd||0; else aVend+=+v.qtd||0; sPix+=+v.pix||0; sDH+=+v.dh||0; sCart+=+v.cart||0; sFiado+=fiado; sGeral+=tot; let t=document.getElementById('t'+i); if(t) t.innerText='R$'+tot; let f=document.getElementById('f'+i); if(f) f.innerText='R$'+fiado; }); let cheio=ESTOQUE.gas-gVend; let agua=ESTOQUE.agua-aVend; document.getElementById('gCheio').innerText=cheio; document.getElementById('gVazio').innerText=gVend; document.getElementById('gVendido').innerText=gVend; document.getElementById('aCheia').innerText=agua; document.getElementById('aVazia').innerText=aVend; document.getElementById('aVendida').innerText=aVend; document.getElementById('boxCheio').classList.toggle('alerta',cheio<=10 && cheio>=0); document.getElementById('boxAgua').classList.toggle('alerta',agua<=10 && agua>=0); document.getElementById('sPix').innerText=sPix; document.getElementById('sDH').innerText=sDH; document.getElementById('sCart').innerText=sCart; document.getElementById('sFiado').innerText=sFiado; document.getElementById('sGeral').innerText=sGeral; let desp=+document.getElementById('despValor').value||0; document.getElementById('sDesp').innerText=desp; document.getElementById('sLucro').innerText=(sPix+sDH+sCart)-desp; localStorage.setItem('ELSHADAY_TEC2',JSON.stringify(DB));}
 function toggleHist(){ let card=document.getElementById('histCard'); if(card.style.display=='block'){card.style.display='none'}else{renderHist(); card.style.display='block'} }
 function renderHist(){ let html=''; let totGas=0,totAgua=0; Object.keys(HIST).sort().reverse().forEach(d=>{ let h=HIST[d]; totGas+=h.gas||0; totAgua+=h.agua||0; html+=`<div style="display:grid;grid-template-columns:70px 30px 30px 60px 70px 60px;gap:2px;padding:5px;text-align:center;border-bottom:1px solid #ddd;font-size:10px"><span>${d.split('-').reverse().join('/')}</span><span>${h.gas||0}</span><span>${h.agua||0}</span><span style="color:red">R$${h.fiado||0}</span><span>R$${h.recebido||0}</span><span>R$${h.desp||0} ${h.motivo||''}</span></div>`; }); document.getElementById('histLista').innerHTML=html || '<div style="padding:8px;text-align:center;color:#999">Nenhum dia salvo</div>'; document.getElementById('soma30').innerText=`SOMA 30 DIAS: ${totGas} GÁS | ${totAgua} ÁGUA`; }
+
 function gerarPDF(){
-  let linhasHtml='';
+  let linhasHtml=''; let textoZap='🔥 EL SHADAY GÁS E ÁGUA - '+hoje.split('-').reverse().join('/')+'%0A%0A';
   DB[hoje].forEach(v=>{
     if((+v.qtd||0)>0){
       let tot=(+v.qtd||0)*(+v.unit||0);
       let pago=(+v.pix||0)+(+v.dh||0)+(+v.cart||0);
       let fiado=tot-pago; if(fiado<0) fiado=0;
       linhasHtml+=`<tr><td>${v.cliente||'Cliente'}</td><td>${v.prod}</td><td>${v.qtd}</td><td>R$${v.unit}</td><td>R$${tot}</td><td>R$${v.pix||0}</td><td>R$${v.dh||0}</td><td>R$${v.cart||0}</td><td>R$${fiado}</td></tr>`;
+      textoZap+=`${v.cliente||'Cliente'} - ${v.prod} ${v.qtd}x R$${v.unit} = R$${tot} (FIADO R$${fiado})%0A`;
     }
   });
   let desp=+document.getElementById('despValor').value||0;
@@ -131,8 +133,20 @@ function gerarPDF(){
   let sFiado=document.getElementById('sFiado').innerText;
   let sGeral=document.getElementById('sGeral').innerText;
   let sLucro=document.getElementById('sLucro').innerText;
-  let htmlPdf=`<html><head><meta charset="UTF-8"><title>EL SHADAY - ${hoje}</title>
-  <style>body{font-family:Arial;font-size:12px} table{width:100%;border-collapse:collapse} th,td{border:1px solid #000;padding:4px;text-align:center;font-size:10px} th{background:#0d47a1;color:#fff} h2{text-align:center}</style>
+  textoZap+=`%0ATOTAL: R$${sGeral} | PIX R$${sPix} | DH R$${sDH} | FIADO R$${sFiado} | LUCRO R$${sLucro} | DESP R$${desp} ${motivo}`;
+
+  let htmlPdf=`<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>EL SHADAY - ${hoje}</title>
+  <style>
+  body{font-family:Arial;font-size:12px;margin:0;padding:10px}
+  table{width:100%;border-collapse:collapse} th,td{border:1px solid #000;padding:5px;text-align:center;font-size:11px} th{background:#0d47a1;color:#fff}
+  h2{text-align:center;margin:5px}
+ .botoes{display:flex;flex-direction:column;gap:10px;margin:20px 0;padding:15px;background:#f0f0f0;border-radius:10px;border:2px dashed #0d47a1}
+ .botoes button{padding:15px;border:none;border-radius:8px;font-weight:bold;font-size:16px;cursor:pointer}
+ .btnZap{background:#25D366;color:#fff}
+ .btnPdf{background:#000;color:#fff}
+ .btnFechar{background:#c62828;color:#fff}
+  @media print{.botoes{display:none}}
+  </style>
   </head><body>
   <h2>🔥 EL SHADAY GÁS E ÁGUA - ${hoje.split('-').reverse().join('/')}</h2>
   <table><tr><th>Cliente</th><th>Prod</th><th>Qtd</th><th>Unit</th><th>Total</th><th>PIX</th><th>DH</th><th>CART</th><th>FIADO</th></tr>
@@ -143,8 +157,14 @@ function gerarPDF(){
   <tr><td colspan="2">TOTAL GERAL: R$${sGeral}</td><td>DESPESA (${motivo}): R$${desp}</td><td>LUCRO REAL: R$${sLucro}</td></tr>
   </table>
   <p>Estoque: Cheio ${document.getElementById('gCheio').innerText} | Vazio ${document.getElementById('gVazio').innerText} | Vendido ${document.getElementById('gVendido').innerText}</p>
-  <script>window.onload=function(){window.print();}<\/script>
+
+  <div class="botoes">
+    <button class="btnZap" onclick="window.open('https://wa.me/?text=${textoZap}','_blank')">📤 COMPARTILHAR NO WHATSAPP</button>
+    <button class="btnPdf" onclick="window.print()">💾 SALVAR EM PDF / IMPRIMIR</button>
+    <button class="btnFechar" onclick="window.close()">❌ FECHAR</button>
+  </div>
   </body></html>`;
+
   let win=window.open('','_blank');
   win.document.open();
   win.document.write(htmlPdf);

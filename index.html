@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>EL SHADAY SOMA FIX</title>
+<title>EL SHADAY FIX TOTAL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -18,38 +18,33 @@
 .top.white-gas{background:#e3f2fd;color:#0d47a1;border:1.5px solid #0d47a1}
 .top.white-agua{background:#e1f5fe;color:#0288d1;border:1.5px solid #0288d1}
 .top.white-gas b,.top.white-agua b{color:#000;font-size:16px}
-.top.alerta{background:red!important;animation:pisca 0.7s infinite}
-@keyframes pisca{0%{opacity:1}50%{opacity:0.3}100%{opacity:1}}
 .card{margin:4px;background:#fff;border-radius:8px;padding:4px;border:1.5px solid #0d47a1}
-.wrap{overflow-x:auto}.tabela{width:100%;min-width:720px}
+.wrap{overflow-x:auto}.tabela{width:100%;min-width:760px}
 .th{display:grid;grid-template-columns:100px 70px 44px 48px 58px 42px 42px 42px 48px;gap:2px;font-size:8px;font-weight:bold;text-align:center}
 .th span{padding:4px;border-radius:4px;color:#fff}
 .linha{display:grid;grid-template-columns:100px 70px 44px 48px 58px 42px 42px 42px 48px;gap:2px;margin:2px 0}
 .linha input,.linha select{height:36px;border:1.5px solid #888;border-radius:5px;text-align:center;font-size:12px;font-weight:bold;width:100%}
-.totalCell,.fiCell{height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold;font-size:11px}
-.totalCell{background:#ffeb3b}.fiCell{background:#ffcdd2}
+.totalCell{background:#ffeb3b;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold;font-size:11px}
+.fiCell{background:#ffcdd2;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold;font-size:11px}
 .sum{padding:8px;border-radius:6px;color:#fff;font-weight:bold;display:flex;justify-content:space-between;margin:2px;font-size:13px}
 .btn{border:none;border-radius:6px;padding:10px 4px;color:#fff;font-weight:bold;font-size:11px;cursor:pointer}
 .bot{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:4px}
-.histCard{display:none;margin:4px;background:#fff;border-radius:8px;padding:6px;border:2px solid #7b1fa2}
 @media(max-width:600px){.linha-unica{grid-template-columns:1fr 1fr 1fr;}}
 </style>
 </head>
 <body>
 <div class="titulo">🔥 EL SHADAY GÁS E ÁGUA 💧</div>
-
 <div class="estoque">
-<div style="font-size:11px;font-weight:bold;text-align:center;margin-bottom:4px;color:#0d47a1">ESTOQUE - CHEIO DIMINUI SOZINHO</div>
+<div style="font-size:11px;font-weight:bold;text-align:center;margin-bottom:4px;color:#0d47a1">ESTOQUE - CHEIO DIMINUI SOZINHO QUANDO VENDE</div>
 <div class="linha-unica">
-<div class="top gas">GÁS<br>CHEIO<br><input id="gCheio" type="tel" inputmode="numeric" value="200" oninput="editarGas()"></div>
+<div class="top gas">GÁS<br>CHEIO<br><input id="gCheio" type="tel" inputmode="numeric" value="200" oninput="salvarEstoque()"></div>
 <div class="top white-gas">GÁS<br>VAZIO<br><b id="gVazio">0</b></div>
 <div class="top white-gas">GÁS<br>VENDIDO<br><b id="gVendido">0</b></div>
-<div class="top agua">ÁGUA<br>CHEIA<br><input id="aCheia" type="tel" inputmode="numeric" value="150" oninput="editarAgua()"></div>
+<div class="top agua">ÁGUA<br>CHEIA<br><input id="aCheia" type="tel" inputmode="numeric" value="150" oninput="salvarEstoque()"></div>
 <div class="top white-agua">ÁGUA<br>VAZIA<br><b id="aVazia">0</b></div>
 <div class="top white-agua">ÁGUA<br>VENDIDA<br><b id="aVendida">0</b></div>
 </div>
 </div>
-
 <div class="card">
 <div style="background:#ffeb3b;text-align:center;font-weight:bold;padding:6px;border-radius:6px">FOLHA DE CADERNO</div>
 <div class="wrap"><div class="tabela">
@@ -59,11 +54,10 @@
 <div id="lista"></div>
 </div></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
-<button class="btn" style="background:#29b6f6" onclick="add(5)">+5 Vendas</button>
-<button class="btn" style="background:#2e7d32" onclick="add(1)">+1 Venda</button>
+<button class="btn" style="background:#29b6f6" onclick="addLinha(5)">+5 Vendas</button>
+<button class="btn" style="background:#2e7d32" onclick="addLinha(1)">+1 Venda</button>
 </div>
 </div>
-
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px">
 <div class="sum" style="background:#1565c0">PIX: R$<span id="sPix">0</span></div>
 <div class="sum" style="background:#2e7d32">DH: R$<span id="sDH">0</span></div>
@@ -71,7 +65,6 @@
 <div class="sum" style="background:#c62828">FIADO: R$<span id="sFiado">0</span></div>
 <div class="sum" style="background:#0d47a1;grid-column:span 2">TOTAL GERAL: R$<span id="sGeral">0</span></div>
 </div>
-
 <div style="margin:4px;background:#fff;border:2px solid #e53935;border-radius:8px;padding:6px">
 <div style="display:grid;grid-template-columns:100px 1fr;gap:6px">
 <div>Desp. R$<br><input id="despValor" type="tel" inputmode="numeric" value="0" style="width:100%;padding:8px;border-radius:4px;border:1.5px solid #999;font-weight:bold" oninput="calcular()"></div>
@@ -82,156 +75,126 @@
 <div class="sum" style="background:#2e7d32">LUCRO REAL: R$<span id="sLucro">0</span></div>
 </div>
 </div>
-
 <div class="bot">
-<button class="btn" style="background:#2e7d32" onclick="add(5)">+5</button>
-<button class="btn" style="background:#ef6c00" onclick="remFolha()">-Folha</button>
 <button class="btn" style="background:#0d47a1" onclick="salvar()">Salvar</button>
-<button class="btn" style="background:#7b1fa2" onclick="toggleHist()">Hist</button>
-<button class="btn" style="background:#29b6f6" onclick="repor()">REPOR</button>
+<button class="btn" style="background:#2e7d32" onclick="addLinha(5)">+5</button>
+<button class="btn" style="background:#ef6c00" onclick="remover()">-Folha</button>
 <button class="btn" style="background:#c62828" onclick="zerar()">ZERAR</button>
-<button class="btn" style="background:#000" onclick="gerarPDFReal()">PDF</button>
-<button class="btn" style="background:#e64a19" onclick="limpar()">Limpar</button>
+<button class="btn" style="background:#000" onclick="gerarPDF()">PDF</button>
+<button class="btn" style="background:#e64a19" onclick="limparTudo()">Limpar</button>
 </div>
-
-<div class="histCard" id="histCard">
-<div style="font-weight:bold;display:flex;justify-content:space-between"><span>HISTÓRICO</span><button onclick="document.getElementById('histCard').style.display='none'" style="background:red;color:#fff;border:none;border-radius:4px;padding:2px 8px">X</button></div>
-<div style="display:grid;grid-template-columns:70px 30px 30px 60px 70px 60px;gap:2px;background:#0d47a1;color:#fff;padding:4px;border-radius:4px;font-size:10px;text-align:center;margin-top:4px"><span>DATA</span><span>GÁS</span><span>ÁGUA</span><span>FIADO</span><span>RECEBIDO</span><span>DESP</span></div>
-<div id="histLista" style="font-size:11px"></div>
-<div style="background:#0d47a1;color:#fff;padding:6px;border-radius:6px;text-align:center;margin-top:4px;font-size:11px" id="soma30">SOMA 30 DIAS: 0 GÁS</div>
-</div>
-
 <script>
-let ESTOQUE_INICIAL={gas:200,agua:150};
-let DB=JSON.parse(localStorage.getItem('ELSHADAY_TEC2')||'null');
-let EST_SAVED=JSON.parse(localStorage.getItem('ELSHADAY_ESTOQUE_INICIAL')||'null');
-if(EST_SAVED){ESTOQUE_INICIAL=EST_SAVED;}
-let hoje=new Date().toISOString().slice(0,10);
-if(!DB){DB={}; DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});}
-if(!DB[hoje]) DB[hoje]=[];
+let estoqueInicialGas = parseInt(localStorage.getItem('estGas')||'200');
+let estoqueInicialAgua = parseInt(localStorage.getItem('estAgua')||'150');
+document.getElementById('gCheio').value = estoqueInicialGas;
+document.getElementById('aCheia').value = estoqueInicialAgua;
 
-function editarGas(){
-  let vend=0;
-  document.querySelectorAll('#lista.linha').forEach(l=>{
-    let prod=l.children[1].value;
-    let qtd=parseInt(l.children[2].value)||0;
-    if(prod=='G') vend+=qtd;
-  });
-  let novoCheio=parseInt(document.getElementById('gCheio').value)||0;
-  ESTOQUE_INICIAL.gas=novoCheio+vend;
-  localStorage.setItem('ELSHADAY_ESTOQUE_INICIAL',JSON.stringify(ESTOQUE_INICIAL));
+let dados = JSON.parse(localStorage.getItem('dadosFolha')||'[]');
+if(dados.length==0){ for(let i=0;i<5;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); }
+
+function salvarEstoque(){
+  estoqueInicialGas = parseInt(document.getElementById('gCheio').value)||0;
+  estoqueInicialAgua = parseInt(document.getElementById('aCheia').value)||0;
+  localStorage.setItem('estGas', estoqueInicialGas);
+  localStorage.setItem('estAgua', estoqueInicialAgua);
   calcular();
 }
-function editarAgua(){
-  let vend=0;
-  document.querySelectorAll('#lista.linha').forEach(l=>{
-    let prod=l.children[1].value;
-    let qtd=parseInt(l.children[2].value)||0;
-    if(prod=='A') vend+=qtd;
-  });
-  let novoCheio=parseInt(document.getElementById('aCheia').value)||0;
-  ESTOQUE_INICIAL.agua=novoCheio+vend;
-  localStorage.setItem('ELSHADAY_ESTOQUE_INICIAL',JSON.stringify(ESTOQUE_INICIAL));
-  calcular();
-}
-function add(n){salvarDOM(); for(let i=0;i<n;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar();}
-function remFolha(){salvarDOM(); DB[hoje].splice(-3); montar();}
-function salvarDOM(){
-  let linhas=document.querySelectorAll('#lista.linha');
-  DB[hoje]=[];
+function addLinha(n){ salvarNaMemoria(); for(let i=0;i<n;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar(); }
+function remover(){ salvarNaMemoria(); dados.splice(-1); montar(); }
+function salvarNaMemoria(){
+  let linhas = document.querySelectorAll('#lista .linha');
+  dados = [];
   linhas.forEach(l=>{
-    DB[hoje].push({
-      cliente:l.children[0].value,
-      prod:l.children[1].value,
-      qtd:l.children[2].value,
-      unit:l.children[3].value,
-      pix:l.children[5].value,
-      dh:l.children[6].value,
-      cart:l.children[7].value
+    dados.push({
+      cliente: l.querySelector('.cCliente').value,
+      prod: l.querySelector('.cProd').value,
+      qtd: l.querySelector('.cQtd').value,
+      unit: l.querySelector('.cUnit').value,
+      pix: l.querySelector('.cPix').value,
+      dh: l.querySelector('.cDh').value,
+      cart: l.querySelector('.cCart').value
     });
   });
-  localStorage.setItem('ELSHADAY_TEC2',JSON.stringify(DB));
+  localStorage.setItem('dadosFolha', JSON.stringify(dados));
 }
 function montar(){
   let html='';
-  DB[hoje].forEach((v,i)=>{
+  dados.forEach((v,i)=>{
     html+=`<div class="linha">
-    <input type="text" value="${v.cliente}" placeholder="Cliente" oninput="calcular()">
-    <select onchange="calcular()"><option value="G" ${v.prod=='G'?'selected':''}>GÁS</option><option value="A" ${v.prod=='A'?'selected':''}>ÁGUA</option></select>
-    <input type="tel" inputmode="numeric" placeholder="0" value="${v.qtd}" oninput="calcular()">
-    <input type="tel" inputmode="numeric" placeholder="0" value="${v.unit}" oninput="calcular()">
-    <div class="totalCell" id="t${i}">R$0</div>
-    <input type="tel" inputmode="numeric" placeholder="0" value="${v.pix}" oninput="calcular()">
-    <input type="tel" inputmode="numeric" placeholder="0" value="${v.dh}" oninput="calcular()">
-    <input type="tel" inputmode="numeric" placeholder="0" value="${v.cart}" oninput="calcular()">
-    <div class="fiCell" id="f${i}">R$0</div></div>`;
+      <input class="cCliente" type="text" value="${v.cliente}" placeholder="Cliente" oninput="calcular()">
+      <select class="cProd" onchange="calcular()"><option value="G" ${v.prod=='G'?'selected':''}>GÁS</option><option value="A" ${v.prod=='A'?'selected':''}>ÁGUA</option></select>
+      <input class="cQtd" type="tel" inputmode="numeric" value="${v.qtd}" placeholder="0" oninput="calcular()">
+      <input class="cUnit" type="tel" inputmode="numeric" value="${v.unit}" placeholder="0" oninput="calcular()">
+      <div class="totalCell" id="t${i}">R$0</div>
+      <input class="cPix" type="tel" inputmode="numeric" value="${v.pix}" placeholder="0" oninput="calcular()">
+      <input class="cDh" type="tel" inputmode="numeric" value="${v.dh}" placeholder="0" oninput="calcular()">
+      <input class="cCart" type="tel" inputmode="numeric" value="${v.cart}" placeholder="0" oninput="calcular()">
+      <div class="fiCell" id="f${i}">R$0</div>
+    </div>`;
   });
-  document.getElementById('lista').innerHTML=html;
+  document.getElementById('lista').innerHTML = html;
   calcular();
 }
 function calcular(){
-  let linhas=document.querySelectorAll('#lista.linha');
-  let gVend=0,aVend=0,sPix=0,sDH=0,sCart=0,sFiado=0,sGeral=0;
+  let linhas = document.querySelectorAll('#lista .linha');
+  let gVend=0, aVend=0, sPix=0, sDh=0, sCart=0, sFiado=0, sGeral=0;
   linhas.forEach((l,i)=>{
-    let qtd=parseFloat(l.children[2].value)||0;
-    let unit=parseFloat(l.children[3].value)||0;
-    let pix=parseFloat(l.children[5].value)||0;
-    let dh=parseFloat(l.children[6].value)||0;
-    let cart=parseFloat(l.children[7].value)||0;
-    let prod=l.children[1].value;
-    let tot=qtd*unit;
-    let fiado=tot-pix-dh-cart;
-    if(fiado<0) fiado=0;
-    if(prod=='G') gVend+=qtd; else if(prod=='A') aVend+=qtd;
-    sPix+=pix; sDH+=dh; sCart+=cart; sFiado+=fiado; sGeral+=tot;
-    let t=document.getElementById('t'+i); if(t) t.innerText='R$'+tot;
-    let f=document.getElementById('f'+i); if(f) f.innerText='R$'+fiado;
+    let qtd = parseFloat(l.querySelector('.cQtd').value)||0;
+    let unit = parseFloat(l.querySelector('.cUnit').value)||0;
+    let pix = parseFloat(l.querySelector('.cPix').value)||0;
+    let dh = parseFloat(l.querySelector('.cDh').value)||0;
+    let cart = parseFloat(l.querySelector('.cCart').value)||0;
+    let prod = l.querySelector('.cProd').value;
+    let tot = qtd * unit;
+    let fiado = tot - pix - dh - cart;
+    if(fiado < 0) fiado = 0;
+    if(prod=='G') gVend += qtd; else aVend += qtd;
+    sPix += pix; sDh += dh; sCart += cart; sFiado += fiado; sGeral += tot;
+    document.getElementById('t'+i).innerText = 'R$' + tot;
+    document.getElementById('f'+i).innerText = 'R$' + fiado;
   });
-  let cheioGas=ESTOQUE_INICIAL.gas-gVend;
-  let cheiaAgua=ESTOQUE_INICIAL.agua-aVend;
-  if(document.activeElement.id!=='gCheio') document.getElementById('gCheio').value=cheioGas;
-  if(document.activeElement.id!=='aCheia') document.getElementById('aCheia').value=cheiaAgua;
-  document.getElementById('gVazio').innerText=gVend;
-  document.getElementById('gVendido').innerText=gVend;
-  document.getElementById('aVazia').innerText=aVend;
-  document.getElementById('aVendida').innerText=aVend;
-  document.getElementById('sPix').innerText=sPix;
-  document.getElementById('sDH').innerText=sDH;
-  document.getElementById('sCart').innerText=sCart;
-  document.getElementById('sFiado').innerText=sFiado;
-  document.getElementById('sGeral').innerText=sGeral;
-  let desp=parseFloat(document.getElementById('despValor').value)||0;
-  document.getElementById('sDesp').innerText=desp;
-  document.getElementById('sLucro').innerText=(sPix+sDH+sCart)-desp;
-  // salva silencioso
-  salvarDOM();
+  // estoque diminui
+  let cheioGasRest = estoqueInicialGas - gVend;
+  let cheioAguaRest = estoqueInicialAgua - aVend;
+  if(document.activeElement.id !== 'gCheio') document.getElementById('gCheio').value = cheioGasRest;
+  if(document.activeElement.id !== 'aCheia') document.getElementById('aCheia').value = cheioAguaRest;
+  document.getElementById('gVazio').innerText = gVend;
+  document.getElementById('gVendido').innerText = gVend;
+  document.getElementById('aVazia').innerText = aVend;
+  document.getElementById('aVendida').innerText = aVend;
+  document.getElementById('sPix').innerText = sPix;
+  document.getElementById('sDH').innerText = sDh;
+  document.getElementById('sCart').innerText = sCart;
+  document.getElementById('sFiado').innerText = sFiado;
+  document.getElementById('sGeral').innerText = sGeral;
+  let desp = parseFloat(document.getElementById('despValor').value)||0;
+  document.getElementById('sDesp').innerText = desp;
+  document.getElementById('sLucro').innerText = (sPix + sDh + sCart) - desp;
+  salvarNaMemoria();
 }
-function zerar(){if(confirm('Zerar HOJE?')){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar();}}
-function limpar(){if(confirm('Limpar TUDO?')){localStorage.clear(); location.reload();}}
-function repor(){let g=prompt('Quantos gás cheio entrou?','50'); if(g){ESTOQUE_INICIAL.gas+=parseInt(g)||0; localStorage.setItem('ELSHADAY_ESTOQUE_INICIAL',JSON.stringify(ESTOQUE_INICIAL)); calcular();}}
-function salvar(){ salvarDOM(); alert('Salvo!'); }
-function toggleHist(){}
-function gerarPDFReal(){
+function zerar(){ if(confirm('Zerar vendas de hoje?')){ dados=[]; for(let i=0;i<5;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar(); } }
+function limparTudo(){ if(confirm('Limpar tudo?')){ localStorage.clear(); location.reload(); } }
+function salvar(){ salvarNaMemoria(); alert('Salvo!'); }
+function gerarPDF(){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('l','mm','a4');
-  let data = hoje.split('-').reverse().join('/');
-  doc.text(`EL SHADAY - ${data}`, 14, 12);
   let rows=[];
-  document.querySelectorAll('#lista.linha').forEach(l=>{
-    let cliente=l.children[0].value;
-    let prod=l.children[1].value=='G'?'GÁS':'ÁGUA';
-    let qtd=l.children[2].value;
-    let unit=l.children[3].value;
-    let tot=l.children[4].innerText;
-    let pix=l.children[5].value;
-    let dh=l.children[6].value;
-    let cart=l.children[7].value;
-    let fiado=l.children[8].innerText;
+  document.querySelectorAll('#lista .linha').forEach(l=>{
+    let cliente=l.querySelector('.cCliente').value||'Cliente';
+    let prod=l.querySelector('.cProd').value=='G'?'GÁS':'ÁGUA';
+    let qtd=l.querySelector('.cQtd').value;
+    let unit=l.querySelector('.cUnit').value;
+    let tot=l.querySelector('.totalCell').innerText;
+    let pix=l.querySelector('.cPix').value||0;
+    let dh=l.querySelector('.cDh').value||0;
+    let cart=l.querySelector('.cCart').value||0;
+    let fiado=l.querySelector('.fiCell').innerText;
     if(parseFloat(qtd)>0) rows.push([cliente,prod,qtd,'R$'+unit,tot,'R$'+pix,'R$'+dh,'R$'+cart,fiado]);
   });
-  if(rows.length==0){alert('Sem vendas'); return;}
-  doc.autoTable({head:[['Cliente','Produto','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:16,styles:{fontSize:9}});
-  doc.save(`ELSHADAY_${hoje}.pdf`);
+  if(rows.length==0){ alert('Sem vendas'); return; }
+  doc.text('EL SHADAY GAS E AGUA - ' + new Date().toLocaleDateString(), 14, 12);
+  doc.autoTable({head:[['Cliente','Produto','Qtd','Unit','Total','PIX','DH','CART','FIADO']], body:rows, startY:16, styles:{fontSize:9}});
+  doc.save('ELSHADAY.pdf');
 }
 montar();
 </script>

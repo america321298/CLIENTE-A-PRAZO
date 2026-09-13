@@ -1,29 +1,28 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>EL SHADAY COMPACTO</title>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>EL SHADAY FIX</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#eef2f5;font-size:12px}
-.titulo{background:#1a7a34;color:#fff;text-align:center;padding:8px;font-weight:bold;font-size:14px}
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f0f0f0;font-size:12px}
+.titulo{background:#1a7a34;color:#fff;text-align:center;padding:8px;font-weight:bold}
 .t3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;padding:4px}
-.top{background:#0d47a1;color:#fff;padding:4px;border-radius:6px;text-align:center;font-size:10px}
+.top{background:#0d47a1;color:#fff;padding:6px;border-radius:6px;text-align:center;font-size:10px}
 .top.white{background:#fff;color:#000;border:1px solid #ccc}
-.top b{font-size:14px;display:block}
-.card{margin:4px;background:#fff;border-radius:8px;padding:4px;border:1px solid #0d47a1;overflow-x:auto}
-.header{background:#ffeb3b;text-align:center;font-weight:bold;padding:4px;border-radius:6px;font-size:11px}
-.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tabela{min-width:620px}
-.th{display:grid;grid-template-columns:90px 28px 28px 35px 45px 32px 32px 32px 38px;gap:2px;font-size:8px;font-weight:bold;text-align:center;margin-top:4px}
-.th span{padding:3px;border-radius:4px;color:#fff;display:flex;align-items:center;justify-content:center}
-.linha{display:grid;grid-template-columns:90px 28px 28px 35px 45px 32px 32px 32px 38px;gap:2px;margin:2px 0}
-.linha input,.linha select{padding:4px 1px;border-radius:4px;border:1px solid #aaa;text-align:center;font-size:11px;height:28px}
-.totalCell{background:#fff9c4;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;border:1px solid #ccc}
-.fiCell{background:#ffcdd2;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold}
+.top b{font-size:16px;display:block}
+.card{margin:4px;background:#fff;border-radius:8px;padding:4px;border:1.5px solid #0d47a1}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:6px}
+.tabela{min-width:680px}
+.th{display:grid;grid-template-columns:92px 36px 44px 48px 58px 42px 42px 42px 48px;gap:2px;font-size:8px;font-weight:bold;text-align:center}
+.th span{padding:4px;border-radius:4px;color:#fff}
+.linha{display:grid;grid-template-columns:92px 36px 44px 48px 58px 42px 42px 42px 48px;gap:2px;margin:2px 0}
+.linha input,.linha select{height:32px;padding:2px;border-radius:5px;border:1.5px solid #888;text-align:center;font-size:12px;font-weight:bold;background:#fff}
+.linha input:focus{border-color:#0d47a1;background:#e3f2fd}
+.totalCell{background:#ffeb3b;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;border:1px solid #999;height:32px}
+.fiCell{background:#ffcdd2;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:bold;height:32px;border:1px solid #999}
 .sums{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:4px}
-.sum{padding:6px;border-radius:6px;color:#fff;font-weight:bold;font-size:11px;display:flex;justify-content:space-between}
-.btn{border:none;border-radius:6px;padding:8px 4px;font-weight:bold;color:#fff;font-size:10px}
-.desp{border:1px solid #e53935;border-radius:8px;margin:4px;padding:4px;background:#fff}
+.sum{padding:8px;border-radius:6px;color:#fff;font-weight:bold;font-size:12px;display:flex;justify-content:space-between}
+.btn{border:none;border-radius:6px;padding:10px 4px;font-weight:bold;color:#fff;font-size:11px}
 .bot{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:4px;margin:4px}
 </style>
 </head>
@@ -38,14 +37,22 @@
 <div class="top white">VEND<br><b id="aVendida">0</b></div>
 </div>
 <div class="card">
-<div class="header">📒 FOLHA DE CADERNO - ARRASTA PRO LADO 👉</div>
+<div style="background:#ffeb3b;text-align:center;font-weight:bold;padding:5px;border-radius:6px;font-size:12px">📒 FOLHA DE CADERNO - 👉 arrasta pro lado pra ver FIADO</div>
 <div class="wrap"><div class="tabela">
 <div class="th">
-<span style="background:#ffeb3b;color:#000">Cliente</span><span style="background:#000">Pr</span><span style="background:#4caf50">Qtd</span><span style="background:#000">Unit</span><span style="background:#ffeb3b;color:#000">Total</span><span style="background:#2196f3">PIX</span><span style="background:#4caf50">DH</span><span style="background:#9c27b0">CAR</span><span style="background:#e53935">FIADO</span>
+<span style="background:#ffeb3b;color:#000">Cliente</span>
+<span style="background:#000">Prod</span>
+<span style="background:#4caf50">Qtd</span>
+<span style="background:#222">Unit</span>
+<span style="background:#ff9800;color:#000">Total</span>
+<span style="background:#2196f3">PIX</span>
+<span style="background:#4caf50">DH</span>
+<span style="background:#9c27b0">CART</span>
+<span style="background:#e53935">FIADO</span>
 </div>
 <div id="lista"></div>
 </div></div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
 <button class="btn" style="background:#29b6f6" onclick="add(5)">+ 5 Vendas</button>
 <button class="btn" style="background:#2e7d32" onclick="add(1)">+ 1 Venda</button>
 </div>
@@ -57,14 +64,14 @@
 <div class="sum" style="background:#c62828">FIADO: R$ <span id="sFiado">0</span></div>
 <div class="sum" style="background:#0d47a1;grid-column:span 2">TOTAL GERAL: R$ <span id="sGeral">0</span></div>
 </div>
-<div class="desp">
-<div style="display:grid;grid-template-columns:70px 1fr;gap:4px">
-<div>Valor:<br><input id="despValor" type="number" value="0" style="width:100%;padding:4px;border-radius:4px;border:1px solid #999" oninput="render()"></div>
-<div>Motivo:<br><input id="despMotivo" type="text" value="" placeholder="Gasolina" style="width:100%;padding:4px;border-radius:4px;border:1px solid #999"></div>
+<div style="margin:4px;background:#fff;border:1.5px solid #e53935;border-radius:8px;padding:6px">
+<div style="display:grid;grid-template-columns:80px 1fr;gap:6px">
+<div>Desp. R$<br><input id="despValor" type="number" inputmode="numeric" value="0" style="width:100%;padding:6px;border-radius:4px;border:1px solid #999" oninput="render()"></div>
+<div>Motivo<br><input id="despMotivo" type="text" placeholder="Gasolina" style="width:100%;padding:6px;border-radius:4px;border:1px solid #999"></div>
 </div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:4px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
 <div class="sum" style="background:#ef5350">DESPESA: R$ <span id="sDesp">0</span></div>
-<div class="sum" style="background:#2e7d32">LUCRO: R$ <span id="sLucro">0</span></div>
+<div class="sum" style="background:#2e7d32">LUCRO REAL: R$ <span id="sLucro">0</span></div>
 </div>
 </div>
 <div class="bot">
@@ -78,24 +85,26 @@
 <button class="btn" style="background:#e64a19" onclick="limparTudo()">Limpar</button>
 </div>
 <div class="card">
-<div style="font-weight:bold;font-size:11px">📊 HISTÓRICO</div>
-<div id="histLista"></div>
-<div style="background:#0d47a1;color:#fff;padding:6px;border-radius:6px;text-align:center;margin-top:4px;font-size:10px" id="soma30">SOMA 30 DIAS</div>
+<div style="font-weight:bold">📊 HISTÓRICO <span id="dataHoje"></span></div>
+<div id="histLista" style="font-size:11px"></div>
+<div style="background:#0d47a1;color:#fff;padding:6px;border-radius:6px;text-align:center;margin-top:4px;font-size:11px" id="soma30">SOMA 30 DIAS: 0 GÁS</div>
 </div>
 <script>
 let ESTOQUE={gas:200,agua:150};
-let DB=JSON.parse(localStorage.getItem('ELSHADAY_C')||'{}');
-let HIST=JSON.parse(localStorage.getItem('ELSHADAY_HIST_C')||'{}');
+let DB=JSON.parse(localStorage.getItem('ELSHADAY_FIX')||'{}');
+let HIST=JSON.parse(localStorage.getItem('ELSHADAY_HIST_FIX')||'{}');
 let hoje=new Date().toISOString().slice(0,10);
-if(!DB[hoje]){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:0,unit:0,pix:0,dh:0,cart:0});}
-function add(n){for(let i=0;i<n;i++) DB[hoje].push({cliente:'',prod:'G',qtd:0,unit:0,pix:0,dh:0,cart:0}); render();}
+document.getElementById('dataHoje').innerText='- '+hoje.split('-').reverse().join('/');
+if(!DB[hoje]){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:130,pix:'',dh:'',cart:''});}
+function getUnit(prod){ return prod==='G'? 130 : 10; }
+function add(n){for(let i=0;i<n;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:130,pix:'',dh:'',cart:''}); render();}
 function remFolha(){DB[hoje].splice(-3); render();}
-function repor(){let g=prompt('Gás que entrou?','50'); if(g) ESTOQUE.gas+=parseInt(g); render();}
-function zerar(){if(confirm('Zerar?')){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:0,unit:0,pix:0,dh:0,cart:0}); render();}}
-function limparTudo(){if(confirm('Limpar?')){localStorage.clear(); location.reload();}}
-function salvar(){localStorage.setItem('ELSHADAY_C',JSON.stringify(DB));let gas=0,agua=0,fiado=0,recebido=0;DB[hoje].forEach(v=>{let tot=(v.qtd||0)*(v.unit||0); let f=tot-(v.pix||0)-(v.dh||0)-(v.cart||0); if(v.prod==='G') gas+=Number(v.qtd)||0; else agua+=Number(v.qtd)||0; fiado+=f>0?f:0; recebido+=(v.pix||0)+(v.dh||0)+(v.cart||0);});HIST[hoje]={gas,agua,fiado,recebido}; localStorage.setItem('ELSHADAY_HIST_C',JSON.stringify(HIST)); renderHist(); alert('Salvo!');}
-function render(){let lista=DB[hoje]; let gVend=0,aVend=0,sPix=0,sDH=0,sCart=0,sFiado=0,sGeral=0; let html='';lista.forEach((v,i)=>{let total=(Number(v.qtd)||0)*(Number(v.unit)||0);let fiado=total-(Number(v.pix)||0)-(Number(v.dh)||0)-(Number(v.cart)||0); if(fiado<0) fiado=0;if(v.prod==='G') gVend+=Number(v.qtd)||0; else aVend+=Number(v.qtd)||0;sPix+=Number(v.pix)||0; sDH+=Number(v.dh)||0; sCart+=Number(v.cart)||0; sFiado+=fiado; sGeral+=total;html+=`<div class="linha"><input type="text" placeholder="Cliente" value="${v.cliente}" oninput="DB['${hoje}'][${i}].cliente=this.value"><select onchange="DB['${hoje}'][${i}].prod=this.value; render()"><option value="G" ${v.prod==='G'?'selected':''}>G</option><option value="A" ${v.prod==='A'?'selected':''}>A</option></select><input type="number" value="${v.qtd}" oninput="DB['${hoje}'][${i}].qtd=this.value; render()"><input type="number" value="${v.unit}" oninput="DB['${hoje}'][${i}].unit=this.value; render()"><div class="totalCell">R$${total}</div><input type="number" value="${v.pix}" oninput="DB['${hoje}'][${i}].pix=this.value; render()"><input type="number" value="${v.dh}" oninput="DB['${hoje}'][${i}].dh=this.value; render()"><input type="number" value="${v.cart}" oninput="DB['${hoje}'][${i}].cart=this.value; render()"><div class="fiCell">${fiado}</div></div>`;});document.getElementById('lista').innerHTML=html;document.getElementById('gCheio').innerText=ESTOQUE.gas-gVend;document.getElementById('gVazio').innerText=gVend;document.getElementById('gVendido').innerText=gVend;document.getElementById('aCheia').innerText=ESTOQUE.agua-aVend;document.getElementById('aVazia').innerText=aVend;document.getElementById('aVendida').innerText=aVend;document.getElementById('sPix').innerText=sPix;document.getElementById('sDH').innerText=sDH;document.getElementById('sCart').innerText=sCart;document.getElementById('sFiado').innerText=sFiado;document.getElementById('sGeral').innerText=sGeral;let desp=Number(document.getElementById('despValor').value)||0;document.getElementById('sDesp').innerText=desp;document.getElementById('sLucro').innerText=(sPix+sDH+sCart)-desp;localStorage.setItem('ELSHADAY_C',JSON.stringify(DB));}
-function renderHist(){let html=''; let totGas=0,totAgua=0;Object.keys(HIST).sort().reverse().slice(0,30).forEach(d=>{let h=HIST[d]; totGas+=h.gas; totAgua+=h.agua;html+=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:2px;padding:4px;text-align:center;border-bottom:1px solid #ddd;font-size:10px"><span>${d.slice(5).split('-').reverse().join('/')}</span><span>${h.gas}</span><span>${h.agua}</span><span style="color:red">R$${h.fiado}</span><span>R$${h.recebido}</span></div>`;});document.getElementById('histLista').innerHTML=html;document.getElementById('soma30').innerText=`SOMA 30 DIAS: ${totGas} GÁS | ${totAgua} ÁGUA`;}
+function repor(){let g=prompt('Quantos gás cheio entrou na base?','50'); if(g) ESTOQUE.gas+=parseInt(g)||0; render();}
+function zerar(){if(confirm('Zerar HOJE?')){DB[hoje]=[]; for(let i=0;i<5;i++) DB[hoje].push({cliente:'',prod:'G',qtd:'',unit:130,pix:'',dh:'',cart:''}); render();}}
+function limparTudo(){if(confirm('Limpar TUDO?')){localStorage.clear(); location.reload();}}
+function salvar(){localStorage.setItem('ELSHADAY_FIX',JSON.stringify(DB));let gas=0,agua=0,fiado=0,recebido=0;DB[hoje].forEach(v=>{let tot=(Number(v.qtd)||0)*(Number(v.unit)||0);let f=tot-(Number(v.pix)||0)-(Number(v.dh)||0)-(Number(v.cart)||0);if(v.prod==='G') gas+=Number(v.qtd)||0; else agua+=Number(v.qtd)||0;fiado+=f>0?f:0; recebido+=(Number(v.pix)||0)+(Number(v.dh)||0)+(Number(v.cart)||0);});HIST[hoje]={gas,agua,fiado,recebido};localStorage.setItem('ELSHADAY_HIST_FIX',JSON.stringify(HIST));renderHist(); alert('Salvo! '+gas+' gás vendido');}
+function render(){let lista=DB[hoje]; let gVend=0,aVend=0,sPix=0,sDH=0,sCart=0,sFiado=0,sGeral=0; let html='';lista.forEach((v,i)=>{if(!v.unit || v.unit==0) v.unit=getUnit(v.prod);let total=(Number(v.qtd)||0)*(Number(v.unit)||0);let fiado=total-(Number(v.pix)||0)-(Number(v.dh)||0)-(Number(v.cart)||0); if(fiado<0) fiado=0;if(v.prod==='G') gVend+=Number(v.qtd)||0; else aVend+=Number(v.qtd)||0;sPix+=Number(v.pix)||0; sDH+=Number(v.dh)||0; sCart+=Number(v.cart)||0; sFiado+=fiado; sGeral+=total;html+=`<div class="linha"><input type="text" placeholder="Cliente" value="${v.cliente}" oninput="DB['${hoje}'][${i}].cliente=this.value"><select onchange="let u=getUnit(this.value); DB['${hoje}'][${i}].prod=this.value; DB['${hoje}'][${i}].unit=u; render()"><option value="G" ${v.prod==='G'?'selected':''}>G</option><option value="A" ${v.prod==='A'?'selected':''}>A</option></select><input type="number" placeholder="Qtd" value="${v.qtd}" oninput="DB['${hoje}'][${i}].qtd=this.value; render()"><input type="number" placeholder="Unit" value="${v.unit}" oninput="DB['${hoje}'][${i}].unit=this.value; render()"><div class="totalCell">R$${total}</div><input type="number" placeholder="0" value="${v.pix}" oninput="DB['${hoje}'][${i}].pix=this.value; render()"><input type="number" placeholder="0" value="${v.dh}" oninput="DB['${hoje}'][${i}].dh=this.value; render()"><input type="number" placeholder="0" value="${v.cart}" oninput="DB['${hoje}'][${i}].cart=this.value; render()"><div class="fiCell">R$${fiado}</div></div>`;});document.getElementById('lista').innerHTML=html;document.getElementById('gCheio').innerText=ESTOQUE.gas-gVend;document.getElementById('gVazio').innerText=gVend;document.getElementById('gVendido').innerText=gVend;document.getElementById('aCheia').innerText=ESTOQUE.agua-aVend;document.getElementById('aVazia').innerText=aVend;document.getElementById('aVendida').innerText=aVend;document.getElementById('sPix').innerText=sPix;document.getElementById('sDH').innerText=sDH;document.getElementById('sCart').innerText=sCart;document.getElementById('sFiado').innerText=sFiado;document.getElementById('sGeral').innerText=sGeral;let desp=Number(document.getElementById('despValor').value)||0;document.getElementById('sDesp').innerText=desp;document.getElementById('sLucro').innerText=(sPix+sDH+sCart)-desp;localStorage.setItem('ELSHADAY_FIX',JSON.stringify(DB));}
+function renderHist(){let html=''; let totGas=0,totAgua=0;Object.keys(HIST).sort().reverse().slice(0,30).forEach(d=>{let h=HIST[d]; totGas+=h.gas; totAgua+=h.agua;html+=`<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr;gap:2px;padding:5px;text-align:center;border-bottom:1px solid #ddd"><span>${d.split('-').reverse().join('/')}</span><span>${h.gas}</span><span>${h.agua}</span><span style="color:red">R$${h.fiado}</span><span>R$${h.recebido}</span></div>`;});document.getElementById('histLista').innerHTML=html || '<div style="padding:8px;text-align:center;color:#999">Nenhum dia salvo</div>';document.getElementById('soma30').innerText=`SOMA 30 DIAS: ${totGas} GÁS | ${totAgua} ÁGUA`;}
 render(); renderHist();
 </script>
 </body>

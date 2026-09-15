@@ -24,30 +24,28 @@
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EL SHADAY - GÁS E ÁGUA</title>
+<title>EL SHADAY - HISTÓRICO MENSAL</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Helvetica,sans-serif;background:#e9e9e9;padding:0 4px 80px}
-.header{background:#1a7a34;color:#fff;text-align:center;padding:10px;font-weight:900;font-size:18px;margin:0 -4px}
+.header{background:#1a7a34;color:#fff;text-align:center;padding:10px;font-weight:900;font-size:18px;margin:0 -4px;position:sticky;top:0;z-index:10}
 .box{background:#fff;border:2.5px solid #0d47a1;border-radius:10px;padding:6px;margin:6px 0}
 .box-title{color:#0d47a1;font-weight:900;text-align:center;font-size:13px;margin-bottom:6px;text-transform:uppercase}
 .estoque-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
 .est{border-radius:8px;padding:4px 2px;text-align:center;border:2px solid #0d47a1}
-.est.cheio{background:#0d47a1;color:#fff}
-.est.vazio{background:#e3f2fd;color:#0d47a1}
-.est b{font-size:11px;display:block;line-height:1.1}
-.est .num{font-size:18px;font-weight:900;margin-top:2px;display:block;color:#000;background:#e3f2fd;border-radius:6px;padding:3px 0}
+.est.cheio{background:#0d47a1;color:#fff}.est.vazio{background:#e3f2fd;color:#0d47a1}
+.est b{font-size:11px;display:block;line-height:1.1}.est .num{font-size:18px;font-weight:900;margin-top:2px;display:block;color:#000;background:#e3f2fd;border-radius:6px;padding:3px 0}
 .est input{width:86%;font-size:18px;font-weight:900;text-align:center;border:2px solid #000;border-radius:6px;padding:3px 0;margin-top:4px;background:#fff}
-.caderno-header{background:#ffeb3b;text-align:center;font-weight:900;font-size:18px;padding:8px;border-radius:8px 8px 0 0;border:2px solid #000;border-bottom:none}
+.caderno-header{background:#ffeb3b;text-align:center;font-weight:900;font-size:16px;padding:6px;border-radius:8px 8px 0 0;border:2px solid #000;border-bottom:none}
 .wrap{overflow-x:auto;background:#fff;border:2px solid #000;border-radius:0 0 8px 8px}
-.tabela{min-width:860px}
-.th{display:grid;grid-template-columns:130px 86px 52px 56px 80px 58px 58px 58px 68px;gap:3px;padding:4px;background:#fff}
-.th span{padding:5px 2px;border-radius:6px;font-size:11px;font-weight:900;text-align:center;color:#fff}
-.linha{display:grid;grid-template-columns:130px 86px 52px 56px 80px 58px 58px 58px 68px;gap:3px;padding:2px 4px}
-.linha input,.linha select{height:40px;border:2px solid #555;border-radius:8px;text-align:center;font-weight:900;font-size:14px;width:100%;background:#fff}
-.cellTotal{background:#ffeb3b;border:1.5px solid #999;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:900;font-size:13px}
-.cellFiado{background:#ffcdd2;border:1.5px solid #999;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:900;font-size:13px}
+.tabela{min-width:960px}
+.th{display:grid;grid-template-columns:90px 120px 70px 48px 52px 72px 54px 54px 54px 64px;gap:3px;padding:4px;background:#fff}
+.th span{padding:5px 2px;border-radius:6px;font-size:10px;font-weight:900;text-align:center;color:#fff}
+.linha{display:grid;grid-template-columns:90px 120px 70px 48px 52px 72px 54px 54px 54px 64px;gap:3px;padding:2px 4px}
+.linha input,.linha select{height:38px;border:2px solid #555;border-radius:7px;text-align:center;font-weight:900;font-size:13px;width:100%;background:#fff}
+.cellTotal{background:#ffeb3b;border:1.5px solid #999;height:38px;display:flex;align-items:center;justify-content:center;border-radius:7px;font-weight:900;font-size:12px}
+.cellFiado{background:#ffcdd2;border:1.5px solid #999;height:38px;display:flex;align-items:center;justify-content:center;border-radius:7px;font-weight:900;font-size:12px}
 .totais{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
 .tot{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;color:#fff;font-weight:900;font-size:15px}
 .tot.blue{background:#1565c0}.tot.green{background:#2e7d32}.tot.purple{background:#6a1b9a}.tot.red{background:#c62828}.tot.darkblue{background:#0d47a1}
@@ -55,35 +53,37 @@
 .despGrid{display:grid;grid-template-columns:110px 1fr;gap:6px}
 .despGrid input{height:44px;border:2px solid #555;border-radius:8px;padding:0 8px;font-weight:900;font-size:16px}
 .botoes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
-.btn{border:none;border-radius:8px;padding:12px 2px;color:#fff;font-weight:900;font-size:13px;cursor:pointer}
-/* RESUMO MES IGUAL SUA FOTO */
+.btn{border:none;border-radius:8px;padding:12px 2px;color:#fff;font-weight:900;font-size:12px;cursor:pointer}
 .mesBox{border:2.5px solid #1a3c6e;border-radius:10px;padding:8px;margin:8px 0;background:#fff}
 .tabelaResumo{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
 .tabelaResumo th{background:#1a3c6e;color:#fff;padding:8px;text-align:center;font-size:12px}
 .tabelaResumo td{border:1px solid #000;padding:6px;font-weight:900;font-size:12px}
-.grafBarra{width:100%;background:#eee;border:1px solid #000;height:24px;border-radius:4px;overflow:hidden;display:flex}
-.grafBarra .barra{height:100%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:11px}
+.qtdBox{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+.qtdCard{border:2px solid #1a3c6e;border-radius:10px;padding:10px;text-align:center;font-weight:900}
+.qtdCard.gas{background:#c62828;color:#fff;font-size:22px}
+.qtdCard.agua{background:#eee;color:#000;font-size:22px}
 </style>
 </head>
 <body>
-<div class="header">🔥 EL SHADAY GÁS E ÁGUA 💧</div>
+<div class="header">🔥 EL SHADAY GÁS E ÁGUA 💧 - MÊS SALVO</div>
 
 <div class="box">
-<div class="box-title">ESTOQUE - CHEIO DIMINUI SOZINHO - EDITÁVEL</div>
+<div class="box-title">ESTOQUE DO MÊS - CHEIO DIMINUI SOZINHO (EDITÁVEL)</div>
 <div class="estoque-grid">
 <div class="est cheio"><b>GÁS CHEIO</b><input id="gCheio" type="number" value="200" onfocus="editandoGas=true" onblur="salvouCheio('gas')"></div>
 <div class="est vazio"><b>GÁS VAZIO</b><span class="num" id="gVazio">0</span></div>
-<div class="est vazio"><b>GÁS VENDIDO</b><span class="num" id="gVendido">0</span></div>
+<div class="est vazio"><b>GÁS VENDIDO MÊS</b><span class="num" id="gVendido">0</span></div>
 <div class="est cheio"><b>ÁGUA CHEIA</b><input id="aCheia" type="number" value="150" onfocus="editandoAgua=true" onblur="salvouCheio('agua')"></div>
 <div class="est vazio"><b>ÁGUA VAZIA</b><span class="num" id="aVazia">0</span></div>
-<div class="est vazio"><b>ÁGUA VENDIDA</b><span class="num" id="aVendida">0</span></div>
+<div class="est vazio"><b>ÁGUA VENDIDA MÊS</b><span class="num" id="aVendida">0</span></div>
 </div>
 </div>
 
 <div class="box" style="padding:0;border:none;background:transparent">
-<div class="caderno-header">FOLHA DE CADERNO</div>
+<div class="caderno-header">VENDAS DO MÊS COM DATA - VAI SALVANDO SOZINHO</div>
 <div class="wrap"><div class="tabela">
 <div class="th">
+<span style="background:#1a3c6e">DATA</span>
 <span style="background:#ffeb3b;color:#000">Cliente</span>
 <span style="background:#000">Produto</span>
 <span style="background:#4caf50">Qtd</span>
@@ -108,7 +108,7 @@
 <div class="tot red"><span>FIADO: R$</span><span id="tFiado">0</span></div>
 </div>
 <div class="totais" style="grid-template-columns:1fr">
-<div class="tot darkblue"><span>TOTAL GERAL: R$</span><span id="tGeral">0</span></div>
+<div class="tot darkblue"><span>TOTAL GERAL MÊS: R$</span><span id="tGeral">0</span></div>
 </div>
 
 <div class="despBox">
@@ -122,34 +122,32 @@
 </div>
 </div>
 
-<!-- RESUMO DO MES IGUAL SUA FOTO COM 110 UNID -->
+<!-- RESUMO DO MES IGUAL SUA FOTO -->
 <div class="mesBox">
-<div class="box-title" style="color:#1a3c6e">QUANTIDADE VENDIDA NO MÊS - FÓRMULAS FUNCIONANDO</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:8px 0;text-align:center;font-weight:900">
-<div><div id="grafGas" style="background:#c62828;color:#fff;padding:20px;border-radius:6px;font-size:22px">110<br><small style="font-size:12px">GÁS</small></div></div>
-<div><div id="grafAgua" style="background:#eee;padding:20px;border-radius:6px;font-size:22px">0<br><small style="font-size:12px">ÁGUA</small></div></div>
+<div class="qtdBox">
+<div class="qtdCard gas"><span id="qGas">0</span><br><small style="font-size:14px">GÁS</small></div>
+<div class="qtdCard agua"><span id="qAgua">0</span><br><small style="font-size:14px">ÁGUA</small></div>
 </div>
-
 <table class="tabelaResumo">
 <tr><th>RESUMO</th><th>VALOR</th></tr>
-<tr><td>TOTAL GÁS MÊS</td><td id="rGas">110 unid.</td></tr>
+<tr><td>TOTAL GÁS MÊS</td><td id="rGas">0 unid.</td></tr>
 <tr><td>TOTAL ÁGUA MÊS</td><td id="rAgua">0 unid.</td></tr>
-<tr><td>VALOR TOTAL VENDIDO</td><td id="rTotal">R$ 9290</td></tr>
-<tr><td>ENTROU EM PIX</td><td id="rPix">R$ 1000</td></tr>
+<tr><td>VALOR TOTAL VENDIDO</td><td id="rTotal">R$ 0</td></tr>
+<tr><td>ENTROU EM PIX</td><td id="rPix">R$ 0</td></tr>
 <tr><td>ENTROU EM DINHEIRO</td><td id="rDh">R$ 0</td></tr>
 <tr><td>ENTROU EM CARTÃO</td><td id="rCart">R$ 0</td></tr>
-<tr><td>A RECEBER (FIADO)</td><td id="rFiado">R$ 8290</td></tr>
+<tr><td>A RECEBER (FIADO)</td><td id="rFiado">R$ 0</td></tr>
 </table>
 </div>
 
 <div class="botoes">
-<button class="btn" style="background:#25d366" onclick="enviarZap()">WhatsApp</button>
+<button class="btn" style="background:#25d366" onclick="enviarZap()">WhatsApp MÊS</button>
 <button class="btn" style="background:#0d47a1" onclick="salvarTudo()">Salvar</button>
-<button class="btn" style="background:#6a1b9a" onclick="addLinha(3)">+3</button>
-<button class="btn" style="background:#ef6c00" onclick="removerLinha()">-Folha</button>
-<button class="btn" style="background:#000" onclick="gerarPDF()">PDF</button>
-<button class="btn" style="background:#c62828" onclick="zerar()">ZERAR</button>
-<button class="btn" style="background:#e65100" onclick="limpar()">Limpar</button>
+<button class="btn" style="background:#6a1b9a" onclick="addLinha(1)">+1 Linha</button>
+<button class="btn" style="background:#ef6c00" onclick="removerHoje()">-Hoje</button>
+<button class="btn" style="background:#000" onclick="gerarPDF()">PDF MÊS</button>
+<button class="btn" style="background:#c62828" onclick="zerarMes()">FECHAR MÊS</button>
+<button class="btn" style="background:#e65100" onclick="limpar()">Limpar Tudo</button>
 <button class="btn" style="background:#607d8b" onclick="location.reload()">Atualizar</button>
 </div>
 </div>
@@ -158,11 +156,23 @@
 let estoqueInicialGas=200, estoqueInicialAgua=150, dados=[];
 let editandoGas=false, editandoAgua=false;
 
+function hojeISO(){return new Date().toISOString().slice(0,10);}
+function dataBR(iso){if(!iso) return ''; let p=iso.split('-'); return p[2]+'/'+p[1];}
+
 function iniciar(){
   estoqueInicialGas=parseInt(localStorage.getItem('estGasInicial')||'200');
   estoqueInicialAgua=parseInt(localStorage.getItem('estAguaInicial')||'150');
-  dados=JSON.parse(localStorage.getItem('dadosFolha')||'[]');
-  if(dados.length===0){for(let i=0;i<3;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});}
+  // Tenta carregar do histórico mensal, senão do antigo
+  let dadosMes = JSON.parse(localStorage.getItem('historicoMesAtual')||'null');
+  let dadosAntigo = JSON.parse(localStorage.getItem('dadosFolha')||'[]');
+  if(dadosMes && dadosMes.length>0){
+    dados=dadosMes;
+  } else if(dadosAntigo.length>0){
+    // migra antigo adicionando data
+    dados=dadosAntigo.map(d=>{ if(!d.data) d.data=hojeISO(); return d; });
+  } else {
+    dados=[{data:hojeISO(),cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}];
+  }
   document.getElementById('despValor').value=localStorage.getItem('despValor')||0;
   document.getElementById('despMotivo').value=localStorage.getItem('despMotivo')||'';
   montar();
@@ -178,9 +188,12 @@ function salvouCheio(tipo){
 function salvarDesp(){localStorage.setItem('despValor',document.getElementById('despValor').value);localStorage.setItem('despMotivo',document.getElementById('despMotivo').value);}
 function getVendidos(){let g=0,a=0;document.querySelectorAll('#lista .linha').forEach(l=>{let q=Number(l.querySelector('.cQtd').value)||0;if(l.querySelector('.cProd').value==='G')g+=q;else a+=q;});return{g,a};}
 function montar(){
+  // ordena por data
+  dados.sort((a,b)=>(a.data||'').localeCompare(b.data||''));
   let html='';
   dados.forEach((v,i)=>{
     html+=`<div class="linha">
+      <input class="cData" type="date" value="${v.data||hojeISO()}" onchange="calcular()">
       <input class="cCliente" value="${(v.cliente||'').replace(/"/g,'&quot;')}" placeholder="Cliente" oninput="calcular()">
       <select class="cProd" onchange="calcular()"><option value="G" ${v.prod!=='A'?'selected':''}>GÁS</option><option value="A" ${v.prod==='A'?'selected':''}>ÁGUA</option></select>
       <input class="cQtd" type="number" value="${v.qtd||''}" placeholder="0" oninput="calcular()">
@@ -194,13 +207,45 @@ function montar(){
   });
   document.getElementById('lista').innerHTML=html;calcular(true);
 }
-function addLinha(n){salvarNaMemoria();for(let i=0;i<n;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});montar();}
-function removerLinha(){salvarNaMemoria();if(dados.length>1){dados.pop();montar();}}
-function salvarNaMemoria(){let novo=[];document.querySelectorAll('#lista .linha').forEach(l=>{novo.push({cliente:l.querySelector('.cCliente').value,prod:l.querySelector('.cProd').value,qtd:l.querySelector('.cQtd').value,unit:l.querySelector('.cUnit').value,pix:l.querySelector('.cPix').value,dh:l.querySelector('.cDh').value,cart:l.querySelector('.cCart').value});});dados=novo;localStorage.setItem('dadosFolha',JSON.stringify(dados));}
+function addLinha(n){
+  salvarNaMemoria();
+  for(let i=0;i<n;i++) dados.push({data:hojeISO(),cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
+  montar();
+}
+function removerHoje(){
+  salvarNaMemoria();
+  let hoje=hojeISO();
+  // remove apenas linhas de hoje que estão vazias ou ultima
+  if(dados.length>1){
+    // procura ultima de hoje
+    for(let i=dados.length-1;i>=0;i--){ if(dados[i].data===hoje){ dados.splice(i,1); break; } }
+  }
+  montar();
+}
+function salvarNaMemoria(){
+  let novo=[];
+  document.querySelectorAll('#lista .linha').forEach(l=>{
+    novo.push({
+      data:l.querySelector('.cData').value||hojeISO(),
+      cliente:l.querySelector('.cCliente').value,
+      prod:l.querySelector('.cProd').value,
+      qtd:l.querySelector('.cQtd').value,
+      unit:l.querySelector('.cUnit').value,
+      pix:l.querySelector('.cPix').value,
+      dh:l.querySelector('.cDh').value,
+      cart:l.querySelector('.cCart').value
+    });
+  });
+  dados=novo;
+  localStorage.setItem('historicoMesAtual',JSON.stringify(dados));
+  localStorage.setItem('dadosFolha',JSON.stringify(dados));
+}
 function calcular(atualizaEstoque=true){
   let gVend=0,aVend=0,tGeral=0,tPix=0,tDH=0,tCart=0,tFiado=0;
   document.querySelectorAll('#lista .linha').forEach((l,i)=>{
-    let q=Number(l.querySelector('.cQtd').value)||0;let u=Number(l.querySelector('.cUnit').value)||0;let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;let prod=l.querySelector('.cProd').value;let tot=q*u;let fiado=tot-pix-dh-cart;if(fiado<0)fiado=0;
+    let q=Number(l.querySelector('.cQtd').value)||0;let u=Number(l.querySelector('.cUnit').value)||0;
+    let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;
+    let prod=l.querySelector('.cProd').value;let tot=q*u;let fiado=tot-pix-dh-cart;if(fiado<0)fiado=0;
     if(prod==='G') gVend+=q; else aVend+=q;
     tGeral+=tot; tPix+=pix; tDH+=dh; tCart+=cart; tFiado+=fiado;
     let elT=document.getElementById('t'+i); if(elT) elT.innerText='R$'+tot;
@@ -226,7 +271,9 @@ function calcular(atualizaEstoque=true){
   document.getElementById('tDesp').innerText=desp;
   document.getElementById('tLucro').innerText=(tPix+tDH+tCart)-desp;
 
-  // FORMULAS DO MES IGUAL SUA FOTO
+  // RESUMO MÊS
+  document.getElementById('qGas').innerText=gVend;
+  document.getElementById('qAgua').innerText=aVend;
   document.getElementById('rGas').innerText=gVend+' unid.';
   document.getElementById('rAgua').innerText=aVend+' unid.';
   document.getElementById('rTotal').innerText='R$ '+tGeral;
@@ -234,39 +281,57 @@ function calcular(atualizaEstoque=true){
   document.getElementById('rDh').innerText='R$ '+tDH;
   document.getElementById('rCart').innerText='R$ '+tCart;
   document.getElementById('rFiado').innerText='R$ '+tFiado;
-  document.getElementById('grafGas').innerHTML=gVend+'<br><small style="font-size:12px">GÁS</small>';
-  document.getElementById('grafAgua').innerHTML=aVend+'<br><small style="font-size:12px">ÁGUA</small>';
 
   salvarNaMemoria(); salvarDesp();
 }
-function salvarTudo(){calcular();alert('Salvo!');}
-function zerar(){if(confirm('Zerar folha?')){dados=[];for(let i=0;i<3;i++)dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});localStorage.setItem('dadosFolha',JSON.stringify(dados));montar();}}
-function limpar(){if(confirm('Limpar tudo?')){localStorage.clear();location.reload();}}
+function salvarTudo(){calcular();alert('Salvo! Mês acumulado com datas.');}
+function zerarMes(){
+  if(confirm('FECHAR MÊS? Isso vai salvar o mês atual e começar um novo mês zerado. Tem certeza?')){
+    let mesAtual = new Date().toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
+    let backup = {mes:mesAtual, dados:dados, estoqueGas:estoqueInicialGas, estoqueAgua:estoqueInicialAgua};
+    let historico = JSON.parse(localStorage.getItem('historicoMeses')||'[]');
+    historico.push(backup);
+    localStorage.setItem('historicoMeses',JSON.stringify(historico));
+    localStorage.removeItem('historicoMesAtual');
+    localStorage.removeItem('dadosFolha');
+    dados=[]; dados.push({data:hojeISO(),cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
+    montar();
+    alert('Mês fechado e salvo! Novo mês iniciado.');
+  }
+}
+function limpar(){if(confirm('Limpar TUDO do mês?')){localStorage.clear();location.reload();}}
 function enviarZap(){
-  let data=new Date().toLocaleDateString('pt-BR');let tg=0,tp=0,td=0,tc=0,tf=0,tt=0;let linhas=[];let dev=[];
+  let data=new Date().toLocaleDateString('pt-BR');let tg=0,tp=0,td=0,tc=0,tf=0,tt=0;let linhasPorData={};let dev=[];
   document.querySelectorAll('#lista .linha').forEach(l=>{
-    let c=l.querySelector('.cCliente').value||'';let q=Number(l.querySelector('.cQtd').value)||0;if(!q)return;
+    let d=l.querySelector('.cData').value||''; let c=l.querySelector('.cCliente').value||'';let q=Number(l.querySelector('.cQtd').value)||0;if(!q)return;
     let p=l.querySelector('.cProd').value;let tot=l.querySelector('.cellTotal').innerText;let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;let fi=Number((l.querySelector('.cellFiado').innerText||'').replace('R$',''))||0;
     tg+=q;tp+=pix;td+=dh;tc+=cart;tf+=fi;tt+=Number(tot.replace('R$',''));
+    let br = d ? d.split('-').reverse().join('/') : '';
+    if(!linhasPorData[br]) linhasPorData[br]=[];
     let det='';if(pix>0)det+=`PIX R$${pix} `;if(dh>0)det+=`DH R$${dh} `;if(cart>0)det+=`CART R$${cart} `;if(fi>0&&pix==0&&dh==0&&cart==0)det+=`FIADO R$${fi}`;
-    if(det.trim()) linhas.push(`${c} - ${q}x ${p} = ${tot} (${det.trim()})`); else linhas.push(`${c} - ${q}x ${p} = ${tot}`); if(fi>0) dev.push(`${c} - R$${fi}`);
+    let linhaTxt = det.trim() ? `${c} - ${q}x ${p} = ${tot} (${det.trim()})` : `${c} - ${q}x ${p} = ${tot}`;
+    linhasPorData[br].push(linhaTxt);
+    if(fi>0) dev.push(`${c} - R$${fi} (${br})`);
   });
-  if(!linhas.length){alert('Sem vendas');return;}
-  let txt=`🔥 EL SHADAY - ${data} - GAS: ${tg} 💧\n${linhas.join('\n')}\n\n📦 GAS VENDIDO QTD: ${tg} unid.\n\nVALOR EM PIX: R$ ${tp}\n\nVALOR EM DH: R$ ${td}\n\nVALOR EM CART: R$ ${tc}\n\nA RECEBER (FIADO): R$ ${tf}\n\nTOTAL GERAL: R$ ${tt}\n\nQUEM ESTA DEVENDO:\n${dev.length?dev.join(' | '):'Nenhum'}`;
+  let txt=`🔥 EL SHADAY - MÊS ATÉ ${data} - GÁS: ${tg} 💧\n\n`;
+  for(let dataKey in linhasPorData){
+    txt+=`📅 ${dataKey}:\n${linhasPorData[dataKey].join('\n')}\n\n`;
+  }
+  txt+=`📦 GÁS VENDIDO MÊS: ${tg} unid.\n\nVALOR EM PIX: R$ ${tp}\n\nVALOR EM DH: R$ ${td}\n\nVALOR EM CART: R$ ${tc}\n\nA RECEBER (FIADO): R$ ${tf}\n\nTOTAL GERAL MÊS: R$ ${tt}\n\nQUEM ESTA DEVENDO:\n${dev.length?dev.join(' | '):'Nenhum'}`;
   window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
 }
 function gerarPDF(){
   const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
-  let rows=[], tg=0,tp=0,tf=0,tt=0;
+  let rows=[], tg=0,tp=0,tf=0,tt=0,td=0;
   document.querySelectorAll('#lista .linha').forEach(l=>{
-    let c=l.querySelector('.cCliente').value||'-';let p=l.querySelector('.cProd').value;let q=Number(l.querySelector('.cQtd').value)||0;let u=l.querySelector('.cUnit').value||'0';let tot=Number((l.querySelector('.cellTotal').innerText||'0').replace('R$',''))||0;let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;let fi=Number((l.querySelector('.cellFiado').innerText||'0').replace('R$',''))||0;
-    if(q>0){tg+=q;tp+=pix;tf+=fi;tt+=tot;rows.push([c,p,q,'R$'+u,'R$'+tot,'R$'+pix,'R$'+dh,'R$'+cart,'R$'+fi]);}
+    let d=l.querySelector('.cData').value||'';let br=d?d.split('-').reverse().join('/'):'';let c=l.querySelector('.cCliente').value||'-';let p=l.querySelector('.cProd').value;let q=Number(l.querySelector('.cQtd').value)||0;let u=l.querySelector('.cUnit').value||'0';let tot=Number((l.querySelector('.cellTotal').innerText||'0').replace('R$',''))||0;let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;let fi=Number((l.querySelector('.cellFiado').innerText||'0').replace('R$',''))||0;
+    if(q>0){tg+=q;tp+=pix;td+=dh;tf+=fi;tt+=tot;rows.push([br,c,p,q,'R$'+u,'R$'+tot,'R$'+pix,'R$'+dh,'R$'+cart,'R$'+fi]);}
   });
   if(!rows.length){alert('Sem vendas');return;}
-  doc.setFontSize(14);doc.text(`EL SHADAY - ${new Date().toLocaleDateString('pt-BR')} - GAS: ${tg} - TOTAL R$${tt}`,14,12);
-  doc.autoTable({head:[['Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:16,styles:{fontSize:12,halign:'center',lineWidth:0.5,cellPadding:4,fontStyle:'bold'},headStyles:{fillColor:[13,71,161]}});
-  doc.save(`elshaday-${new Date().toLocaleDateString('pt-BR')}.pdf`);
+  doc.setFontSize(14);doc.text(`EL SHADAY - MÊS - GAS: ${tg} - TOTAL R$${tt} - ${new Date().toLocaleDateString('pt-BR')}`,14,12);
+  doc.autoTable({head:[['DATA','Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:16,styles:{fontSize:10,halign:'center',lineWidth:0.4,cellPadding:3},headStyles:{fillColor:[13,71,161]}});
+  doc.save(`elshaday-mes-${new Date().toLocaleDateString('pt-BR')}.pdf`);
 }
 window.onload=iniciar;
 </script>
-<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{retur
+<script>(function(){var loc=locat

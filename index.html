@@ -24,7 +24,7 @@
 </style>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>EL SHADAY - GÁS E ÁGUA - PC E CELULAR</title>
+<title>EL SHADAY - GÁS E ÁGUA</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -35,21 +35,19 @@ body{font-family:Arial,Helvetica,sans-serif;background:#e9e9e9;padding:0 8px 80p
 .box{background:#fff;border:2.5px solid #0d47a1;border-radius:12px;padding:10px;margin:10px 0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
 .box-title{color:#0d47a1;font-weight:900;text-align:center;font-size:14px;margin-bottom:8px;text-transform:uppercase}
 .estoque-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
-.est{border-radius:10px;padding:6px 2px;text-align:center;border:2px solid #0d47a1;transition:.2s}
-.est:hover{transform:scale(1.02)}
+.est{border-radius:10px;padding:6px 2px;text-align:center;border:2px solid #0d47a1}
 .est.cheio{background:#0d47a1;color:#fff}
 .est.vazio{background:#e3f2fd;color:#0d47a1}
 .est b{font-size:11px;display:block;line-height:1.1}
-.est .num{font-size:20px;font-weight:900;margin-top:4px;display:block;color:#000}
-.est input{width:88%;font-size:20px;font-weight:900;text-align:center;border:2px solid #000;border-radius:8px;padding:4px 0;margin-top:6px}
-.caderno-header{background:#ffeb3b;text-align:center;font-weight:900;font-size:20px;padding:10px;border-radius:12px 12px 0 0;border:2.5px solid #000;border-bottom:none}
-.wrap{overflow-x:auto;background:#fff;border:2.5px solid #000;border-radius:0 0 12px 12px}
+.est .num{font-size:18px;font-weight:900;margin-top:4px;display:block;color:#000;background:#e3f2fd;border-radius:6px;padding:4px 0;margin:4px 4px 0}
+.est input{width:86%;font-size:20px;font-weight:900;text-align:center;border:2.5px solid #000;border-radius:8px;padding:5px 0;margin-top:6px;background:#fff;color:#000}
+.est small{font-size:9px;display:block;margin-top:2px;opacity:.9}
+.wrap{overflow-x:auto;background:#fff;border:2.5px solid #000;border-radius:12px}
 .tabela{min-width:860px}
-.th{display:grid;grid-template-columns:150px 90px 60px 60px 85px 65px 65px 65px 75px;gap:4px;padding:6px;background:#f5f5f5}
+.th{display:grid;grid-template-columns:150px 90px 60px 60px 85px 65px 65px 65px 75px;gap:4px;padding:6px;background:#f5f5f5;border-radius:12px 12px 0 0}
 .th span{padding:7px 2px;border-radius:8px;font-size:12px;font-weight:900;text-align:center;color:#fff}
 .linha{display:grid;grid-template-columns:150px 90px 60px 60px 85px 65px 65px 65px 75px;gap:4px;padding:3px 6px}
 .linha input,.linha select{height:42px;border:2px solid #555;border-radius:8px;text-align:center;font-weight:900;font-size:14px;width:100%;background:#fff;cursor:pointer}
-.linha input:focus,.linha select:focus{border-color:#0d47a1;outline:none;box-shadow:0 0 0 2px rgba(13,71,161,.2)}
 .cellTotal{background:#ffeb3b;border:1.5px solid #000;height:42px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:900;font-size:14px}
 .cellFiado{background:#ffcdd2;border:1.5px solid #000;height:42px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:900;font-size:14px}
 .totais{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
@@ -59,68 +57,42 @@ body{font-family:Arial,Helvetica,sans-serif;background:#e9e9e9;padding:0 8px 80p
 .despGrid{display:grid;grid-template-columns:140px 1fr;gap:8px}
 .despGrid input{height:46px;border:2px solid #555;border-radius:8px;padding:0 10px;font-weight:900;font-size:16px}
 .botoes{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
-.btn{border:none;border-radius:10px;padding:14px 4px;color:#fff;font-weight:900;font-size:14px;cursor:pointer;transition:.2s;box-shadow:0 2px 5px rgba(0,0,0,.2)}
-.btn:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(0,0,0,.3)}
-.btn:active{transform:translateY(0)}
+.btn{border:none;border-radius:10px;padding:14px 4px;color:#fff;font-weight:900;font-size:14px;cursor:pointer}
 .mesBox{border:2.5px solid #1a3c6e;border-radius:12px;padding:10px;margin:10px 0;background:#fff}
 .tabelaResumo{width:100%;border-collapse:collapse;font-size:13px}
 .tabelaResumo th{background:#1a3c6e;color:#fff;padding:10px;text-align:center}
-.tabelaResumo td{border:1px solid #000;padding:8px;font-weight:900;text-align:left}
-.tabelaResumo td:last-child{text-align:center}
+.tabelaResumo td{border:1px solid #000;padding:8px;font-weight:900}
 .vermelho{background:#c62828;color:#fff}.azulEscuro{background:#1a3c6e;color:#fff}.preto{background:#000;color:#fff}.verdeClaro{background:#c8e6c9}.rosa{background:#ffcdd2}.azulClaro{background:#bbdefb}
 .grafGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
 .cardG{background:#fff;border:2px solid #1a3c6e;border-radius:10px;padding:10px}
-
-/* ===== PC 💻 ===== */
 @media(min-width:1024px){
   body{max-width:1400px;margin:0 auto;padding:0 20px 40px}
-  .header{font-size:26px;padding:16px;margin:0 -20px;border-radius:0 0 12px 12px}
-  .box{padding:16px}
-  .estoque-grid{grid-template-columns:repeat(6,1fr);gap:12px}
-  .est{padding:12px 4px}
-  .est b{font-size:14px}
-  .est .num{font-size:26px}
-  .est input{font-size:24px;padding:6px}
-  .caderno-header{font-size:22px;padding:12px}
-  .tabela{min-width:100%}
-  .th{grid-template-columns:1.4fr .8fr .6fr .7fr .9fr .7fr .7fr .7fr .8fr;gap:6px;padding:8px}
-  .th span{font-size:13px;padding:10px 2px}
-  .linha{grid-template-columns:1.4fr .8fr .6fr .7fr .9fr .7fr .7fr .7fr .8fr;gap:6px;padding:4px 8px}
-  .linha input,.linha select{height:46px;font-size:15px}
-  .cellTotal,.cellFiado{height:46px;font-size:15px}
-  .wrap{overflow:visible}
-  .tot{font-size:18px;padding:14px}
-  .despGrid{grid-template-columns:200px 1fr}
+  .header{font-size:26px;margin:0 -20px;border-radius:0 0 12px 12px}
+  .tabela{min-width:100%}.wrap{overflow:visible}
   .botoes{grid-template-columns:repeat(8,1fr)}
-  .btn{font-size:15px;padding:16px 4px}
   .grafGrid{grid-template-columns:repeat(3,1fr)}
-  .pc-cols{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
-  .pc-totais{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-}
-@media(max-width:1023px){
-  .pc-cols{display:block}
+  .pc-cols{display:grid;grid-template-columns:1fr 380px;gap:16px}
 }
 </style>
 </head>
 <body>
-<div class="header">🔥 EL SHADAY GÁS E ÁGUA 💧 - PC e Celular</div>
+<div class="header">🔥 EL SHADAY GÁS E ÁGUA 💧</div>
 
 <div class="box">
-<div class="box-title">ESTOQUE - CHEIO DIMINUI SOZINHO</div>
+<div class="box-title">ESTOQUE - CHEIO DIMINUI SOZINHO - EDITÁVEL</div>
 <div class="estoque-grid">
-<div class="est cheio"><b>GÁS CHEIO</b><input id="gCheio" type="number" value="200" oninput="atualizarInicial('gas')"></div>
+<div class="est cheio"><b>GÁS CHEIO</b><input id="gCheio" type="number" value="200" onfocus="editandoGas=true" onblur="salvouCheio('gas')"><small>restante</small></div>
 <div class="est vazio"><b>GÁS VAZIO</b><span class="num" id="gVazio">0</span></div>
-<div class="est vazio"><b>GÁS<br>VENDIDO</b><span class="num" id="gVendido">0</span></div>
-<div class="est cheio"><b>ÁGUA CHEIA</b><input id="aCheia" type="number" value="150" oninput="atualizarInicial('agua')"></div>
-<div class="est vazio"><b>ÁGUA<br>VAZIA</b><span class="num" id="aVazia">0</span></div>
-<div class="est vazio"><b>ÁGUA<br>VENDIDA</b><span class="num" id="aVendida">0</span></div>
+<div class="est vazio"><b>GÁS VENDIDO</b><span class="num" id="gVendido">0</span></div>
+<div class="est cheio"><b>ÁGUA CHEIA</b><input id="aCheia" type="number" value="150" onfocus="editandoAgua=true" onblur="salvouCheio('agua')"><small>restante</small></div>
+<div class="est vazio"><b>ÁGUA VAZIA</b><span class="num" id="aVazia">0</span></div>
+<div class="est vazio"><b>ÁGUA VENDIDA</b><span class="num" id="aVendida">0</span></div>
 </div>
 </div>
 
 <div class="pc-cols">
 <div>
 <div class="box" style="padding:0;border:none;background:transparent">
-<div class="caderno-header">FOLHA DE CADERNO - FUNCIONA NO PC 💻 E CELULAR 📱</div>
 <div class="wrap"><div class="tabela">
 <div class="th">
 <span style="background:#ffeb3b;color:#000">Cliente</span>
@@ -167,7 +139,7 @@ body{font-family:Arial,Helvetica,sans-serif;background:#e9e9e9;padding:0 8px 80p
 </div>
 
 <div class="mesBox">
-<div class="box-title" style="font-size:14px;color:#1a3c6e">RESUMO DO MÊS - SETEMBRO 2026 - FÓRMULAS</div>
+<div class="box-title">RESUMO DO MÊS - SETEMBRO 2026</div>
 <table class="tabelaResumo">
 <tr><th>RESUMO</th><th>VALOR</th></tr>
 <tr><td>TOTAL GÁS MÊS</td><td id="rGas">0 unid.</td></tr>
@@ -209,6 +181,8 @@ body{font-family:Arial,Helvetica,sans-serif;background:#e9e9e9;padding:0 8px 80p
 <script>
 let estoqueInicialGas=200, estoqueInicialAgua=150, dados=[];
 let chart1,chart2,chart3;
+let editandoGas=false, editandoAgua=false;
+
 function iniciar(){
   estoqueInicialGas=parseInt(localStorage.getItem('estGasInicial')||'200');
   estoqueInicialAgua=parseInt(localStorage.getItem('estAguaInicial')||'150');
@@ -218,13 +192,22 @@ function iniciar(){
   document.getElementById('despMotivo').value=localStorage.getItem('despMotivo')||'';
   montar();
 }
-function salvarDesp(){localStorage.setItem('despValor',document.getElementById('despValor').value);localStorage.setItem('despMotivo',document.getElementById('despMotivo').value);}
-function atualizarInicial(tipo){
-  const v=getVendidos();
-  if(tipo==='gas'){let r=Number(document.getElementById('gCheio').value)||0;estoqueInicialGas=r+v.g;localStorage.setItem('estGasInicial',estoqueInicialGas);}
-  else{let r=Number(document.getElementById('aCheia').value)||0;estoqueInicialAgua=r+v.a;localStorage.setItem('estAguaInicial',estoqueInicialAgua);}
+function salvouCheio(tipo){
+  let el = tipo==='gas' ? document.getElementById('gCheio') : document.getElementById('aCheia');
+  let val = parseInt(el.value)||0;
+  let vendidos = getVendidos();
+  if(tipo==='gas'){
+    editandoGas=false;
+    estoqueInicialGas = val + vendidos.g;
+    localStorage.setItem('estGasInicial',estoqueInicialGas);
+  }else{
+    editandoAgua=false;
+    estoqueInicialAgua = val + vendidos.a;
+    localStorage.setItem('estAguaInicial',estoqueInicialAgua);
+  }
   calcular(false);
 }
+function salvarDesp(){localStorage.setItem('despValor',document.getElementById('despValor').value);localStorage.setItem('despMotivo',document.getElementById('despMotivo').value);}
 function getVendidos(){let g=0,a=0;document.querySelectorAll('#lista .linha').forEach(l=>{let q=Number(l.querySelector('.cQtd').value)||0;if(l.querySelector('.cProd').value==='G')g+=q;else a+=q;});return{g,a};}
 function montar(){
   let html='';
@@ -252,23 +235,30 @@ function calcular(atualizaEstoque=true){
     let q=Number(l.querySelector('.cQtd').value)||0;let u=Number(l.querySelector('.cUnit').value)||0;let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;let prod=l.querySelector('.cProd').value;let tot=q*u;let fiado=tot-pix-dh-cart;if(fiado<0)fiado=0;
     if(prod==='G') gVend+=q; else aVend+=q;
     tGeral+=tot; tPix+=pix; tDH+=dh; tCart+=cart; tFiado+=fiado; if(fiado>0) clientesFiado++;
-    document.getElementById('t'+i).innerText='R$'+tot;
-    document.getElementById('f'+i).innerText='R$'+fiado;
-    document.getElementById('f'+i).style.background=fiado>0?'#ffcdd2':'#c8e6c9';
+    let et=document.getElementById('t'+i); if(et) et.innerText='R$'+tot;
+    let ef=document.getElementById('f'+i); if(ef){ef.innerText='R$'+fiado; ef.style.background=fiado>0?'#ffcdd2':'#c8e6c9';}
   });
+  // SEM PISCAR - só atualiza se não estiver digitando
   if(atualizaEstoque){
-    let restoG=estoqueInicialGas-gVend;let restoA=estoqueInicialAgua-aVend;
-    if(document.activeElement.id!=='gCheio') document.getElementById('gCheio').value=restoG<0?0:restoG;
-    if(document.activeElement.id!=='aCheia') document.getElementById('aCheia').value=restoA<0?0:restoA;
+    let elGas=document.getElementById('gCheio');
+    let elAgua=document.getElementById('aCheia');
+    let novoGas=estoqueInicialGas-gVend; if(novoGas<0) novoGas=0;
+    let novoAgua=estoqueInicialAgua-aVend; if(novoAgua<0) novoAgua=0;
+    if(!editandoGas && document.activeElement!==elGas){ if(parseInt(elGas.value)!==novoGas) elGas.value=novoGas; }
+    if(!editandoAgua && document.activeElement!==elAgua){ if(parseInt(elAgua.value)!==novoAgua) elAgua.value=novoAgua; }
   }
-  document.getElementById('gVazio').innerText=gVend;document.getElementById('gVendido').innerText=gVend;
-  document.getElementById('aVazia').innerText=aVend;document.getElementById('aVendida').innerText=aVend;
-  document.getElementById('tPix').innerText=tPix;document.getElementById('tDH').innerText=tDH;document.getElementById('tCart').innerText=tCart;document.getElementById('tFiado').innerText=tFiado;document.getElementById('tGeral').innerText=tGeral;
+  document.getElementById('gVazio').innerText=gVend;
+  document.getElementById('gVendido').innerText=gVend;
+  document.getElementById('aVazia').innerText=aVend;
+  document.getElementById('aVendida').innerText=aVend;
+  document.getElementById('tPix').innerText=tPix;
+  document.getElementById('tDH').innerText=tDH;
+  document.getElementById('tCart').innerText=tCart;
+  document.getElementById('tFiado').innerText=tFiado;
+  document.getElementById('tGeral').innerText=tGeral;
   let desp=Number(document.getElementById('despValor').value)||0;
   document.getElementById('tDesp').innerText=desp;
   document.getElementById('tLucro').innerText=(tPix+tDH+tCart)-desp;
-  
-  // FORMULAS DO MES
   document.getElementById('rGas').innerText=gVend+' unid.';
   document.getElementById('rAgua').innerText=aVend+' unid.';
   document.getElementById('rTotal').innerText='R$ '+tGeral;
@@ -283,7 +273,6 @@ function calcular(atualizaEstoque=true){
   document.getElementById('rFiado2').innerText='R$ '+tFiado;
   document.getElementById('rDh2').innerText='R$ '+tDH;
   document.getElementById('rClientes').innerText=clientesFiado+' clientes';
-  
   atualizarGraficos(gVend,aVend,tPix,tDH,tCart,tFiado,tGeral);
   salvarNaMemoria(); salvarDesp();
 }
@@ -294,7 +283,7 @@ function atualizarGraficos(gas,agua,pix,dh,cart,fiado,total){
   chart3=new Chart(document.getElementById('chartValores'),{type:'bar',data:{labels:['Total','PIX','Fiado'],datasets:[{data:[total,pix,fiado],backgroundColor:['#0d47a1','#1565c0','#c62828']}]},options:{responsive:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true}}}});
 }
 function salvarTudo(){calcular();alert('Salvo!');}
-function zerar(){if(confirm('Zerar?')){dados=[];for(let i=0;i<3;i++)dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});localStorage.setItem('dadosFolha',JSON.stringify(dados));montar();}}
+function zerar(){if(confirm('Zerar folha?')){dados=[];for(let i=0;i<3;i++)dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});localStorage.setItem('dadosFolha',JSON.stringify(dados));montar();}}
 function limpar(){if(confirm('Limpar tudo?')){localStorage.clear();location.reload();}}
 function enviarZap(){
   let data=new Date().toLocaleDateString('pt-BR');let tg=0,tp=0,td=0,tc=0,tf=0,tt=0;let linhas=[];let dev=[];
@@ -303,4 +292,14 @@ function enviarZap(){
     let p=l.querySelector('.cProd').value;let tot=l.querySelector('.cellTotal').innerText;let pix=Number(l.querySelector('.cPix').value)||0;let dh=Number(l.querySelector('.cDh').value)||0;let cart=Number(l.querySelector('.cCart').value)||0;let fi=Number((l.querySelector('.cellFiado').innerText||'').replace('R$',''))||0;
     tg+=q;tp+=pix;td+=dh;tc+=cart;tf+=fi;tt+=Number(tot.replace('R$',''));
     let det='';if(pix>0)det+=`PIX R$${pix} `;if(dh>0)det+=`DH R$${dh} `;if(cart>0)det+=`CART R$${cart} `;if(fi>0&&pix==0&&dh==0&&cart==0)det+=`FIADO R$${fi}`;
-    if(det.trim()) linhas.push(`${c} - ${q}x ${p} = ${tot} (${det.trim()})`); else linhas.push(`${c} - ${q}
+    if(det.trim()) linhas.push(`${c} - ${q}x ${p} = ${tot} (${det.trim()})`); else linhas.push(`${c} - ${q}x ${p} = ${tot}`); if(fi>0) dev.push(`${c} - R$${fi}`);
+  });
+  if(!linhas.length){alert('Sem vendas');return;}
+  let txt=`🔥 EL SHADAY - ${data} - GAS: ${tg} 💧\n${linhas.join('\n')}\n\n📦 GAS VENDIDO QTD: ${tg} unid.\n\nVALOR EM PIX: R$ ${tp}\n\nVALOR EM DH: R$ ${td}\n\nVALOR EM CART: R$ ${tc}\n\nA RECEBER (FIADO): R$ ${tf}\n\nTOTAL GERAL: R$ ${tt}\n\nQUEM ESTA DEVENDO:\n${dev.length?dev.join(' | '):'Nenhum'}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(txt),'_blank');
+}
+function gerarPDF(){
+  const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
+  let rows=[], tg=0,tp=0,tf=0,tt=0;
+  document.querySelectorAll('#lista .linha').forEach(l=>{
+    let c=l.querySelector('.cCliente').value||'-';let p=l.querySelector('.cProd').value;let q=Number(l.querySelector('.cQtd').value)||0;let u=l.querySelector('.cUnit').value||'0';let tot=Number((l.querySelector('.cellTotal').innerText||'0').replace('R$',''))||0;let pix=N

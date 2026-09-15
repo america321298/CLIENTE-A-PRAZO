@@ -106,7 +106,6 @@ function salvarEstoque(){
     let q = Number(l.querySelector('.cQtd').value)||0;
     if(l.querySelector('.cProd').value=='G') gVend+=q; else aVend+=q;
   });
-  // Quando o usuário digita no CHEIO, o novo inicial = o que sobrou + o que já vendeu
   estoqueInicialGas = (Number(document.getElementById('gCheio').value)||0) + gVend;
   estoqueInicialAgua = (Number(document.getElementById('aCheia').value)||0) + aVend;
   localStorage.setItem('estGas', estoqueInicialGas);
@@ -216,16 +215,125 @@ function zap(){
   m+=`\nPIX R$${document.getElementById('sPix').innerText} DH R$${document.getElementById('sDH').innerText} CART R$${document.getElementById('sCart').innerText} FIADO R$${document.getElementById('sFiado').innerText} TOTAL R$${document.getElementById('sGeral').innerText}`;
   window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');
 }
+
+// ===== NOVA FUNÇÃO PDF COM CORES E 4 QUADRADOS =====
 function gerarPDF(){
-  const { jsPDF } = window.jspdf; const doc = new jsPDF('l','mm','a4'); let rows=[];
+  const { jsPDF } = window.jspdf; 
+  const doc = new jsPDF('l','mm','a4'); 
+  let rows=[];
+  let listaFiado = [];
+  let totalGasQtd = 0;
+  let totalPixValor = 0;
+  let totalFiadoValor = 0;
+
   document.querySelectorAll('#lista .linha').forEach(l=>{
-    let c=l.querySelector('.cCliente').value; let p=l.querySelector('.cProd').value; let q=l.querySelector('.cQtd').value;
-    let u=l.querySelector('.cUnit').value; let t=l.querySelector('.totalCell').innerText;
-    if(q) rows.push([c,p,q,'R$'+u,t,l.querySelector('.cPix').value,l.querySelector('.cDh').value,l.querySelector('.cCart').value,l.querySelector('.fiCell').innerText]);
+    let c=l.querySelector('.cCliente').value; 
+    let p=l.querySelector('.cProd').value; 
+    let q=Number(l.querySelector('.cQtd').value)||0;
+    let u=l.querySelector('.cUnit').value; 
+    let t=l.querySelector('.totalCell').innerText;
+    let pixVal=Number(l.querySelector('.cPix').value)||0;
+    let fiadoTxt=l.querySelector('.fiCell').innerText;
+    let fiadoVal = Number(fiadoTxt.replace('R$',''))||0;
+
+    if(q){
+      if(p=='G') totalGasQtd+=q;
+      totalPixValor+=pixVal;
+      totalFiadoValor+=fiadoVal;
+      if(fiadoVal>0) listaFiado.push({nome:c||'Sem nome', valor:fiadoVal});
+      rows.push([c,p,q,'R$'+u,t,'R$'+pixVal,'R$'+l.querySelector('.cDh').value,'R$'+l.querySelector('.cCart').value,fiadoTxt]);
+    }
   });
+
   if(!rows.length){ alert('Sem vendas'); return; }
-  doc.text('EL SHADAY - '+new Date().toLocaleDateString(),14,10);
-  doc.autoTable({head:[['Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],body:rows,startY:15});
+
+  doc.setFontSize(12);
+  doc.text('EL SHADAY - '+new Date().toLocaleDateString('pt-BR'),14,10);
+
+  // CORES IGUAL VOCÊ MARCOU NA FOTO
+  const cores = [
+    [255,235,59],   // Cliente - AMARELO (você marcou amarelo)
+    [66,66,66],     // Prod - CINZA ESCURO (cinza)
+    [76,175,80],    // Qtd - VERDE (verde)
+    [97,97,97],     // Unit - CINZA (cinza)
+    [255,235,59],   // Total - AMARELO (amarelo)
+    [33,150,243],   // PIX - AZUL (azul)
+    [76,175,80],    // DH - VERDE (verde)
+    [156,39,176],   // CART - ROXO (roxo)
+    [229,57,53]     // FIADO - VERMELHO (vermelho)
+  ];
+
+  doc.autoTable({
+    head:[['Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],
+    body:rows,
+    startY:15,
+    headStyles:{fillColor:[13,71,161], textColor:255, fontStyle:'bold'},
+    styles:{fontSize:9, halign:'center'},
+    didParseCell: function(data){
+      if(data.section==='body'){
+        let col = data.column.index;
+        if(cores[col]){
+          data.cell.styles.fillColor = cores[col];
+          if(col===1 || col===5 || col===7 || col===8) data.cell.styles.textColor = [255,255,255];
+          if(col===0 || col===2 || col===4) data.cell.styles.textColor = [0,0,0];
+        }
+      }
+    }
+  });
+
+  let finalY = doc.lastAutoTable.finalY + 8;
+
+  // 4 QUADRADOS VERMELHOS QUE VOCÊ MARCOU EMBAIXO
+  let boxW = 65;
+  let boxH = 22;
+  let gap = 6;
+  let startX = 14;
+
+  // Box 1 - Qtd Gás Vendido
+  doc.setFillColor(229,57,53);
+  doc.setDrawColor(0);
+  doc.rect(startX, finalY, boxW, boxH, 'FD');
+  doc.setTextColor(255,255,255);
+  doc.setFontSize(9);
+  doc.setFont(undefined,'bold');
+  doc.text('GAS VENDIDO QTD', startX+3, finalY+6);
+  doc.setFontSize(14);
+  doc.text(totalGasQtd + ' unid.', startX+3, finalY+16);
+
+  // Box 2 - Valor em PIX
+  doc.setFillColor(33,150,243);
+  doc.rect(startX+boxW+gap, finalY, boxW, boxH, 'FD');
+  doc.text('VALOR EM PIX', startX+boxW+gap+3, finalY+6);
+  doc.setFontSize(12);
+  doc.text('R$ ' + totalPixValor, startX+boxW+gap+3, finalY+16);
+
+  // Box 3 - Total a Receber (FIADO)
+  doc.setFillColor(229,57,53);
+  doc.rect(startX+(boxW+gap)*2, finalY, boxW, boxH, 'FD');
+  doc.setFontSize(9);
+  doc.text('A RECEBER (FIADO)', startX+(boxW+gap)*2+3, finalY+6);
+  doc.setFontSize(12);
+  doc.text('R$ ' + totalFiadoValor, startX+(boxW+gap)*2+3, finalY+16);
+
+  // Box 4 - Nomes devendo
+  let box4X = startX+(boxW+gap)*3;
+  let box4W = 80;
+  let box4H = 22 + (listaFiado.length*5);
+  if(box4H<22) box4H=22;
+  doc.setFillColor(97,97,97);
+  doc.rect(box4X, finalY, box4W, box4H, 'FD');
+  doc.setFontSize(9);
+  doc.text('QUEM ESTA DEVENDO', box4X+3, finalY+6);
+  doc.setFontSize(8);
+  doc.setFont(undefined,'normal');
+  if(listaFiado.length==0){
+    doc.text('Nenhum', box4X+3, finalY+14);
+  } else {
+    listaFiado.forEach((f,i)=>{
+      doc.text(`${f.nome} - R$${f.valor}`, box4X+3, finalY+12 + (i*5));
+    });
+  }
+
   doc.save('elshaday.pdf');
 }
 window.onload=iniciar;

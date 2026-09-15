@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>EL SHADAY - FIX TOTAL</title>
+<title>EL SHADAY GÁS E ÁGUA</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
@@ -89,7 +89,6 @@
 let estoqueInicialGas = 200;
 let estoqueInicialAgua = 150;
 let dados = [];
-
 function iniciar(){
   estoqueInicialGas = parseInt(localStorage.getItem('estGas')||'200');
   estoqueInicialAgua = parseInt(localStorage.getItem('estAgua')||'150');
@@ -99,7 +98,6 @@ function iniciar(){
   if(dados.length==0){ for(let i=0;i<5;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); }
   montar();
 }
-
 function salvarEstoque(){
   let gVend=0,aVend=0;
   document.querySelectorAll('#lista.linha').forEach(l=>{
@@ -112,7 +110,6 @@ function salvarEstoque(){
   localStorage.setItem('estAgua', estoqueInicialAgua);
   calcular();
 }
-
 function salvarNaMemoria(){
   let linhas = document.querySelectorAll('#lista.linha');
   let novo=[];
@@ -130,7 +127,6 @@ function salvarNaMemoria(){
   dados = novo;
   localStorage.setItem('dadosFolha', JSON.stringify(dados));
 }
-
 function montar(){
   let html='';
   dados.forEach((v,i)=>{
@@ -149,59 +145,46 @@ function montar(){
   document.getElementById('lista').innerHTML = html;
   calcular();
 }
-
-function addLinha(n){
-  salvarNaMemoria();
-  for(let i=0;i<n;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
-  montar();
-}
-function remover(){
-  salvarNaMemoria();
-  if(dados.length>1) dados.pop();
-  montar();
-}
-
+function addLinha(n){ salvarNaMemoria(); for(let i=0;i<n;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); montar(); }
+function remover(){ salvarNaMemoria(); if(dados.length>1) dados.pop(); montar(); }
 function calcular(){
   let linhas = document.querySelectorAll('#lista.linha');
   let gVend=0,aVend=0,sPix=0,sDh=0,sCart=0,sFiado=0,sGeral=0;
   linhas.forEach((l,i)=>{
-    let qtd = Number(l.querySelector('.cQtd').value) || 0;
-    let unit = Number(l.querySelector('.cUnit').value) || 0;
-    let pix = Number(l.querySelector('.cPix').value) || 0;
-    let dh = Number(l.querySelector('.cDh').value) || 0;
-    let cart = Number(l.querySelector('.cCart').value) || 0;
+    let qtd = Number(l.querySelector('.cQtd').value)||0;
+    let unit = Number(l.querySelector('.cUnit').value)||0;
+    let pix = Number(l.querySelector('.cPix').value)||0;
+    let dh = Number(l.querySelector('.cDh').value)||0;
+    let cart = Number(l.querySelector('.cCart').value)||0;
     let prod = l.querySelector('.cProd').value;
-    let tot = qtd * unit;
+    let tot = qtd*unit;
     let fiado = tot - pix - dh - cart;
-    if(fiado < 0) fiado = 0;
+    if(fiado<0) fiado=0;
     if(prod=='G') gVend+=qtd; else aVend+=qtd;
     sPix+=pix; sDh+=dh; sCart+=cart; sFiado+=fiado; sGeral+=tot;
-    let tEl = document.getElementById('t'+i);
-    let fEl = document.getElementById('f'+i);
-    if(tEl) tEl.innerText = 'R$' + tot;
-    if(fEl) fEl.innerText = 'R$' + fiado;
+    document.getElementById('t'+i).innerText='R$'+tot;
+    document.getElementById('f'+i).innerText='R$'+fiado;
   });
   let restoGas = estoqueInicialGas - gVend;
   let restoAgua = estoqueInicialAgua - aVend;
-  if(document.activeElement.id!== 'gCheio') document.getElementById('gCheio').value = restoGas < 0? 0 : restoGas;
-  if(document.activeElement.id!== 'aCheia') document.getElementById('aCheia').value = restoAgua < 0? 0 : restoAgua;
-  document.getElementById('gVazio').innerText = gVend;
-  document.getElementById('gVendido').innerText = gVend;
-  document.getElementById('aVazia').innerText = aVend;
-  document.getElementById('aVendida').innerText = aVend;
-  document.getElementById('sPix').innerText = sPix;
-  document.getElementById('sDH').innerText = sDh;
-  document.getElementById('sCart').innerText = sCart;
-  document.getElementById('sFiado').innerText = sFiado;
-  document.getElementById('sGeral').innerText = sGeral;
+  if(document.activeElement.id!=='gCheio') document.getElementById('gCheio').value = restoGas<0?0:restoGas;
+  if(document.activeElement.id!=='aCheia') document.getElementById('aCheia').value = restoAgua<0?0:restoAgua;
+  document.getElementById('gVazio').innerText=gVend;
+  document.getElementById('gVendido').innerText=gVend;
+  document.getElementById('aVazia').innerText=aVend;
+  document.getElementById('aVendida').innerText=aVend;
+  document.getElementById('sPix').innerText=sPix;
+  document.getElementById('sDH').innerText=sDh;
+  document.getElementById('sCart').innerText=sCart;
+  document.getElementById('sFiado').innerText=sFiado;
+  document.getElementById('sGeral').innerText=sGeral;
   let desp = Number(document.getElementById('despValor').value)||0;
-  document.getElementById('sDesp').innerText = desp;
-  document.getElementById('sLucro').innerText = (sPix+sDh+sCart-desp);
+  document.getElementById('sDesp').innerText=desp;
+  document.getElementById('sLucro').innerText=(sPix+sDh+sCart-desp);
   salvarNaMemoria();
   localStorage.setItem('estGas', estoqueInicialGas);
   localStorage.setItem('estAgua', estoqueInicialAgua);
 }
-
 function zerar(){ if(confirm('Zerar vendas?')){ dados=[]; for(let i=0;i<5;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''}); localStorage.setItem('dadosFolha', JSON.stringify(dados)); montar(); } }
 function limparTudo(){ if(confirm('Limpar tudo mesmo?')){ localStorage.clear(); location.reload(); } }
 function salvar(){ salvarNaMemoria(); alert('Salvo!'); }
@@ -215,16 +198,10 @@ function zap(){
   m+=`\nPIX R$${document.getElementById('sPix').innerText} DH R$${document.getElementById('sDH').innerText} CART R$${document.getElementById('sCart').innerText} FIADO R$${document.getElementById('sFiado').innerText} TOTAL R$${document.getElementById('sGeral').innerText}`;
   window.open('https://wa.me/?text='+encodeURIComponent(m),'_blank');
 }
-
 function gerarPDF(){
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('l','mm','a4');
-  let rows=[];
-  let listaFiado = [];
-  let totalGasQtd = 0;
-  let totalPixValor = 0;
-  let totalFiadoValor = 0;
-
+  let rows=[]; let listaFiado=[]; let totalGasQtd=0, totalPixValor=0, totalFiadoValor=0;
   document.querySelectorAll('#lista.linha').forEach(l=>{
     let c=l.querySelector('.cCliente').value;
     let p=l.querySelector('.cProd').value;
@@ -233,7 +210,7 @@ function gerarPDF(){
     let t=l.querySelector('.totalCell').innerText;
     let pixVal=Number(l.querySelector('.cPix').value)||0;
     let fiadoTxt=l.querySelector('.fiCell').innerText;
-    let fiadoVal = Number(fiadoTxt.replace('R$',''))||0;
+    let fiadoVal=Number(fiadoTxt.replace('R$',''))||0;
     if(q){
       if(p=='G') totalGasQtd+=q;
       totalPixValor+=pixVal;
@@ -245,11 +222,7 @@ function gerarPDF(){
   if(!rows.length){ alert('Sem vendas'); return; }
   doc.setFontSize(12);
   doc.text('EL SHADAY - '+new Date().toLocaleDateString('pt-BR'),14,10);
-
-  const cores = [
-    [255,235,59],[66,66,66],[76,175,80],[97,97,97],[255,235,59],[33,150,243],[76,175,80],[156,39,176],[229,57,53]
-  ];
-
+  const cores = [[255,235,59],[66,66,66],[76,175,80],[97,97,97],[255,235,59],[33,150,243],[76,175,80],[156,39,176],[229,57,53]];
   doc.autoTable({
     head:[['Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],
     body:rows,
@@ -258,58 +231,28 @@ function gerarPDF(){
     styles:{fontSize:9, halign:'center', valign:'middle'},
     didParseCell: function(data){
       if(data.section==='body'){
-        let col = data.column.index;
+        let col=data.column.index;
         if(cores[col]){
-          data.cell.styles.fillColor = cores[col];
-          if(col===1 || col===3 || col===5 || col===7 || col===8) data.cell.styles.textColor = [255,255,255];
-          else data.cell.styles.textColor = [0,0,0];
+          data.cell.styles.fillColor=cores[col];
+          if(col===1||col===3||col===5||col===7||col===8) data.cell.styles.textColor=[255,255,255];
+          else data.cell.styles.textColor=[0,0,0];
         }
       }
     }
   });
-
-  let finalY = doc.lastAutoTable.finalY + 8;
-  let pageW = 277;
-  let gap = 4;
-  let boxW = (pageW - (gap*3)) / 4;
-  let boxH = 24;
-  let startX = 10;
-
-  doc.setFillColor(97,97,97);
-  doc.rect(startX, finalY, boxW, boxH, 'FD');
-  doc.setTextColor(255,255,255);
-  doc.setFontSize(8); doc.setFont(undefined,'bold');
-  doc.text('GAS VENDIDO QTD', startX+4, finalY+7);
-  doc.setFontSize(13);
-  doc.text(totalGasQtd + ' unid.', startX+4, finalY+17);
-
-  doc.setFillColor(33,150,243);
-  doc.rect(startX+boxW+gap, finalY, boxW, boxH, 'FD');
-  doc.setFontSize(8);
-  doc.text('VALOR EM PIX', startX+boxW+gap+4, finalY+7);
-  doc.setFontSize(12);
-  doc.text('R$ ' + totalPixValor, startX+boxW+gap+4, finalY+17);
-
-  doc.setFillColor(46,125,50);
-  doc.rect(startX+(boxW+gap)*2, finalY, boxW, boxH, 'FD');
-  doc.setFontSize(8);
-  doc.text('A RECEBER (FIADO)', startX+(boxW+gap)*2+4, finalY+7);
-  doc.setFontSize(12);
-  doc.text('R$ ' + totalFiadoValor, startX+(boxW+gap)*2+4, finalY+17);
-
-  doc.setFillColor(66,66,66);
-  doc.rect(startX+(boxW+gap)*3, finalY, boxW, boxH, 'FD');
-  doc.setFontSize(8);
-  doc.text('QUEM ESTA DEVENDO', startX+(boxW+gap)*3+4, finalY+7);
-  doc.setFontSize(7); doc.setFont(undefined,'normal');
-  if(listaFiado.length==0){
-    doc.text('Nenhum', startX+(boxW+gap)*3+4, finalY+16);
-  } else {
-    let texto = listaFiado.map(f=> `${f.nome} R$${f.valor}`).join(', ');
-    let linhas = doc.splitTextToSize(texto, boxW-8);
-    doc.text(linhas[0] + (linhas.length>1? '...' : ''), startX+(boxW+gap)*3+4, finalY+16);
-  }
-
+  let finalY=doc.lastAutoTable.finalY+8;
+  let pageW=277, gap=4, boxW=(pageW-(gap*3))/4, boxH=24, startX=10;
+  doc.setFillColor(97,97,97); doc.rect(startX,finalY,boxW,boxH,'FD');
+  doc.setTextColor(255,255,255); doc.setFontSize(8); doc.setFont(undefined,'bold');
+  doc.text('GAS VENDIDO QTD',startX+4,finalY+7); doc.setFontSize(13); doc.text(totalGasQtd+' unid.',startX+4,finalY+17);
+  doc.setFillColor(33,150,243); doc.rect(startX+boxW+gap,finalY,boxW,boxH,'FD');
+  doc.setFontSize(8); doc.text('VALOR EM PIX',startX+boxW+gap+4,finalY+7); doc.setFontSize(12); doc.text('R$ '+totalPixValor,startX+boxW+gap+4,finalY+17);
+  doc.setFillColor(46,125,50); doc.rect(startX+(boxW+gap)*2,finalY,boxW,boxH,'FD');
+  doc.setFontSize(8); doc.text('A RECEBER (FIADO)',startX+(boxW+gap)*2+4,finalY+7); doc.setFontSize(12); doc.text('R$ '+totalFiadoValor,startX+(boxW+gap)*2+4,finalY+17);
+  doc.setFillColor(66,66,66); doc.rect(startX+(boxW+gap)*3,finalY,boxW,boxH,'FD');
+  doc.setFontSize(8); doc.text('QUEM ESTA DEVENDO',startX+(boxW+gap)*3+4,finalY+7); doc.setFontSize(7); doc.setFont(undefined,'normal');
+  if(listaFiado.length==0) doc.text('Nenhum',startX+(boxW+gap)*3+4,finalY+16);
+  else { let texto=listaFiado.map(f=>`${f.nome} R$${f.valor}`).join(', '); let linhas=doc.splitTextToSize(texto,boxW-8); doc.text(linhas[0]+(linhas.length>1?'...':''),startX+(boxW+gap)*3+4,finalY+16); }
   doc.save('elshaday.pdf');
 }
 window.onload=iniciar;

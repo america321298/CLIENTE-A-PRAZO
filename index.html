@@ -1,261 +1,296 @@
 <!DOCTYPE html>
-<html>
-<head>
+<html lang="pt-BR">
+<head><style>
+@font-face {
+  font-family: "Optimistic";
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("/fonts/OptimisticAI_VF_Optimized.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Optimistic Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/OptimisticMono_W_TextRegular.woff2") format("woff2");
+}
+:where(html) {
+  font-family: "Optimistic", system-ui, sans-serif;
+}
+:where(code, pre, kbd, samp) {
+  font-family: "Optimistic Mono", ui-monospace, monospace;
+}
+</style>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-<title>EL SHADAY - FIX TOTAL</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>EL SHADAY - GÁS E ÁGUA</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f0f0f0}
-.titulo{background:#1a7a34;color:#fff;text-align:center;padding:12px;font-weight:bold;font-size:16px}
-.estoque{margin:4px;background:#fff;border-radius:8px;padding:6px;border:2px solid #0d47a1}
-.linha-unica{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;gap:4px}
-.top{padding:6px;border-radius:6px;text-align:center;font-size:8px;font-weight:bold;color:#fff}
-.top b{font-size:15px;display:block;margin-top:2px}
-.top input{width:100%;background:#fff;color:#000;border:2px solid #000;border-radius:4px;text-align:center;font-size:18px;font-weight:bold;padding:3px;margin-top:3px}
-.top.gas{background:#0d47a1}.top.agua{background:#0288d1}
-.top.white-gas{background:#e3f2fd;color:#0d47a1;border:1.5px solid #0d47a1}
-.top.white-agua{background:#e1f5fe;color:#0288d1;border:1.5px solid #0288d1}
-.top.white-gas b,.top.white-agua b{color:#000;font-size:16px}
-.card{margin:4px;background:#fff;border-radius:8px;padding:4px;border:1.5px solid #0d47a1}
-.wrap{overflow-x:auto}.tabela{width:100%;min-width:760px}
-.th{display:grid;grid-template-columns:100px 70px 44px 48px 58px 42px 42px 42px 48px;gap:2px;font-size:8px;font-weight:bold;text-align:center}
-.th span{padding:4px;border-radius:4px;color:#fff}
-.linha{display:grid;grid-template-columns:100px 70px 44px 48px 58px 42px 42px 42px 48px;gap:2px;margin:2px 0}
-.linha input,.linha select{height:36px;border:1.5px solid #888;border-radius:5px;text-align:center;font-size:12px;font-weight:bold;width:100%}
-.totalCell{background:#ffeb3b;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold;font-size:11px}
-.fiCell{background:#ffcdd2;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #999;border-radius:5px;font-weight:bold;font-size:11px}
-.sum{padding:8px;border-radius:6px;color:#fff;font-weight:bold;display:flex;justify-content:space-between;margin:2px;font-size:13px}
-.btn{border:none;border-radius:6px;padding:10px 4px;color:#fff;font-weight:bold;font-size:11px;cursor:pointer}
-.bot{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:4px}
-.resumo{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;margin-top:8px}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Arial,Helvetica,sans-serif;background:#e9e9e9;padding:0 4px 80px}
+.header{background:#1a7a34;color:#fff;text-align:center;padding:10px;font-weight:900;font-size:18px;letter-spacing:0.5px;margin:0 -4px}
+.box{background:#fff;border:2.5px solid #0d47a1;border-radius:10px;padding:6px;margin:6px 0}
+.box-title{color:#0d47a1;font-weight:900;text-align:center;font-size:13px;margin-bottom:6px;text-transform:uppercase}
+.estoque-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.est{border-radius:8px;padding:4px 2px;text-align:center;border:2px solid #0d47a1}
+.est.cheio{background:#0d47a1;color:#fff}
+.est.vazio{background:#e3f2fd;color:#0d47a1}
+.est b{font-size:11px;display:block;line-height:1.1}
+.est .num{font-size:18px;font-weight:900;margin-top:2px;display:block;color:#000}
+.est.cheio .num{color:#000;background:#fff;border-radius:6px;padding:2px 0;margin:4px 4px 0;border:2px solid #000}
+.est input{width:86%;font-size:18px;font-weight:900;text-align:center;border:2px solid #000;border-radius:6px;padding:2px 0;margin-top:4px}
+
+.caderno-header{background:#ffeb3b;text-align:center;font-weight:900;font-size:18px;padding:8px;border-radius:8px 8px 0 0;border:2px solid #000;border-bottom:none}
+.wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;background:#fff;border:2px solid #000;border-radius:0 0 8px 8px}
+.tabela{min-width:860px}
+.th{display:grid;grid-template-columns:130px 86px 52px 56px 80px 58px 58px 58px 68px;gap:3px;padding:4px;background:#fff}
+.th span{padding:5px 2px;border-radius:6px;font-size:11px;font-weight:900;text-align:center;color:#fff}
+.linha{display:grid;grid-template-columns:130px 86px 52px 56px 80px 58px 58px 58px 68px;gap:3px;padding:2px 4px}
+.linha input,.linha select{height:40px;border:2px solid #555;border-radius:8px;text-align:center;font-weight:900;font-size:14px;width:100%;background:#fff}
+.linha select{background:#fff}
+.cellTotal{background:#ffeb3b;border:1.5px solid #999;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:900;font-size:13px}
+.cellFiado{background:#ffcdd2;border:1.5px solid #999;height:40px;display:flex;align-items:center;justify-content:center;border-radius:8px;font-weight:900;font-size:13px}
+
+.totais{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}
+.tot{display:flex;justify-content:space-between;align-items:center;padding:10px 10px;border-radius:8px;color:#fff;font-weight:900;font-size:15px}
+.tot.blue{background:#1565c0}.tot.green{background:#2e7d32}.tot.purple{background:#6a1b9a}.tot.red{background:#c62828}.tot.darkblue{background:#0d47a1}
+
+.despBox{border:2px solid #c62828;border-radius:10px;padding:6px;margin-top:8px;background:#fff}
+.despGrid{display:grid;grid-template-columns:110px 1fr;gap:6px}
+.despGrid input{height:44px;border:2px solid #555;border-radius:8px;padding:0 8px;font-weight:900;font-size:16px}
+.despGrid label{font-weight:900;font-size:14px}
+
+.botoes{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px}
+.btn{border:none;border-radius:8px;padding:12px 2px;color:#fff;font-weight:900;font-size:13px;cursor:pointer}
+.btn:active{transform:scale(0.97)}
 </style>
 </head>
 <body>
-<div class="titulo">🔥 EL SHADAY GÁS E ÁGUA 💧</div>
-<div class="estoque">
-<div style="font-size:11px;font-weight:bold;text-align:center;margin-bottom:4px;color:#0d47a1">ESTOQUE</div>
-<div class="linha-unica">
-<div class="top gas">GÁS CHEIO<input id="gCheio" type="number" value="200" oninput="atualizarInicial('gas')"></div>
-<div class="top white-gas">GÁS VAZIO<b id="gVazio">0</b></div>
-<div class="top white-gas">GÁS VENDIDO<b id="gVendido">0</b></div>
-<div class="top agua">ÁGUA CHEIA<input id="aCheia" type="number" value="150" oninput="atualizarInicial('agua')"></div>
-<div class="top white-agua">ÁGUA VAZIA<b id="aVazia">0</b></div>
-<div class="top white-agua">ÁGUA VENDIDA<b id="aVendida">0</b></div>
+<div class="header">🔥 EL SHADAY GÁS E ÁGUA 💧</div>
+
+<div class="box">
+<div class="box-title">ESTOQUE - CHEIO DIMINUI SOZINHO</div>
+<div class="estoque-grid">
+<div class="est cheio"><b>GÁS CHEIO</b><input id="gCheio" type="number" value="200" oninput="atualizarInicial('gas')"></div>
+<div class="est vazio"><b>GÁS VAZIO</b><span class="num" id="gVazio">0</span></div>
+<div class="est vazio"><b>GÁS<br>VENDIDO</b><span class="num" id="gVendido">0</span></div>
+<div class="est cheio"><b>ÁGUA CHEIA</b><input id="aCheia" type="number" value="150" oninput="atualizarInicial('agua')"></div>
+<div class="est vazio"><b>ÁGUA<br>VAZIA</b><span class="num" id="aVazia">0</span></div>
+<div class="est vazio"><b>ÁGUA<br>VENDIDA</b><span class="num" id="aVendida">0</span></div>
 </div>
 </div>
-<div class="card">
-<div style="background:#ffeb3b;text-align:center;font-weight:bold;padding:6px;border-radius:6px">FOLHA DE CADERNO</div>
+
+<div class="box" style="padding:0;border:none;background:transparent">
+<div class="caderno-header">FOLHA DE CADERNO</div>
 <div class="wrap"><div class="tabela">
 <div class="th">
-<span style="background:#ffeb3b;color:#000">Cliente</span><span style="background:#000">Produto</span><span style="background:#4caf50">Qtd</span><span style="background:#222">Unit</span><span style="background:#ff9800;color:#000">Total</span><span style="background:#2196f3">PIX</span><span style="background:#4caf50">DH</span><span style="background:#9c27b0">CART</span><span style="background:#e53935">FIADO</span>
+<span style="background:#ffeb3b;color:#000">Cliente</span>
+<span style="background:#000">Produto</span>
+<span style="background:#4caf50">Qtd</span>
+<span style="background:#212121">Unit</span>
+<span style="background:#ff9800;color:#000">Total</span>
+<span style="background:#2196f3">PIX</span>
+<span style="background:#4caf50">DH</span>
+<span style="background:#9c27b0">CART</span>
+<span style="background:#e53935">FIADO</span>
 </div>
 <div id="lista"></div>
 </div></div>
-<div class="resumo" id="resumo"></div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">
 <button class="btn" style="background:#29b6f6" onclick="addLinha(5)">+5 Vendas</button>
 <button class="btn" style="background:#2e7d32" onclick="addLinha(1)">+1 Venda</button>
 </div>
+
+<div class="totais">
+<div class="tot blue"><span>PIX: R$</span><span id="tPix">0</span></div>
+<div class="tot green"><span>DH: R$</span><span id="tDH">0</span></div>
+<div class="tot purple"><span>CART: R$</span><span id="tCart">0</span></div>
+<div class="tot red"><span>FIADO: R$</span><span id="tFiado">0</span></div>
 </div>
-<div class="bot">
+<div class="totais" style="grid-template-columns:1fr">
+<div class="tot darkblue"><span>TOTAL GERAL: R$</span><span id="tGeral">0</span></div>
+</div>
+
+<div class="despBox">
+<div class="despGrid">
+<div><label>Desp. R$</label><input id="despValor" type="number" value="0" oninput="calcular()"></div>
+<div><label>Motivo</label><input id="despMotivo" placeholder="Ex: Almoço" oninput="salvarDesp()"></div>
+</div>
+<div class="totais" style="margin-top:6px">
+<div class="tot" style="background:#ef5350"><span>DESPESA: R$</span><span id="tDesp">0</span></div>
+<div class="tot green"><span>LUCRO: R$</span><span id="tLucro">0</span></div>
+</div>
+</div>
+
+<div class="botoes">
+<button class="btn" style="background:#25d366" onclick="enviarZap()">WhatsApp</button>
+<button class="btn" style="background:#0d47a1" onclick="salvarTudo()">Salvar</button>
+<button class="btn" style="background:#6a1b9a" onclick="addLinha(3)">+3</button>
+<button class="btn" style="background:#ef6c00" onclick="removerLinha()">-Folha</button>
 <button class="btn" style="background:#000" onclick="gerarPDF()">PDF</button>
 <button class="btn" style="background:#c62828" onclick="zerar()">ZERAR</button>
+<button class="btn" style="background:#e65100" onclick="limpar()">Limpar</button>
 <button class="btn" style="background:#607d8b" onclick="location.reload()">Atualizar</button>
-<button class="btn" style="background:#0d47a1" onclick="zerarEstoque()">Zerar Estoque</button>
 </div>
+</div>
+
 <script>
-// CÓDIGO CORRIGIDO - SELETOR #lista.linha
 let estoqueInicialGas=200, estoqueInicialAgua=150, dados=[];
 function iniciar(){
   estoqueInicialGas=parseInt(localStorage.getItem('estGasInicial')||'200');
   estoqueInicialAgua=parseInt(localStorage.getItem('estAguaInicial')||'150');
   dados=JSON.parse(localStorage.getItem('dadosFolha')||'[]');
-  if(dados.length==0){for(let i=0;i<5;i++)dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});}
+  if(dados.length===0){for(let i=0;i<3;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});}
+  document.getElementById('despValor').value=localStorage.getItem('despValor')||0;
+  document.getElementById('despMotivo').value=localStorage.getItem('despMotivo')||'';
   montar();
 }
+function salvarDesp(){
+  localStorage.setItem('despValor',document.getElementById('despValor').value);
+  localStorage.setItem('despMotivo',document.getElementById('despMotivo').value);
+}
 function atualizarInicial(tipo){
-  const vend = getVendidos();
+  const v=getVendidos();
   if(tipo==='gas'){
-    let restante = Number(document.getElementById('gCheio').value)||0;
-    estoqueInicialGas = restante + vend.g;
-    localStorage.setItem('estGasInicial', estoqueInicialGas);
-  } else {
-    let restante = Number(document.getElementById('aCheia').value)||0;
-    estoqueInicialAgua = restante + vend.a;
-    localStorage.setItem('estAguaInicial', estoqueInicialAgua);
+    let restante=Number(document.getElementById('gCheio').value)||0;
+    estoqueInicialGas=restante+v.g;
+    localStorage.setItem('estGasInicial',estoqueInicialGas);
+  }else{
+    let restante=Number(document.getElementById('aCheia').value)||0;
+    estoqueInicialAgua=restante+v.a;
+    localStorage.setItem('estAguaInicial',estoqueInicialAgua);
   }
   calcular(false);
 }
 function getVendidos(){
   let g=0,a=0;
-  document.querySelectorAll('#lista.linha').forEach(l=>{
+  document.querySelectorAll('#lista .linha').forEach(l=>{
     let q=Number(l.querySelector('.cQtd').value)||0;
-    let prod=l.querySelector('.cProd').value;
-    if(prod==='G') g+=q; else a+=q;
+    let p=l.querySelector('.cProd').value;
+    if(p==='G') g+=q; else a+=q;
   });
   return {g,a};
-}
-function salvarNaMemoria(){
-  let novo=[];
-  document.querySelectorAll('#lista.linha').forEach(l=>{
-    novo.push({
-      cliente:l.querySelector('.cCliente').value,
-      prod:l.querySelector('.cProd').value,
-      qtd:l.querySelector('.cQtd').value,
-      unit:l.querySelector('.cUnit').value,
-      pix:l.querySelector('.cPix').value,
-      dh:l.querySelector('.cDh').value,
-      cart:l.querySelector('.cCart').value
-    });
-  });
-  dados=novo;
-  localStorage.setItem('dadosFolha',JSON.stringify(dados));
 }
 function montar(){
   let html='';
   dados.forEach((v,i)=>{
     html+=`<div class="linha">
       <input class="cCliente" value="${(v.cliente||'').replace(/"/g,'&quot;')}" placeholder="Cliente" oninput="calcular()">
-      <select class="cProd" onchange="calcular()"><option value="G" ${v.prod==='A'?'':'selected'}>GÁS</option><option value="A" ${v.prod==='A'?'selected':''}>ÁGUA</option></select>
+      <select class="cProd" onchange="calcular()"><option value="G" ${v.prod!=='A'?'selected':''}>GÁS</option><option value="A" ${v.prod==='A'?'selected':''}>ÁGUA</option></select>
       <input class="cQtd" type="number" value="${v.qtd||''}" placeholder="0" oninput="calcular()">
       <input class="cUnit" type="number" value="${v.unit||''}" placeholder="0" oninput="calcular()">
-      <div class="totalCell" id="t${i}">R$0</div>
+      <div class="cellTotal" id="t${i}">R$0</div>
       <input class="cPix" type="number" value="${v.pix||''}" placeholder="0" oninput="calcular()">
       <input class="cDh" type="number" value="${v.dh||''}" placeholder="0" oninput="calcular()">
       <input class="cCart" type="number" value="${v.cart||''}" placeholder="0" oninput="calcular()">
-      <div class="fiCell" id="f${i}">R$0</div>
+      <div class="cellFiado" id="f${i}">R$0</div>
     </div>`;
   });
   document.getElementById('lista').innerHTML=html;
   calcular(true);
 }
-function addLinha(n){
-  salvarNaMemoria();
-  for(let i=0;i<n;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
-  montar();
+function addLinha(n){salvarNaMemoria();for(let i=0;i<n;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});montar();}
+function removerLinha(){salvarNaMemoria();if(dados.length>1){dados.pop();montar();}}
+function salvarNaMemoria(){
+  let novo=[];
+  document.querySelectorAll('#lista .linha').forEach(l=>{
+    novo.push({cliente:l.querySelector('.cCliente').value,prod:l.querySelector('.cProd').value,qtd:l.querySelector('.cQtd').value,unit:l.querySelector('.cUnit').value,pix:l.querySelector('.cPix').value,dh:l.querySelector('.cDh').value,cart:l.querySelector('.cCart').value});
+  });
+  dados=novo;localStorage.setItem('dadosFolha',JSON.stringify(dados));
 }
-function calcular(atualizarEstoque=true){
-  let gVend=0,aVend=0,totalGeral=0,totalPix=0,totalDH=0,totalCart=0,totalFiado=0;
-  document.querySelectorAll('#lista.linha').forEach((l,i)=>{
-    let qtd=Number(l.querySelector('.cQtd').value)||0;
-    let unit=Number(l.querySelector('.cUnit').value)||0;
+function calcular(atualizaEstoque=true){
+  let gVend=0,aVend=0,tGeral=0,tPix=0,tDH=0,tCart=0,tFiado=0;
+  document.querySelectorAll('#lista .linha').forEach((l,i)=>{
+    let q=Number(l.querySelector('.cQtd').value)||0;
+    let u=Number(l.querySelector('.cUnit').value)||0;
     let pix=Number(l.querySelector('.cPix').value)||0;
     let dh=Number(l.querySelector('.cDh').value)||0;
     let cart=Number(l.querySelector('.cCart').value)||0;
     let prod=l.querySelector('.cProd').value;
-    let tot=qtd*unit;
-    let fiado=tot-pix-dh-cart;
-    if(fiado<0) fiado=0;
-    if(prod=='G') gVend+=qtd; else aVend+=qtd;
-    totalGeral+=tot; totalPix+=pix; totalDH+=dh; totalCart+=cart; totalFiado+=fiado;
-    document.getElementById('t'+i).innerText='R$'+tot.toFixed(0);
-    document.getElementById('f'+i).innerText='R$'+fiado.toFixed(0);
-    document.getElementById('f'+i).style.background = fiado>0? '#ffcdd2' : '#c8e6c9';
+    let tot=q*u;
+    let fiado=tot-pix-dh-cart; if(fiado<0) fiado=0;
+    if(prod==='G') gVend+=q; else aVend+=q;
+    tGeral+=tot; tPix+=pix; tDH+=dh; tCart+=cart; tFiado+=fiado;
+    document.getElementById('t'+i).innerText='R$'+tot;
+    document.getElementById('f'+i).innerText='R$'+fiado;
+    document.getElementById('f'+i).style.background=fiado>0?'#ffcdd2':'#c8e6c9';
   });
-  if(atualizarEstoque){
-    let restoGas=estoqueInicialGas-gVend;
-    let restoAgua=estoqueInicialAgua-aVend;
-    if(document.activeElement.id!=='gCheio') document.getElementById('gCheio').value=restoGas<0?0:restoGas;
-    if(document.activeElement.id!=='aCheia') document.getElementById('aCheia').value=restoAgua<0?0:restoAgua;
+  if(atualizaEstoque){
+    let restoG=estoqueInicialGas-gVend;
+    let restoA=estoqueInicialAgua-aVend;
+    if(document.activeElement.id!=='gCheio') document.getElementById('gCheio').value=restoG<0?0:restoG;
+    if(document.activeElement.id!=='aCheia') document.getElementById('aCheia').value=restoA<0?0:restoA;
   }
   document.getElementById('gVazio').innerText=gVend;
   document.getElementById('gVendido').innerText=gVend;
   document.getElementById('aVazia').innerText=aVend;
   document.getElementById('aVendida').innerText=aVend;
-  document.getElementById('resumo').innerHTML=`
-    <div class="sum" style="background:#000">GERAL R$${totalGeral}</div>
-    <div class="sum" style="background:#2196f3">PIX R$${totalPix}</div>
-    <div class="sum" style="background:#e53935">FIADO R$${totalFiado}</div>
-  `;
-  salvarNaMemoria();
+  document.getElementById('tPix').innerText=tPix;
+  document.getElementById('tDH').innerText=tDH;
+  document.getElementById('tCart').innerText=tCart;
+  document.getElementById('tFiado').innerText=tFiado;
+  document.getElementById('tGeral').innerText=tGeral;
+  let desp=Number(document.getElementById('despValor').value)||0;
+  document.getElementById('tDesp').innerText=desp;
+  document.getElementById('tLucro').innerText=(tPix+tDH+tCart)-desp;
+  salvarNaMemoria(); salvarDesp();
 }
-function zerar(){
-  if(confirm('Zerar todas as vendas de hoje?')){
-    dados=[];
-    for(let i=0;i<5;i++) dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});
-    localStorage.setItem('dadosFolha',JSON.stringify(dados));
-    montar();
-  }
-}
-function zerarEstoque(){
-  if(confirm('Resetar estoque inicial para 200 gás e 150 água?')){
-    localStorage.setItem('estGasInicial','200');
-    localStorage.setItem('estAguaInicial','150');
-    location.reload();
-  }
+function salvarTudo(){calcular();alert('Salvo!');}
+function zerar(){if(confirm('Zerar folha de hoje?')){dados=[];for(let i=0;i<3;i++)dados.push({cliente:'',prod:'G',qtd:'',unit:'',pix:'',dh:'',cart:''});localStorage.setItem('dadosFolha',JSON.stringify(dados));montar();}}
+function limpar(){if(confirm('Limpar tudo?')){localStorage.clear();location.reload();}}
+function enviarZap(){
+  let txt=`*EL SHADAY - ${new Date().toLocaleDateString('pt-BR')}*\n`;
+  document.querySelectorAll('#lista .linha').forEach(l=>{
+    let c=l.querySelector('.cCliente').value; let q=l.querySelector('.cQtd').value; let p=l.querySelector('.cProd').value;
+    let tot=l.querySelector('.cellTotal').innerText; let fi=l.querySelector('.cellFiado').innerText;
+    if(q) txt+=`${c} - ${q}x ${p} - ${tot} - Fiado ${fi}\n`;
+  });
+  txt+=`\nTOTAL: R$${document.getElementById('tGeral').innerText} | PIX R$${document.getElementById('tPix').innerText} | DH R$${document.getElementById('tDH').innerText} | FIADO R$${document.getElementById('tFiado').innerText}`;
+  window.open('https://wa.me/?text='+encodeURIComponent(txt));
 }
 function gerarPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF('l','mm','a4');
-  let rows=[],listaFiado=[],totalGasQtd=0,totalAguaQtd=0,totalPix=0,totalDH=0,totalCart=0,totalFiado=0,totalGeral=0;
-  document.querySelectorAll('#lista.linha').forEach(l=>{
+  const {jsPDF}=window.jspdf; const doc=new jsPDF('l','mm','a4');
+  let rows=[], listaFiado=[], tg=0,ta=0,tp=0,td=0,tc=0,tf=0,tgGeral=0;
+  document.querySelectorAll('#lista .linha').forEach(l=>{
     let c=l.querySelector('.cCliente').value||'Sem nome';
-    let p=l.querySelector('.cProd').value;
-    let q=Number(l.querySelector('.cQtd').value)||0;
+    let p=l.querySelector('.cProd').value; let q=Number(l.querySelector('.cQtd').value)||0;
     let u=l.querySelector('.cUnit').value||0;
-    let tot=Number(l.querySelector('.totalCell').innerText.replace('R$',''))||0;
-    let pix=Number(l.querySelector('.cPix').value)||0;
-    let dh=Number(l.querySelector('.cDh').value)||0;
-    let cart=Number(l.querySelector('.cCart').value)||0;
-    let fiado=Number(l.querySelector('.fiCell').innerText.replace('R$',''))||0;
+    let tot=Number(l.querySelector('.cellTotal').innerText.replace('R$',''))||0;
+    let pix=Number(l.querySelector('.cPix').value)||0; let dh=Number(l.querySelector('.cDh').value)||0;
+    let cart=Number(l.querySelector('.cCart').value)||0; let fi=Number(l.querySelector('.cellFiado').innerText.replace('R$',''))||0;
     if(q>0){
-      if(p=='G') totalGasQtd+=q; else totalAguaQtd+=q;
-      totalPix+=pix; totalDH+=dh; totalCart+=cart; totalFiado+=fiado; totalGeral+=tot;
-      if(fiado>0) listaFiado.push({nome:c, valor:fiado});
-      rows.push([c,p,q,'R$'+u,'R$'+tot,'R$'+pix,'R$'+dh,'R$'+cart,'R$'+fiado]);
+      if(p==='G') tg+=q; else ta+=q;
+      tp+=pix; td+=dh; tc+=cart; tf+=fi; tgGeral+=tot;
+      if(fi>0) listaFiado.push({nome:c,valor:fi});
+      rows.push([c,p,q,'R$'+u,'R$'+tot,'R$'+pix,'R$'+dh,'R$'+cart,'R$'+fi]);
     }
   });
-  if(!rows.length){alert('Sem vendas para gerar PDF');return;}
-  let totalEntrou = totalPix + totalDH + totalCart;
-  doc.setFontSize(11);doc.setFont(undefined,'bold');
-  doc.text('EL SHADAY - '+new Date().toLocaleDateString('pt-BR')+' - Gas:'+totalGasQtd+' Agua:'+totalAguaQtd,14,10);
-  const cores=[[255,235,59],[66,66,66],[76,175,80],[255,255,255],[255,235,59],[33,150,243],[76,175,80],[156,39,176],[46,125,50]];
+  if(!rows.length){alert('Sem vendas');return;}
+  doc.setFontSize(10);doc.setFont(undefined,'bold');
+  doc.text(`EL SHADAY - ${new Date().toLocaleDateString('pt-BR')} - GAS: ${tg} AGUA: ${ta}`,14,10);
   doc.autoTable({
     head:[['Cliente','Prod','Qtd','Unit','Total','PIX','DH','CART','FIADO']],
-    body:rows,
-    startY:14,
-    headStyles:{fillColor:[13,71,161],textColor:255,halign:'center'},
-    styles:{fontSize:9,halign:'center',valign:'middle',lineColor:[0,0,0],lineWidth:0.1},
-    didParseCell:function(data){
-      if(data.section==='body'){
-        let col=data.column.index;
-        if(cores[col]){
-          data.cell.styles.fillColor=cores[col];
-          if(col===1||col===7) data.cell.styles.textColor=[255,255,255];
-          else data.cell.styles.textColor=[0,0,0];
-        }
+    body:rows,startY:14,
+    headStyles:{fillColor:[13,71,161],halign:'center'},
+    styles:{fontSize:9,halign:'center',lineWidth:0.1,lineColor:[0,0,0]},
+    didParseCell:function(d){
+      if(d.section==='body'){
+        const cores=[[255,235,59],[66,66,66],[76,175,80],[200,200,200],[255,235,59],[33,150,243],[76,175,80],[156,39,176],[229,57,53]];
+        if(cores[d.column.index]){d.cell.styles.fillColor=cores[d.column.index]; if([1,7].includes(d.column.index)) d.cell.styles.textColor=[255,255,255];}
       }
     }
   });
-  let finalY=doc.lastAutoTable.finalY+8;
-  let pageW=277,gap=4,boxW=(pageW-20-gap*2)/3,boxH=20,startX=10;
-  doc.setFillColor(97,97,97); doc.rect(startX,finalY,boxW,boxH,'F');
-  doc.setTextColor(255,255,255);doc.setFontSize(8);doc.setFont(undefined,'bold');
-  doc.text('GAS VENDIDO QTD',startX+3,finalY+6);doc.setFontSize(11);doc.text(totalGasQtd+' unid.',startX+3,finalY+14);
-  doc.setFillColor(33,150,243); doc.rect(startX+boxW+gap,finalY,boxW,boxH,'F');
-  doc.setFontSize(8);doc.text('VALOR EM PIX',startX+boxW+gap+3,finalY+6);doc.setFontSize(11);doc.text('R$ '+totalPix,startX+boxW+gap+3,finalY+14);
-  doc.setFillColor(46,125,50); doc.rect(startX+(boxW+gap)*2,finalY,boxW,boxH,'F');
-  doc.setFontSize(8);doc.text('DINHEIRO (DH)',startX+(boxW+gap)*2+3,finalY+6);doc.setFontSize(11);doc.text('R$ '+totalDH,startX+(boxW+gap)*2+3,finalY+14);
-  let finalY2 = finalY + boxH + 4;
-  doc.setFillColor(0,121,107); doc.rect(startX,finalY2,boxW,boxH,'F');
-  doc.setFontSize(8);doc.text('TOTAL QUE ENTROU',startX+3,finalY2+6);doc.setFontSize(11);doc.text('R$ '+totalEntrou,startX+3,finalY2+14);
-  doc.setFillColor(13,71,161); doc.rect(startX+boxW+gap,finalY2,boxW,boxH,'F');
-  doc.setFontSize(8);doc.text('TOTAL GERAL',startX+boxW+gap+3,finalY2+6);doc.setFontSize(11);doc.text('R$ '+totalGeral,startX+boxW+gap+3,finalY2+14);
-  doc.setFillColor(66,66,66); doc.rect(startX+(boxW+gap)*2,finalY2,boxW,boxH,'F');
-  doc.setFontSize(8);doc.text('QUEM FALTA PAGAR - R$'+totalFiado,startX+(boxW+gap)*2+3,finalY2+6);
-  doc.setFontSize(7);doc.setFont(undefined,'normal');
-  if(listaFiado.length==0) doc.text('Nenhum devendo',startX+(boxW+gap)*2+3,finalY2+13);
-  else {
-    let txt = listaFiado.map(f=>`${f.nome} R$${f.valor}`).join(', ');
-    let linhas = doc.splitTextToSize(txt, boxW-6);
-    doc.text(linhas[0],startX+(boxW+gap)*2+3,finalY2+12);
-    if(linhas[1]) doc.text(linhas[1],startX+(boxW+gap)*2+3,finalY2+15);
-  }
-  doc.save('elshaday-'+new Date().toLocaleDateString('pt-BR')+'.pdf');
+  let y=doc.lastAutoTable.finalY+6, W=277, gap=4, bw=(W-20-gap*2)/3, bh=16, x=10;
+  doc.setFillColor(198,40,40);doc.rect(x,y,bw,bh,'F');doc.setTextColor(255);doc.setFontSize(7);doc.text('GAS VENDIDO QTD',x+2,y+5);doc.setFontSize(10);doc.text(tg+' unid.',x+2,y+12);
+  doc.setFillColor(33,150,243);doc.rect(x+bw+gap,y,bw,bh,'F');doc.text('VALOR EM PIX',x+bw+gap+2,y+5);doc.text('R$ '+tp,x+bw+gap+2,y+12);
+  doc.setFillColor(198,40,40);doc.rect(x+(bw+gap)*2,y,bw,bh,'F');doc.text('A RECEBER (FIADO)',x+(bw+gap)*2+2,y+5);doc.text('R$ '+tf,x+(bw+gap)*2+2,y+12);
+  y+=bh+3;
+  doc.setFillColor(66,66,66);doc.rect(x,y,bw*2+gap,bh,'F');doc.setFontSize(7);doc.text('QUEM ESTA DEVENDO',x+2,y+5);doc.setFontSize(8);
+  let txtDev=listaFiado.length? listaFiado.map(f=>`${f.nome} - R$${f.valor}`).join(', ') : 'Nenhum';
+  let linhas=doc.splitTextToSize(txtDev,bw*2+gap-4); doc.text(linhas,x+2,y+11);
+  doc.save(`elshaday-${new Date().toLocaleDateString('pt-BR')}.pdf`);
 }
 window.onload=iniciar;
 </script>
-</body>
-</html>
+<script>(function(){var loc=location.href.replace(/#.*$/,"");var ATTR_NAMES=["data-product-id","data-productid","data-product_id","product-id","productid","product_id","data-source-entity-id","source-entity-id","source_entity_id","data-product","data-metadata","data-meta"];var DATASET_KEYS=["productId","productid","product_id","sourceEntityId","sourceentityid","source_entity_id","product","metadata","meta"];function readProductId(value){if(typeof value!=="string"||value.length===0)return null;if(/^[0-9]{6,}$/.test(value))return value;var match=value.match(/(?:product(?:_|-)?id|source(?:_|-)?entity(?:_|-)?id)["'=:\s]+([0-9]{6,})/i);return match?match[1]:null}function extractProductId(start){for(var node=start;node&&node!==document.body;node=node.parentElement){for(var i=0;i<ATTR_NAMES.length;i++){var attrValue=node.getAttribute&&node.getAttribute(ATTR_NAMES[i]);var attrProductId=readProductId(attrValue);if(attrProductId)return attrProductId}var dataset=node.dataset||null;if(dataset){for(var j=0;j<DATASET_KEYS.length;j++){var dataValue=dataset[DATASET_KEYS[j]];var dataProductId=readProductId(dataValue);if(dataProductId)return dataProductId}}}return null}function isInlineMediaSlotElement(node){return !!(node&&node.getAttribute&&node.getAttribute("data-clippy-inline-media-slot")!==null)}function findInlineMediaSlot(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(isInlineMediaSlotElement(node))return node}return null}function readInlineMediaUrl(node){if(!node)return null;return node.getAttribute&&((node.getAttribute("data-clippy-inline-media-url")||node.getAttribute("data-url")||node.getAttribute("data_url")))||node.href||null}function stripHash(url){return String(url).replace(/#.*$/,"")}function urlsMatch(a,b){if(!a||!b)return false;try{return stripHash(new URL(a,loc).href)===stripHash(new URL(b,loc).href)}catch(_){return stripHash(a)===stripHash(b)}}function isFirstPartyReelUrl(value){try{var url=new URL(value,loc);if(url.protocol!=="https:")return false;var host=url.hostname.toLowerCase();var supported=host==="instagram.com"||host.endsWith(".instagram.com")||host==="facebook.com"||host.endsWith(".facebook.com");return supported&&/\/reels?\//i.test(url.pathname)}catch(_){return false}}function isInlineMediaUrlClick(node,href){var slot=findInlineMediaSlot(node);if(!slot)return false;var slotUrl=readInlineMediaUrl(slot);if(slotUrl)return urlsMatch(href,slotUrl);return isFirstPartyReelUrl(href)}function findDataHref(start){for(var node=start;node&&node!==document.body;node=node.parentElement){if(node.getAttribute){var href=node.getAttribute("data-href")||node.getAttribute("data-url");if(href)return{href:href,node:node}}}return null}var nativeOpen=window.open;window.open=function(url){if(parent!==window&&typeof url==="string"&&/^https?:\/\//.test(url)){parent.postMessage({type:"ecto:usercontent-link-click",href:url},"*");return null}return nativeOpen?nativeOpen.apply(window,arguments):null};document.addEventListener("click",function(e){var target=e.target instanceof Element?e.target:null;if(!target)return;if(parent===window)return;var a=target.closest?target.closest("a[href]"):null;if(a&&a.href&&/^https?:\/\//.test(a.href)&&a.href.replace(/#.*$/,"")!==loc){if(isInlineMediaUrlClick(a,a.href))return;var productId=extractProductId(target)||extractProductId(a);if(productId){e.preventDefault();parent.postMessage({type:"ecto-artifact-l
